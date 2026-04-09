@@ -1,0 +1,98 @@
+plugin_name: AI Smart Programming Assistant
+plugin_description: An AI-powered smart programming assistant plugin for MT Manager, providing intelligent code analysis, optimization suggestions, and issue diagnosis services. Deeply integrated with DeepSeek AI model, supporting full-text analysis and quick code snippet diagnosis. Also includes practical development tools such as encoding/decoding, hash calculation, and timestamp conversion to comprehensively improve mobile programming efficiency.
+plugin_author: Kang Ge
+plugin_website: Official Website
+about: About
+features_title: Core Features
+features_summary: This plugin features AI code analysis as the core function, along with various practical development tools. All functions can be used directly in the text editor to comprehensively improve programming efficiency
+encode_decode_function: Encode/Decode
+encode_decode_usage: Provides multiple encoding/decoding formats. Select text and click the corresponding function to use it.
+base64_encode: Base64 Encode
+base64_encode_usage: Encodes selected text in Base64 format.
+base64_decode: Base64 Decode
+hex_encode: Hex Encode
+hex_encode_usage: Encodes selected text in hexadecimal format.
+hex_decode: Hex Decode
+unicode_encode: Unicode Encode
+unicode_encode_usage: Encodes selected text as Unicode escape sequences.
+unicode_decode: Unicode Decode
+url_encode: URL Encode
+url_decode: URL Decode
+rot13_encode: ROT13 Encode
+rot13_encode_usage: Encrypts selected text using ROT13 algorithm.
+rot13_decode: ROT13 Decode
+rot13_decode_usage: Decrypts selected text using ROT13 algorithm.
+binary_encode: Binary Encode
+binary_encode_usage: Encodes selected text in binary format.
+binary_decode: Binary Decode
+encode_decode_error: Encoding/Decoding failed
+hash_function: Hash Calculation
+hash_usage: Select any text to calculate the hash value (MD5/SHA-256/SHA-512) and copy to clipboard. Quickly generate text fingerprints for file integrity verification.
+timestamp_function: Timestamp Conversion
+timestamp_usage: Supports bidirectional conversion: Select a numeric timestamp to automatically convert to date/time format, or select a date/time string to convert to timestamp. Supports multiple date formats (yyyy-MM-dd, yyyy/MM/dd, etc.).
+quick_insert_function: Insert Time
+quick_insert_usage: Quickly insert the current date and time at the cursor position in yyyy-MM-dd HH:mm:ss format. No need to select text, available anytime.
+ai_code_analysis: AI Code Analysis
+ai_code_analysis_usage: [Core Feature] Perform AI intelligent analysis on all code in the current editor, providing code overview, quality assessment, potential issue identification, optimization suggestions, and code standard checks. Supports real-time display of the analysis process.
+ai_quick_analysis: AI Quick Analysis
+ai_quick_analysis_usage: [Core Feature] Perform AI quick analysis on selected code snippets, providing targeted optimization suggestions and issue diagnosis. Select text and click to use.
+select_text_hint: Please select text first
+encode_success: Encoded successfully
+decode_success: Decoded successfully
+decode_error: Decoding failed
+encode_error: Encoding failed
+base64_error: Base64 operation failed
+hash_type: Hash Type
+hash_error: Hash calculation failed
+timestamp_input: Timestamp Input
+timestamp_hint: Enter timestamp or date/time
+timestamp_output: Result
+convert: Convert
+invalid_timestamp: Invalid timestamp format
+invalid_timestamp_or_date: Invalid timestamp or date format
+timestamp_to_date_success: Timestamp to date converted successfully
+date_to_timestamp_success: Date to timestamp converted successfully
+convert_error: Conversion failed
+common_text: Common Text
+current_date: Current Date
+current_time: Current Time
+current_datetime: Current Date/Time
+current_timestamp: Current Timestamp
+uuid: UUID
+email_template: Email Template
+phone_template: Phone Template
+ip_template: IP Address Template
+insert: Insert
+insert_success: Inserted successfully
+copy: Copy
+copy_success: Copied successfully
+cancel: Cancel
+close: Close
+undo: Undo
+undo_success: Undo successful
+replace: Replace
+replace_success: Replace successful
+ai_capability_config: AI Capability Config
+manage_skills: Manage Custom Skills
+save: Save
+saved: Saved
+new_skill: + New Skill
+skill_management: Custom Skill Management
+load_skill_failed: Failed to load Skill
+skill_name: Skill Name
+input_name: Enter name
+prompt_content: Prompt Content
+delete_this_skill: Delete This Skill
+confirm_delete: Confirm Delete
+sure_to_delete_skill: Are you sure you want to delete Skill
+delete: Delete
+deleted: Deleted
+delete_failed: Delete failed
+edit_skill: Edit Skill
+name_cannot_be_empty: Name cannot be empty
+skill_saved: Skill saved
+save_failed: Save failed
+apply: Apply
+skill_applied: Skill applied
+global_analysis_prompt: Global Analysis Prompt
+short_analysis_prompt: Short Analysis Prompt

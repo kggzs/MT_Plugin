@@ -1,0 +1,107 @@
+
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.mt.plugin)
+}
+
+// 加快构建速度
+tasks.configureEach { task ->
+    if (task.name.contains("lint")) {
+        task.enabled = false
+    }
+}
+
+// 定义 Java 版本
+def javaVersion = JavaVersion.VERSION_17
+
+android {
+    namespace = 'com.kggzs.cn.mt'
+    compileSdk = 36
+
+    defaultConfig {
+        //noinspection ExpiredTargetSdkVersion
+        targetSdk = 28
+        minSdk = 21
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled = true
+        sourceCompatibility javaVersion
+        targetCompatibility javaVersion
+    }
+
+    if (project.plugins.hasPlugin(libs.plugins.kotlin.android.get().pluginId)) {
+        kotlin.jvmToolchain(javaVersion.majorVersion.toInteger())
+    }
+}
+
+dependencies {
+    coreLibraryDesugaring libs.desugar.jdk.libs
+}
+
+/**
+ * MT 插件配置
+ */
+mtPlugin {
+    /**
+     * 插件安装包 mtp 文件会被打包到当前模块生成的 apk 文件内，
+     * 当 apk 在您的设备上运行后会自动将 mtp 文件自动推送给 MT 管理器，
+     * 因此您只需在 AS 中点击右上角菜单运行当前模块，即可实现插件的快速安装。
+     *
+     * 您可在这里设置推送给哪个MT管理器：
+     * - 自动检测请填写：auto
+     * - 正式版请填写：bin.mt.plus
+     * - 测试版/共存请填写：bin.mt.plus.canary
+     * 默认为自动检测
+     */
+    pushTarget = "bin.mt.plus.canary"
+
+    /**
+     * 插件ID，插件的唯一标识，类似于packageName
+     * 只能由字母、数字、下划线和点组成
+     */
+    pluginID = "com.kggzs.cn.mt"
+
+    /**
+     * 插件版本号，低版本插件无法覆盖安装高版本插件
+     */
+    versionCode = 2
+
+    /**
+     * 插件版本名称
+     */
+    versionName = "v2.0"
+
+    /**
+     * 插件名称
+     */
+    name = "{plugin_name}"
+
+    /**
+     * 插件描述
+     */
+    description = "{plugin_description}"
+
+    /**
+     * 主设置界面，可不填
+     */
+    mainPreference = "com.example.myplugin.MyPreference"
+
+    /**
+     * 插件对外接口，接口类型会自动判断
+     */
+    interfaces = [
+        "com.example.myplugin.EncodeDecodeMenu",
+        "com.example.myplugin.QuickInsertFunction",
+        "com.example.myplugin.AICodeAnalysisToolMenu",
+        "com.example.myplugin.AICodeAnalysisFloatingMenu"
+    ]
+}

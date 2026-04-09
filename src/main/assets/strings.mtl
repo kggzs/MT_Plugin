@@ -1,0 +1,98 @@
+plugin_name: AI 智能编程助手
+plugin_description: 一款基于 AI 的智能编程助手插件，为 MT 管理器提供代码智能分析、优化建议和问题诊断服务。深度融合 DeepSeek AI 模型，支持全文分析和选中代码快速诊断。同时集成编码/解码、哈希计算、时间戳转换等实用开发工具，全方位提升移动端编程效率。
+plugin_author: 康哥
+plugin_website: 官方网站
+about: 关于
+features_title: 核心功能
+features_summary: 本插件以 AI 代码分析为核心，同时提供多种实用开发辅助工具。在文本编辑器中即可使用所有功能，全方位提升编程效率
+encode_decode_function: 编码/解码
+encode_decode_usage: 提供多种编码/解码格式，选中文本后点击对应功能即可使用。
+base64_encode: Base64 编码
+base64_encode_usage: 将选中的文本编码为 Base64 格式。
+base64_decode: Base64 解码
+hex_encode: Hex 编码
+hex_encode_usage: 将选中的文本编码为十六进制格式。
+hex_decode: Hex 解码
+unicode_encode: Unicode 编码
+unicode_encode_usage: 将选中的文本编码为 Unicode 转义序列。
+unicode_decode: Unicode 解码
+url_encode: URL 编码
+url_decode: URL 解码
+rot13_encode: ROT13 编码
+rot13_encode_usage: 使用 ROT13 算法对选中的文本进行加密。
+rot13_decode: ROT13 解码
+rot13_decode_usage: 使用 ROT13 算法对选中的文本进行解密。
+binary_encode: 二进制编码
+binary_encode_usage: 将选中的文本编码为二进制格式。
+binary_decode: 二进制解码
+encode_decode_error: 编码/解码失败
+hash_function: 哈希计算
+hash_usage: 选中任意文本，点击后自动计算哈希值（MD5/SHA-256/SHA-512）并复制到剪贴板。快速生成文本指纹，用于校验文件完整性。
+timestamp_function: 时间戳转换
+timestamp_usage: 支持双向转换：选中纯数字时间戳自动转换为日期时间格式，选中日期时间字符串自动转换为时间戳。支持多种日期格式（yyyy-MM-dd、yyyy/MM/dd 等）。
+quick_insert_function: 插入时间
+quick_insert_usage: 在光标位置快速插入当前日期时间，格式为 yyyy-MM-dd HH:mm:ss。无需选中文本，随时可用。
+ai_code_analysis: AI 代码分析
+ai_code_analysis_usage: 【核心功能】对当前编辑器中的全部代码进行 AI 智能分析，提供代码功能概述、质量评估、潜在问题识别、优化建议和代码规范检查。支持实时显示分析过程。
+ai_quick_analysis: AI 快速分析
+ai_quick_analysis_usage: 【核心功能】对选中的代码片段进行 AI 快速分析，提供针对性的优化建议和问题诊断。选中文本后点击即可使用。
+select_text_hint: 请先选择文本
+encode_success: 编码成功
+decode_success: 解码成功
+decode_error: 解码失败
+encode_error: 编码失败
+base64_error: Base64 操作失败
+hash_type: 哈希类型
+hash_error: 哈希计算失败
+timestamp_input: 时间戳输入
+timestamp_hint: 输入时间戳或日期时间
+timestamp_output: 结果
+convert: 转换
+invalid_timestamp: 无效的时间戳格式
+invalid_timestamp_or_date: 无效的时间戳或日期格式
+timestamp_to_date_success: 时间戳转日期成功
+date_to_timestamp_success: 日期转时间戳成功
+convert_error: 转换失败
+common_text: 常用文本
+current_date: 当前日期
+current_time: 当前时间
+current_datetime: 当前日期时间
+current_timestamp: 当前时间戳
+uuid: UUID
+email_template: 邮箱模板
+phone_template: 手机号模板
+ip_template: IP 地址模板
+insert: 插入
+insert_success: 插入成功
+copy: 复制
+copy_success: 复制成功
+cancel: 取消
+close: 关闭
+undo: 撤销
+undo_success: 撤销成功
+replace: 替换
+replace_success: 替换成功
+ai_capability_config: AI 能力配置
+manage_skills: 管理自定义 Skill
+save: 保存
+saved: 已保存
+new_skill: + 新建 Skill
+skill_management: 自定义 Skill 管理
+load_skill_failed: 加载 Skill 失败
+skill_name: Skill 名称
+input_name: 输入名称
+prompt_content: 提示词内容
+delete_this_skill: 删除此 Skill
+confirm_delete: 确认删除
+sure_to_delete_skill: 确定要删除 Skill
+delete: 删除
+deleted: 已删除
+delete_failed: 删除失败
+edit_skill: 编辑 Skill
+name_cannot_be_empty: 名称不能为空
+skill_saved: Skill 已保存
+save_failed: 保存失败
+apply: 应用
+skill_applied: 已应用 Skill
+global_analysis_prompt: 全局分析提示词
+short_analysis_prompt: 简短分析提示词
