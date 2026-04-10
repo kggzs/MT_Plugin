@@ -484,68 +484,71 @@ public class AIHelper {
                             // 处理主内容 - 需要检测并分离内嵌标签型思考内容
                             if (content != null && !content.isEmpty() && !"null".equals(content)) {
                                 if (showThinking) {
-                                    // 累积内容到缓冲区
-                                    contentBuffer.append(content);
-                                    String allContent = contentBuffer.toString();
-
-                                    // 检测是否包含思考标签
-                                    if (!hasDetectedThinkingTag) {
-                                        if (containsThinkingTag(allContent)) {
-                                            hasDetectedThinkingTag = true;
-                                        } else if (allContent.length() > 100) {
-                                            // 超过100字符无标签，认为无思考过程
-                                            fullContent.append(allContent);
-                                            contentBuffer.setLength(0);
-                                            if (resultEdit != null) {
-                                                final String currentContent = fullContent.toString();
-                                                runOnMainThread(() -> {
-                                                    resultEdit.setText(currentContent);
-                                                    resultEdit.selectEnd();
-                                                });
-                                            }
-                                        }
-                                    }
-
-                                    // 如果检测到思考标签，分离并显示
-                                    if (hasDetectedThinkingTag) {
-                                        String[] result = separateThinkingFromContent(allContent);
-                                        String thinking = result[0];
-                                        String finalContent = result[1];
-                                        hasFoundEndTag = result[2].equals("true");
-
-                                        // 更新思考过程显示
-                                        if (!thinking.isEmpty()) {
-                                            fullReasoning.setLength(0);
-                                            fullReasoning.append(thinking);
-                                            if (thinkingEdit != null) {
-                                                final String currentReasoning = fullReasoning.toString();
-                                                runOnMainThread(() -> {
-                                                    thinkingEdit.setText(currentReasoning);
-                                                    thinkingEdit.selectEnd();
-                                                });
-                                            }
-                                        }
-
-                                        // 更新正式内容显示
-                                        if (!finalContent.isEmpty()) {
-                                            fullContent.setLength(0);
-                                            fullContent.append(finalContent);
-                                            if (resultEdit != null) {
-                                                final String currentContent = fullContent.toString();
-                                                runOnMainThread(() -> {
-                                                    resultEdit.setText(currentContent);
-                                                    resultEdit.selectEnd();
-                                                });
-                                            }
-                                        }
-                                    } else {
-                                        // 无思考标签，流式显示
+                                    // 如果已经确定没有思考标签，直接追加
+                                    if (!hasDetectedThinkingTag && contentBuffer.length() == 0 && fullContent.length() > 0) {
+                                        fullContent.append(content);
                                         if (resultEdit != null) {
                                             final String currentContent = fullContent.toString();
                                             runOnMainThread(() -> {
                                                 resultEdit.setText(currentContent);
                                                 resultEdit.selectEnd();
                                             });
+                                        }
+                                    } else {
+                                        // 累积内容到缓冲区
+                                        contentBuffer.append(content);
+                                        String allContent = contentBuffer.toString();
+
+                                        // 检测是否包含思考标签
+                                        if (!hasDetectedThinkingTag) {
+                                            if (containsThinkingTag(allContent)) {
+                                                hasDetectedThinkingTag = true;
+                                            } else if (allContent.length() > 100) {
+                                                // 超过100字符无标签，认为无思考过程
+                                                fullContent.append(allContent);
+                                                contentBuffer.setLength(0); // 清空buffer，后续内容直接追加到fullContent
+                                                if (resultEdit != null) {
+                                                    final String currentContent = fullContent.toString();
+                                                    runOnMainThread(() -> {
+                                                        resultEdit.setText(currentContent);
+                                                        resultEdit.selectEnd();
+                                                    });
+                                                }
+                                            }
+                                        }
+
+                                        // 如果检测到思考标签，分离并显示
+                                        if (hasDetectedThinkingTag) {
+                                            String[] result = separateThinkingFromContent(allContent);
+                                            String thinking = result[0];
+                                            String finalContent = result[1];
+                                            hasFoundEndTag = result[2].equals("true");
+
+                                            // 更新思考过程显示
+                                            if (!thinking.isEmpty()) {
+                                                fullReasoning.setLength(0);
+                                                fullReasoning.append(thinking);
+                                                if (thinkingEdit != null) {
+                                                    final String currentReasoning = fullReasoning.toString();
+                                                    runOnMainThread(() -> {
+                                                        thinkingEdit.setText(currentReasoning);
+                                                        thinkingEdit.selectEnd();
+                                                    });
+                                                }
+                                            }
+
+                                            // 更新正式内容显示
+                                            if (!finalContent.isEmpty()) {
+                                                fullContent.setLength(0);
+                                                fullContent.append(finalContent);
+                                                if (resultEdit != null) {
+                                                    final String currentContent = fullContent.toString();
+                                                    runOnMainThread(() -> {
+                                                        resultEdit.setText(currentContent);
+                                                        resultEdit.selectEnd();
+                                                    });
+                                                }
+                                            }
                                         }
                                     }
                                 } else {
@@ -571,16 +574,23 @@ public class AIHelper {
         connection.disconnect();
 
         // 处理缓冲区中剩余的内容
-        if (contentBuffer.length() > 0 && hasDetectedThinkingTag) {
-            String[] result = separateThinkingFromContent(contentBuffer.toString());
-            String thinking = result[0];
-            String finalContent = result[1];
+        if (contentBuffer.length() > 0) {
+            String remainingContent = contentBuffer.toString();
+            if (hasDetectedThinkingTag) {
+                // 如果检测到思考标签，需要分离
+                String[] result = separateThinkingFromContent(remainingContent);
+                String thinking = result[0];
+                String finalContent = result[1];
 
-            if (!thinking.isEmpty()) {
-                fullReasoning.append(thinking);
-            }
-            if (!finalContent.isEmpty()) {
-                fullContent.append(finalContent);
+                if (!thinking.isEmpty()) {
+                    fullReasoning.append(thinking);
+                }
+                if (!finalContent.isEmpty()) {
+                    fullContent.append(finalContent);
+                }
+            } else {
+                // 没有思考标签，直接追加
+                fullContent.append(remainingContent);
             }
         }
 
@@ -801,6 +811,7 @@ public class AIHelper {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         StringBuilder fullContent = new StringBuilder();
+        StringBuilder contentBuffer = new StringBuilder();
         String line;
 
         while ((line = reader.readLine()) != null) {
@@ -833,7 +844,7 @@ public class AIHelper {
                             }
 
                             if (content != null && !content.isEmpty() && !"null".equals(content)) {
-                                fullContent.append(content);
+                                contentBuffer.append(content);
                             }
                         }
                     }
@@ -844,6 +855,11 @@ public class AIHelper {
         }
         reader.close();
         connection.disconnect();
+
+        // 处理缓冲区剩余内容
+        if (contentBuffer.length() > 0) {
+            fullContent.append(contentBuffer.toString());
+        }
 
         if (fullContent.length() == 0) {
             throw new Exception("AI API返回空结果（未返回正式回答）");
