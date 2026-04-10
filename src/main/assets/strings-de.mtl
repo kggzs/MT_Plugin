@@ -157,6 +157,10 @@ binary_decode_btn: Binär Dekodieren
 decode_error_empty_input: Dekodierung fehlgeschlagen: Leere Eingabe
 decode_error_invalid_binary: Dekodierung fehlgeschlagen: Ungültiges Binärformat
 decode_error_binary_length: Dekodierung fehlgeschlagen: Binärlänge muss ein Vielfaches von 8 sein
+background_run: Im Hintergrund Ausführen
+confirm_selection: Bestätigen
+cancel_selection: Abbrechen
+confirm: OK
 ai_prompt_input_label: Bitte geben Sie einen Prompt ein
 ai_prompt_added: Schneller Prompt hinzugefügt
 quick_prompt_btn_label: Schnelle Prompts

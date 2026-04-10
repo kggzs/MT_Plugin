@@ -157,6 +157,10 @@ binary_decode_btn: バイナリデコード
 decode_error_empty_input: デコードに失敗しました: 入力が空です
 decode_error_invalid_binary: デコードに失敗しました: 無効なバイナリ形式です
 decode_error_binary_length: デコードに失敗しました: バイナリの長さは8の倍数である必要があります
+background_run: バックグラウンド実行
+confirm_selection: 確認
+cancel_selection: キャンセル
+confirm: 確認
 ai_prompt_input_label: プロンプトを入力してください
 ai_prompt_added: 高速プロンプトを追加しました
 quick_prompt_btn_label: 高速プロンプト

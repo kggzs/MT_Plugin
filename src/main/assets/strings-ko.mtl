@@ -157,6 +157,10 @@ binary_decode_btn: 이진디코딩
 decode_error_empty_input: 디코딩 실패: 입력이 비어 있습니다
 decode_error_invalid_binary: 디코딩 실패: 잘못된 이진 형식
 decode_error_binary_length: 디코딩 실패: 이진 길이는 8의 배수여야 합니다
+background_run: 백그라운드 실행
+confirm_selection: 확인
+cancel_selection: 취소
+confirm: 확인
 ai_prompt_input_label: 프롬프트를 입력하십시오
 ai_prompt_added: 빠른 프롬프트가 추가되었습니다
 quick_prompt_btn_label: 빠른 프롬프트

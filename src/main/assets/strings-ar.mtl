@@ -157,6 +157,10 @@ binary_decode_btn: ثنائي فك ترميز
 decode_error_empty_input: فشل فك الترميز: إدخال فارغ
 decode_error_invalid_binary: فشل فك الترميز: تنسيق ثنائي غير صالح
 decode_error_binary_length: فشل فك الترميز: يجب أن يكون الطول الثنائي مضاعفًا لـ 8
+background_run: تشغيل في الخلفية
+confirm_selection: تأكيد
+cancel_selection: إلغاء
+confirm: موافق
 ai_prompt_input_label: الرجاء إدخال تلميح
 ai_prompt_added: تم إضافة التلميح السريع
 quick_prompt_btn_label: التلميحات السريعة

@@ -157,6 +157,10 @@ binary_decode_btn: Binaire Décoder
 decode_error_empty_input: Échec du décodage : Entrée vide
 decode_error_invalid_binary: Échec du décodage : Format binaire invalide
 decode_error_binary_length: Échec du décodage : La longueur binaire doit être un multiple de 8
+background_run: Exécuter en Arrière-plan
+confirm_selection: Confirmer
+cancel_selection: Annuler
+confirm: OK
 ai_prompt_input_label: Veuillez entrer un prompt
 ai_prompt_added: Prompt rapide ajouté
 quick_prompt_btn_label: Prompts Rapides

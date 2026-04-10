@@ -157,6 +157,10 @@ binary_decode_btn: 二進位解碼
 decode_error_empty_input: 解碼失敗: 輸入為空
 decode_error_invalid_binary: 解碼失敗: 無效的二進位格式
 decode_error_binary_length: 解碼失敗: 二進位長度必須是8的倍數
+background_run: 背景執行
+confirm_selection: 確定
+cancel_selection: 取消
+confirm: 確定
 ai_prompt_input_label: 請輸入提示詞
 ai_prompt_added: 已新增快速提示詞
 quick_prompt_btn_label: 快速提示詞

@@ -157,6 +157,10 @@ binary_decode_btn: Двоичный Декодировать
 decode_error_empty_input: Ошибка декодирования: Пустой ввод
 decode_error_invalid_binary: Ошибка декодирования: Неверный двоичный формат
 decode_error_binary_length: Ошибка декодирования: Двоичная длина должна быть кратна 8
+background_run: Запуск в фоне
+confirm_selection: Подтвердить
+cancel_selection: Отмена
+confirm: OK
 ai_prompt_input_label: Пожалуйста, введите подсказку
 ai_prompt_added: Быстрая подсказка добавлена
 quick_prompt_btn_label: Быстрые подсказки
