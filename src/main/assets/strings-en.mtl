@@ -1,5 +1,5 @@
 plugin_name: AI Smart Programming Assistant
-plugin_description: An AI-powered smart programming assistant plugin for MT Manager, providing intelligent code analysis, optimization suggestions, and issue diagnosis services. Deeply integrated with DeepSeek AI model, supporting full-text analysis and quick code snippet diagnosis. Also includes practical development tools such as encoding/decoding, hash calculation, and timestamp conversion to comprehensively improve mobile programming efficiency.
+plugin_description: An AI-powered smart programming assistant plugin for MT Manager, providing intelligent code analysis, optimization suggestions, and issue diagnosis services. Deeply integrated with AI model, supporting full-text analysis and quick code snippet diagnosis. Also includes practical development tools such as encoding/decoding, hash calculation, and timestamp conversion to comprehensively improve mobile programming efficiency.
 plugin_author: Kang Ge
 plugin_website: Official Website
 about: About
