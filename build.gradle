@@ -73,12 +73,12 @@ mtPlugin {
     /**
      * 插件版本号，低版本插件无法覆盖安装高版本插件
      */
-    versionCode = 3
+    versionCode = 4
 
     /**
      * 插件版本名称
      */
-    versionName = "v2.0.1"
+    versionName = "v2.0.2"
 
     /**
      * 插件名称
