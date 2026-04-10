@@ -1,0 +1,193 @@
+plugin_name: Умный помощник программиста AI
+plugin_description: Плагин умного помощника программиста на базе ИИ для MT Manager, предоставляющий услуги интеллектуального анализа кода, предложений по оптимизации и диагностики проблем. Глубоко интегрирован с моделями ИИ, поддерживает полнотекстовый анализ и быструю диагностику фрагментов кода. Также включает практические инструменты разработки, такие как кодирование/декодирование, вычисление хэша и преобразование меток времени для всестороннего повышения эффективности мобильного программирования.
+plugin_author: Кан Ге
+plugin_website: Официальный сайт
+about: О плагине
+features_title: Основные функции
+features_summary: Этот плагин имеет анализ кода ИИ в качестве основной функции, а также различные практические инструменты вспомогательной разработки. Все функции можно использовать непосредственно в текстовом редакторе для всестороннего повышения эффективности программирования.
+encode_decode_function: Кодирование/Декодирование
+encode_decode_usage: Предоставляет несколько форматов кодирования/декодирования. Выберите текст и нажмите соответствующую функцию для использования.
+base64_encode: Кодировать Base64
+base64_encode_usage: Кодирует выбранный текст в формате Base64.
+base64_decode: Декодировать Base64
+hex_encode: Кодировать Hex
+hex_encode_usage: Кодирует выбранный текст в шестнадцатеричном формате.
+hex_decode: Декодировать Hex
+unicode_encode: Кодировать Unicode
+unicode_encode_usage: Кодирует выбранный текст как экранирующие последовательности Unicode.
+unicode_decode: Декодировать Unicode
+url_encode: Кодировать URL
+url_decode: Декодировать URL
+rot13_encode: Кодировать ROT13
+rot13_encode_usage: Шифрует выбранный текст с использованием алгоритма ROT13.
+rot13_decode: Декодировать ROT13
+rot13_decode_usage: Расшифровывает выбранный текст с использованием алгоритма ROT13.
+binary_encode: Кодировать в двоичный
+binary_encode_usage: Кодирует выбранный текст в двоичном формате.
+binary_decode: Декодировать из двоичного
+encode_decode_error: Ошибка кодирования/декодирования
+hash_function: Вычисление хэша
+hash_usage: Выберите любой текст для вычисления значения хэша (MD5/SHA-256/SHA-512) и копирования в буфер обмена. Быстро генерируйте текстовые отпечатки для проверки целостности файлов.
+timestamp_function: Преобразование метки времени
+timestamp_usage: Поддерживает двунаправленное преобразование: выберите числовую метку времени для автоматического преобразования в формат даты/времени или выберите строку даты/времени для преобразования в метку времени. Поддерживает несколько форматов даты (yyyy-MM-dd, yyyy/MM/dd и т.д.).
+quick_insert_function: Вставить время
+quick_insert_usage: Быстро вставьте текущую дату и время в позицию курсора в формате yyyy-MM-dd HH:mm:ss. Не нужно выбирать текст, доступно в любое время.
+ai_code_analysis: Анализ кода ИИ
+ai_code_analysis_usage: 【Основная функция】Выполните интеллектуальный анализ кода ИИ для всего кода в текущем редакторе, предоставляя обзор кода, оценку качества, выявление потенциальных проблем, предложения по оптимизации и проверку стандартов кода. Поддерживает отображение процесса анализа в реальном времени.
+ai_quick_analysis: Быстрый анализ ИИ
+ai_quick_analysis_usage: 【Основная функция】Выполните быстрый анализ кода ИИ для выбранных фрагментов кода, предоставляя целенаправленные предложения по оптимизации и диагностику проблем. Выберите текст и нажмите для использования.
+select_text_hint: Пожалуйста, сначала выберите текст
+encode_success: Кодирование выполнено
+decode_success: Декодирование выполнено
+decode_error: Ошибка декодирования
+encode_error: Ошибка кодирования
+base64_error: Ошибка операции Base64
+hash_type: Тип хэша
+hash_error: Ошибка вычисления хэша
+timestamp_input: Ввод метки времени
+timestamp_hint: Введите метку времени или дату/время
+timestamp_output: Результат
+convert: Преобразовать
+invalid_timestamp: Неверный формат метки времени
+invalid_timestamp_or_date: Неверный формат метки времени или даты
+timestamp_to_date_success: Метка времени преобразована в дату успешно
+date_to_timestamp_success: Дата преобразована в метку времени успешно
+convert_error: Ошибка преобразования
+common_text: Общий текст
+current_date: Текущая дата
+current_time: Текущее время
+current_datetime: Текущая дата/время
+current_timestamp: Текущая метка времени
+uuid: UUID
+email_template: Шаблон электронной почты
+phone_template: Шаблон телефона
+ip_template: Шаблон IP-адреса
+insert: Вставить
+insert_success: Вставка выполнена
+copy: Копировать
+copy_success: Копирование выполнено
+cancel: Отмена
+close: Закрыть
+undo: Отменить
+undo_success: Отмена выполнена
+replace: Заменить
+replace_success: Замена выполнена
+ai_capability_config: Настройка возможностей ИИ
+manage_skills: Управление пользовательскими Skills
+save: Сохранить
+saved: Сохранено
+new_skill: + Новый Skill
+skill_management: Управление пользовательскими Skills
+load_skill_failed: Ошибка загрузки Skill
+skill_name: Имя Skill
+input_name: Введите имя
+prompt_content: Содержание подсказки
+delete_this_skill: Удалить этот Skill
+confirm_delete: Подтвердить удаление
+sure_to_delete_skill: Вы уверены, что хотите удалить Skill?
+delete: Удалить
+deleted: Удалено
+delete_failed: Ошибка удаления
+edit_skill: Редактировать Skill
+name_cannot_be_empty: Имя не может быть пустым
+skill_saved: Skill сохранен
+save_failed: Ошибка сохранения
+apply: Применить
+skill_applied: Skill применен
+quick_prompts: Быстрые подсказки
+quick_prompts_config: Настройка быстрых подсказок
+quick_prompts_summary: Настройте до 10 быстрых подсказок для быстрого выбора во время анализа
+add_quick_prompt: Добавить быструю подсказку
+edit_quick_prompt: Редактировать быструю подсказку
+delete_quick_prompt: Удалить эту подсказку
+quick_prompt_max_limit: Можно добавить не более 10 быстрых подсказок
+quick_prompt_name_hint: Имя кнопки (первые 8 символов)
+quick_prompt_content_hint: Содержание подсказки
+apply_quick_prompt: Применить
+quick_prompt_applied: Быстрая подсказка применена
+global_analysis_prompt: Глобальная подсказка анализа
+short_analysis_prompt: Краткая подсказка анализа
+supplementary_prompt_hint: Введите дополнительную подсказку...
+set_analysis_prompt: Установить подсказку анализа
+start_analysis: Начать анализ
+initializing: Инициализация...
+analysis_cancelled: Анализ отменен
+analysis_failed: Ошибка анализа:
+empty_analysis_result: Пустой результат анализа
+copied_to_clipboard: Скопировано в буфер обмена
+config_reset_success: Конфигурация сброшена до значений по умолчанию
+url_format_error: URL должен начинаться с http:// или https://
+select_code_hint: Пожалуйста, сначала выберите код для анализа
+analysis_result: Результат анализа
+analysis_result_empty_detail: ИИ не смог вернуть действительный результат анализа.
+error_detail: Подробная информация об ошибке:
+content_truncated: Содержимое обрезано...
+error_info_copied: Информация об ошибке скопирована в буфер обмена
+ai_config_group: Конфигурация анализа кода ИИ
+api_config: Конфигурация API
+api_config_summary: Настройте URL API, имя модели и ключ API
+ai_capability_config_summary: Управляйте глобальными подсказками анализа, краткими подсказками анализа и пользовательскими Skills
+reset_config: Сбросить конфигурацию
+reset_config_summary: Нажмите, чтобы сбросить конфигурацию ИИ до значений по умолчанию
+api_address: Адрес API
+api_url_hint: По умолчанию: https://api.kggzs.cn/v1
+model_name: Имя модели
+model_name_hint: По умолчанию: deepseek-v3.2
+api_key: Ключ API
+api_key_hint: По умолчанию: sk-xxxxxxxxxxxxxxxxxxxxxxxx
+no_input_detected: Ввод не обнаружен
+reset_to_default: Сброшено до значений по умолчанию
+global_analysis_prompt_label: Глобальная подсказка анализа
+short_analysis_prompt_label: Краткая подсказка анализа
+load_skill_data_failed: Ошибка загрузки данных Skill
+conversion_tools: Инструменты преобразования
+encode_decode_section: Кодирование/Декодирование
+base64_encode_btn: Base64 Кодировать
+base64_decode_btn: Base64 Декодировать
+hex_encode_btn: Hex Кодировать
+hex_decode_btn: Hex Декодировать
+unicode_encode_btn: Unicode Кодировать
+unicode_decode_btn: Unicode Декодировать
+url_encode_btn: URL Кодировать
+url_decode_btn: URL Декодировать
+rot13_encode_btn: ROT13 Кодировать
+rot13_decode_btn: ROT13 Декодировать
+binary_encode_btn: Двоичный Кодировать
+binary_decode_btn: Двоичный Декодировать
+decode_error_empty_input: Ошибка декодирования: Пустой ввод
+decode_error_invalid_binary: Ошибка декодирования: Неверный двоичный формат
+decode_error_binary_length: Ошибка декодирования: Двоичная длина должна быть кратна 8
+ai_prompt_input_label: Пожалуйста, введите подсказку
+ai_prompt_added: Быстрая подсказка добавлена
+quick_prompt_btn_label: Быстрые подсказки
+skill_selector_label: Выбрать пользовательский Skill (Нажмите для выбора)
+skill_selected_label: Выбранный Skill:
+unknown_skill: Неизвестно
+confirm_reset_title: Подтвердить сброс
+confirm_reset_message: Вы уверены, что хотите сбросить все конфигурации до значений по умолчанию?\nЭту операцию нельзя отменить.
+confirm_reset_positive: Подтвердить сброс
+confirm_reset_negative: Отмена
+confirm_cancel_title: Подтвердить отмену
+confirm_cancel_message: Вы уверены, что хотите отменить текущий анализ?
+confirm_cancel_positive: Подтвердить отмену
+confirm_cancel_negative: Продолжить анализ
+thinking_label: Процесс мышления:
+result_label: Результат анализа:
+initializing_text: Инициализация...
+waiting_analysis_text: Ожидание анализа...
+analysis_result_title: ИИ Анализирует...
+background_running_msg: Анализ выполняется в фоновом режиме, результаты будут показаны после завершения
+cancel_analysis_confirm: Анализ отменен
+analysis_failed_prefix: Ошибка анализа:
+background_analysis_failed_prefix: Ошибка фонового анализа:
+copy_success_clipboard: Скопировано в буфер обмена
+error_info_copied_clipboard: Информация об ошибке скопирована в буфер обмена
+empty_result_title: Пустой результат анализа
+empty_result_msg: ИИ не смог вернуть действительный результат анализа.
+error_detail_label: Подробная информация об ошибке:
+content_truncated_msg: [Содержимое обрезано...]
+load_quick_prompts_failed: Ошибка загрузки быстрых подсказок
+build_quick_prompt_btn_failed: Ошибка создания кнопки быстрой подсказки
+bind_quick_prompt_btn_failed: Ошибка привязки кнопки быстрой подсказки
+build_skill_names_failed: Ошибка создания имен skills
+get_skill_content_failed: Ошибка получения содержания skill

@@ -1,0 +1,193 @@
+plugin_name: Asistente de Programación Inteligente AI
+plugin_description: Un complemento de asistencia de programación inteligente basado en AI para MT Manager, que proporciona servicios de análisis de código inteligente, sugerencias de optimización y diagnóstico de problemas. Integrado profundamente con modelos AI, soporta análisis de texto completo y diagnóstico rápido de fragmentos de código. También incluye herramientas de desarrollo prácticas como codificación/decodificación, cálculo hash y conversión de marcas de tiempo para mejorar integralmente la eficiencia de programación móvil.
+plugin_author: Kang Ge
+plugin_website: Sitio web oficial
+about: Acerca de
+features_title: Funciones principales
+features_summary: Este complemento tiene como función principal el análisis de código AI, junto con varias herramientas prácticas de desarrollo asistido. Todas las funciones se pueden usar directamente en el editor de texto para mejorar integralmente la eficiencia de programación.
+encode_decode_function: Codificar/Decodificar
+encode_decode_usage: Proporciona múltiples formatos de codificación/decodificación. Seleccione texto y haga clic en la función correspondiente para usarla.
+base64_encode: Codificar Base64
+base64_encode_usage: Codifica el texto seleccionado en formato Base64.
+base64_decode: Decodificar Base64
+hex_encode: Codificar Hex
+hex_encode_usage: Codifica el texto seleccionado en formato hexadecimal.
+hex_decode: Decodificar Hex
+unicode_encode: Codificar Unicode
+unicode_encode_usage: Codifica el texto seleccionado como secuencias de escape Unicode.
+unicode_decode: Decodificar Unicode
+url_encode: Codificar URL
+url_decode: Decodificar URL
+rot13_encode: Codificar ROT13
+rot13_encode_usage: Cifra el texto seleccionado usando el algoritmo ROT13.
+rot13_decode: Decodificar ROT13
+rot13_decode_usage: Descifra el texto seleccionado usando el algoritmo ROT13.
+binary_encode: Codificar Binario
+binary_encode_usage: Codifica el texto seleccionado en formato binario.
+binary_decode: Decodificar Binario
+encode_decode_error: Error de codificación/decodificación
+hash_function: Cálculo Hash
+hash_usage: Seleccione cualquier texto para calcular el valor hash (MD5/SHA-256/SHA-512) y copiar al portapapeles. Genere rápidamente huellas digitales de texto para verificación de integridad de archivos.
+timestamp_function: Conversión de Marca de Tiempo
+timestamp_usage: Soporta conversión bidireccional: seleccione una marca de tiempo numérica para convertirla automáticamente a formato de fecha/hora, o seleccione una cadena de fecha/hora para convertirla a marca de tiempo. Soporta múltiples formatos de fecha (yyyy-MM-dd, yyyy/MM/dd, etc.).
+quick_insert_function: Insertar Hora
+quick_insert_usage: Inserte rápidamente la fecha y hora actuales en la posición del cursor en formato yyyy-MM-dd HH:mm:ss. No necesita seleccionar texto, disponible en cualquier momento.
+ai_code_analysis: Análisis de Código AI
+ai_code_analysis_usage: 【Función principal】Realice análisis inteligente de código AI en todo el código del editor actual, proporcionando descripción general del código, evaluación de calidad, identificación de problemas potenciales, sugerencias de optimización y verificación de estándares de código. Soporta visualización en tiempo real del proceso de análisis.
+ai_quick_analysis: Análisis Rápido AI
+ai_quick_analysis_usage: 【Función principal】Realice análisis rápido de código AI en fragmentos de código seleccionados, proporcionando sugerencias de optimización específicas y diagnóstico de problemas. Seleccione texto y haga clic para usar.
+select_text_hint: Por favor seleccione texto primero
+encode_success: Codificado exitosamente
+decode_success: Decodificado exitosamente
+decode_error: Error de decodificación
+encode_error: Error de codificación
+base64_error: Error de operación Base64
+hash_type: Tipo de Hash
+hash_error: Error de cálculo hash
+timestamp_input: Entrada de Marca de Tiempo
+timestamp_hint: Ingrese marca de tiempo o fecha/hora
+timestamp_output: Resultado
+convert: Convertir
+invalid_timestamp: Formato de marca de tiempo inválido
+invalid_timestamp_or_date: Formato de marca de tiempo o fecha inválido
+timestamp_to_date_success: Marca de tiempo a fecha convertida exitosamente
+date_to_timestamp_success: Fecha a marca de tiempo convertida exitosamente
+convert_error: Error de conversión
+common_text: Texto Común
+current_date: Fecha Actual
+current_time: Hora Actual
+current_datetime: Fecha/Hora Actual
+current_timestamp: Marca de Tiempo Actual
+uuid: UUID
+email_template: Plantilla de Correo
+phone_template: Plantilla de Teléfono
+ip_template: Plantilla de Dirección IP
+insert: Insertar
+insert_success: Insertado exitosamente
+copy: Copiar
+copy_success: Copiado exitosamente
+cancel: Cancelar
+close: Cerrar
+undo: Deshacer
+undo_success: Deshacer exitoso
+replace: Reemplazar
+replace_success: Reemplazo exitoso
+ai_capability_config: Configuración de Capacidad AI
+manage_skills: Gestionar Skills Personalizados
+save: Guardar
+saved: Guardado
+new_skill: + Nuevo Skill
+skill_management: Gestión de Skills Personalizados
+load_skill_failed: Error al cargar Skill
+skill_name: Nombre del Skill
+input_name: Ingrese nombre
+prompt_content: Contenido del Prompt
+delete_this_skill: Eliminar Este Skill
+confirm_delete: Confirmar Eliminación
+sure_to_delete_skill: ¿Está seguro de que desea eliminar el Skill?
+delete: Eliminar
+deleted: Eliminado
+delete_failed: Error de eliminación
+edit_skill: Editar Skill
+name_cannot_be_empty: El nombre no puede estar vacío
+skill_saved: Skill guardado
+save_failed: Error de guardado
+apply: Aplicar
+skill_applied: Skill aplicado
+quick_prompts: Prompts Rápidos
+quick_prompts_config: Configurar Prompts Rápidos
+quick_prompts_summary: Configure hasta 10 prompts rápidos para selección rápida durante el análisis
+add_quick_prompt: Agregar Prompt Rápido
+edit_quick_prompt: Editar Prompt Rápido
+delete_quick_prompt: Eliminar Este Prompt
+quick_prompt_max_limit: Solo se pueden agregar máximo 10 prompts rápidos
+quick_prompt_name_hint: Nombre del botón (primeros 8 caracteres)
+quick_prompt_content_hint: Contenido del prompt
+apply_quick_prompt: Aplicar
+quick_prompt_applied: Prompt rápido aplicado
+global_analysis_prompt: Prompt de Análisis Global
+short_analysis_prompt: Prompt de Análisis Corto
+supplementary_prompt_hint: Ingrese prompt suplementario...
+set_analysis_prompt: Configurar Prompt de Análisis
+start_analysis: Iniciar Análisis
+initializing: Inicializando...
+analysis_cancelled: Análisis cancelado
+analysis_failed: Error de análisis:
+empty_analysis_result: Resultado de análisis vacío
+copied_to_clipboard: Copiado al portapapeles
+config_reset_success: Configuración restablecida a valores predeterminados
+url_format_error: La URL debe comenzar con http:// o https://
+select_code_hint: Por favor seleccione código para analizar primero
+analysis_result: Resultado del Análisis
+analysis_result_empty_detail: AI no pudo devolver un resultado de análisis válido.
+error_detail: Información detallada de error:
+content_truncated: Contenido truncado...
+error_info_copied: Información de error copiada al portapapeles
+ai_config_group: Configuración de Análisis de Código AI
+api_config: Configuración de API
+api_config_summary: Configure URL de API, nombre de modelo y clave de API
+ai_capability_config_summary: Gestione prompts de análisis global, prompts de análisis corto y Skills personalizados
+reset_config: Restablecer Configuración
+reset_config_summary: Haga clic para restablecer la configuración de AI a valores predeterminados
+api_address: Dirección de API
+api_url_hint: Predeterminado: https://api.kggzs.cn/v1
+model_name: Nombre del Modelo
+model_name_hint: Predeterminado: deepseek-v3.2
+api_key: Clave de API
+api_key_hint: Predeterminado: sk-xxxxxxxxxxxxxxxxxxxxxxxx
+no_input_detected: No se detectó entrada
+reset_to_default: Restablecido a valores predeterminados
+global_analysis_prompt_label: Prompt de Análisis Global
+short_analysis_prompt_label: Prompt de Análisis Corto
+load_skill_data_failed: Error al cargar datos de Skill
+conversion_tools: Herramientas de Conversión
+encode_decode_section: Codificar/Decodificar
+base64_encode_btn: Base64 Codificar
+base64_decode_btn: Base64 Decodificar
+hex_encode_btn: Hex Codificar
+hex_decode_btn: Hex Decodificar
+unicode_encode_btn: Unicode Codificar
+unicode_decode_btn: Unicode Decodificar
+url_encode_btn: URL Codificar
+url_decode_btn: URL Decodificar
+rot13_encode_btn: ROT13 Codificar
+rot13_decode_btn: ROT13 Decodificar
+binary_encode_btn: Binario Codificar
+binary_decode_btn: Binario Decodificar
+decode_error_empty_input: Error de decodificación: Entrada vacía
+decode_error_invalid_binary: Error de decodificación: Formato binario inválido
+decode_error_binary_length: Error de decodificación: La longitud binaria debe ser múltiplo de 8
+ai_prompt_input_label: Por favor ingrese prompt
+ai_prompt_added: Prompt rápido agregado
+quick_prompt_btn_label: Prompts Rápidos
+skill_selector_label: Seleccionar Skill Personalizado (Haga clic para seleccionar)
+skill_selected_label: Skill seleccionado:
+unknown_skill: Desconocido
+confirm_reset_title: Confirmar Restablecimiento
+confirm_reset_message: ¿Está seguro de que desea restablecer todas las configuraciones a valores predeterminados?\nEsta operación no se puede deshacer.
+confirm_reset_positive: Confirmar Restablecimiento
+confirm_reset_negative: Cancelar
+confirm_cancel_title: Confirmar Cancelación
+confirm_cancel_message: ¿Está seguro de que desea cancelar el análisis actual?
+confirm_cancel_positive: Confirmar Cancelación
+confirm_cancel_negative: Continuar Análisis
+thinking_label: Proceso de Pensamiento:
+result_label: Resultado del Análisis:
+initializing_text: Inicializando...
+waiting_analysis_text: Esperando análisis...
+analysis_result_title: AI Analizando...
+background_running_msg: El análisis se está ejecutando en segundo plano, los resultados se mostrarán cuando se complete
+cancel_analysis_confirm: Análisis cancelado
+analysis_failed_prefix: Error de análisis:
+background_analysis_failed_prefix: Error de análisis en segundo plano:
+copy_success_clipboard: Copiado al portapapeles
+error_info_copied_clipboard: Información de error copiada al portapapeles
+empty_result_title: Resultado de análisis vacío
+empty_result_msg: AI no pudo devolver un resultado de análisis válido.
+error_detail_label: Información detallada de error:
+content_truncated_msg: [Contenido truncado...]
+load_quick_prompts_failed: Error al cargar prompts rápidos
+build_quick_prompt_btn_failed: Error al construir botón de prompt rápido
+bind_quick_prompt_btn_failed: Error al vincular botón de prompt rápido
+build_skill_names_failed: Error al construir nombres de skills
+get_skill_content_failed: Error al obtener contenido de skill

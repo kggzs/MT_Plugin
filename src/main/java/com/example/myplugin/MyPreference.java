@@ -41,14 +41,14 @@ public class MyPreference implements PluginPreference {
                .onClick((ui, preference) -> {
                    // 二次确认对话框
                    ui.buildDialog()
-                       .setTitle("确认重置")
-                       .setMessage("确定要重置所有配置为默认值吗？\n此操作不可撤销。")
-                       .setPositiveButton("确定重置", (dialog, which) -> {
+                       .setTitle("{confirm_reset_title}")
+                       .setMessage("{confirm_reset_message}")
+                       .setPositiveButton("{confirm_reset_positive}", (dialog, which) -> {
                            AIHelper.resetToDefault(context);
                            context.showToast("{config_reset_success}");
                            dialog.dismiss();
                        })
-                       .setNegativeButton("取消", null)
+                       .setNegativeButton("{confirm_reset_negative}", null)
                        .show();
                });
 

@@ -1,0 +1,193 @@
+plugin_name: AI 스마트 프로그래밍 어시스턴트
+plugin_description: AI 기반 스마트 프로그래밍 어시스턴트 플러그인으로, MT 관리자에 코드 인텔리전트 분석, 최적화 제안 및 문제 진단 서비스를 제공합니다. AI 모델과 깊이 통합되어 전체 텍스트 분석 및 선택 코드 빠른 진단을 지원합니다. 인코딩/디코딩, 해시 계산, 타임스탬프 변환 등 실용적인 개발 도구도 통합되어 모바일 프로그래밍 효율성을 전면적으로 향상시킵니다.
+plugin_author: 캉거
+plugin_website: 공식 웹사이트
+about: 정보
+features_title: 핵심 기능
+features_summary: 이 플러그인은 AI 코드 분석을 핵심으로 하며, 다양한 실용적인 개발 보조 도구를 제공합니다. 텍스트 편집기에서 모든 기능을 사용하여 프로그래밍 효율성을 전면적으로 향상시킬 수 있습니다.
+encode_decode_function: 인코딩/디코딩
+encode_decode_usage: 다양한 인코딩/디코딩 형식을 제공합니다. 텍스트를 선택한 후 해당 기능을 클릭하여 사용합니다.
+base64_encode: Base64 인코딩
+base64_encode_usage: 선택한 텍스트를 Base64 형식으로 인코딩합니다.
+base64_decode: Base64 디코딩
+hex_encode: Hex 인코딩
+hex_encode_usage: 선택한 텍스트를 16진수 형식으로 인코딩합니다.
+hex_decode: Hex 디코딩
+unicode_encode: Unicode 인코딩
+unicode_encode_usage: 선택한 텍스트를 Unicode 이스케이프 시퀀스로 인코딩합니다.
+unicode_decode: Unicode 디코딩
+url_encode: URL 인코딩
+url_decode: URL 디코딩
+rot13_encode: ROT13 인코딩
+rot13_encode_usage: ROT13 알고리즘을 사용하여 선택한 텍스트를 암호화합니다.
+rot13_decode: ROT13 디코딩
+rot13_decode_usage: ROT13 알고리즘을 사용하여 선택한 텍스트를 복호화합니다.
+binary_encode: 이진 인코딩
+binary_encode_usage: 선택한 텍스트를 이진 형식으로 인코딩합니다.
+binary_decode: 이진 디코딩
+encode_decode_error: 인코딩/디코딩 실패
+hash_function: 해시 계산
+hash_usage: 텍스트를 선택하면 해시 값(MD5/SHA-256/SHA-512)을 자동으로 계산하여 클립보드에 복사합니다. 파일 무결성 검증에 사용할 텍스트 지문을 빠르게 생성합니다.
+timestamp_function: 타임스탬프 변환
+timestamp_usage: 양방향 변환을 지원합니다. 순수 숫자 타임스탬프를 선택하면 날짜 시간 형식으로 자동 변환되고, 날짜 시간 문자열을 선택하면 타임스탬프로 자동 변환됩니다. 다양한 날짜 형식(yyyy-MM-dd, yyyy/MM/dd 등)을 지원합니다.
+quick_insert_function: 시간 삽입
+quick_insert_usage: 커서 위치에 현재 날짜 시간을 yyyy-MM-dd HH:mm:ss 형식으로 빠르게 삽입합니다. 텍스트를 선택할 필요가 없으며 언제든지 사용할 수 있습니다.
+ai_code_analysis: AI 코드 분석
+ai_code_analysis_usage: 【핵심 기능】현재 편집기의 모든 코드에 대해 AI 인텔리전트 분석을 실행하여 코드 기능 개요, 품질 평가, 잠재적 문제 식별, 최적화 제안 및 코드 표준 검사를 제공합니다. 분석 과정의 실시간 표시를 지원합니다.
+ai_quick_analysis: AI 빠른 분석
+ai_quick_analysis_usage: 【핵심 기능】선택한 코드 스니펫에 대해 AI 빠른 분석을 실행하여 대상 최적화 제안 및 문제 진단을 제공합니다. 텍스트를 선택하고 클릭하기만 하면 사용할 수 있습니다.
+select_text_hint: 텍스트를 선택하십시오
+encode_success: 인코딩 성공
+decode_success: 디코딩 성공
+decode_error: 디코딩 실패
+encode_error: 인코딩 실패
+base64_error: Base64 작업 실패
+hash_type: 해시 유형
+hash_error: 해시 계산 실패
+timestamp_input: 타임스탬프 입력
+timestamp_hint: 타임스탬프 또는 날짜 시간 입력
+timestamp_output: 결과
+convert: 변환
+invalid_timestamp: 잘못된 타임스탬프 형식
+invalid_timestamp_or_date: 잘못된 타임스탬프 또는 날짜 형식
+timestamp_to_date_success: 타임스탬프를 날짜로 변환 성공
+date_to_timestamp_success: 날짜를 타임스탬프로 변환 성공
+convert_error: 변환 실패
+common_text: 일반 텍스트
+current_date: 현재 날짜
+current_time: 현재 시간
+current_datetime: 현재 날짜 시간
+current_timestamp: 현재 타임스탬프
+uuid: UUID
+email_template: 이메일 템플릿
+phone_template: 전화번호 템플릿
+ip_template: IP 주소 템플릿
+insert: 삽입
+insert_success: 삽입 성공
+copy: 복사
+copy_success: 복사 성공
+cancel: 취소
+close: 닫기
+undo: 실행 취소
+undo_success: 실행 취소 성공
+replace: 바꾸기
+replace_success: 바꾸기 성공
+ai_capability_config: AI 능력 설정
+manage_skills: 사용자 정의 Skill 관리
+save: 저장
+saved: 저장됨
+new_skill: + 새 Skill
+skill_management: 사용자 정의 Skill 관리
+load_skill_failed: Skill 로드 실패
+skill_name: Skill 이름
+input_name: 이름 입력
+prompt_content: 프롬프트 내용
+delete_this_skill: 이 Skill 삭제
+confirm_delete: 삭제 확인
+sure_to_delete_skill: Skill을 삭제하시겠습니까
+delete: 삭제
+deleted: 삭제됨
+delete_failed: 삭제 실패
+edit_skill: Skill 편집
+name_cannot_be_empty: 이름은 비워둘 수 없습니다
+skill_saved: Skill이 저장되었습니다
+save_failed: 저장 실패
+apply: 적용
+skill_applied: Skill이 적용되었습니다
+quick_prompts: 빠른 프롬프트
+quick_prompts_config: 빠른 프롬프트 구성
+quick_prompts_summary: 최대 10개의 빠른 프롬프트를 구성하여 분석 시 빠르게 선택하여 사용합니다
+add_quick_prompt: 빠른 프롬프트 추가
+edit_quick_prompt: 빠른 프롬프트 편집
+delete_quick_prompt: 이 프롬프트 삭제
+quick_prompt_max_limit: 빠른 프롬프트는 최대 10개까지 추가할 수 있습니다
+quick_prompt_name_hint: 버튼 이름(처음 8자)
+quick_prompt_content_hint: 프롬프트 내용
+apply_quick_prompt: 적용
+quick_prompt_applied: 빠른 프롬프트가 적용되었습니다
+global_analysis_prompt: 전역 분석 프롬프트
+short_analysis_prompt: 짧은 분석 프롬프트
+supplementary_prompt_hint: 보완 프롬프트를 입력하십시오...
+set_analysis_prompt: 분석 프롬프트 설정
+start_analysis: 분석 시작
+initializing: 초기화 중...
+analysis_cancelled: 분석이 취소되었습니다
+analysis_failed: 분석 실패:
+empty_analysis_result: 분석 결과가 비어 있습니다
+copied_to_clipboard: 클립보드에 복사했습니다
+config_reset_success: 기본 구성으로 재설정했습니다
+url_format_error: URL은 http:// 또는 https://로 시작해야 합니다
+select_code_hint: 분석할 코드를 선택하십시오
+analysis_result: 분석 결과
+analysis_result_empty_detail: AI가 유효한 분석 결과를 반환하지 않았습니다.
+error_detail: 상세 오류 정보:
+content_truncated: 내용이 잘렸습니다...
+error_info_copied: 오류 정보를 클립보드에 복사했습니다
+ai_config_group: AI 코드 분석 구성
+api_config: API 구성
+api_config_summary: API 주소, 모델 이름 및 API 키 구성
+ai_capability_config_summary: 전역 분석 프롬프트, 짧은 분석 프롬프트 및 사용자 정의 Skill 관리
+reset_config: 구성 재설정
+reset_config_summary: 클릭하여 AI 구성을 기본값으로 재설정
+api_address: API 주소
+api_url_hint: 기본값: https://api.kggzs.cn/v1
+model_name: 모델 이름
+model_name_hint: 기본값: deepseek-v3.2
+api_key: API 키
+api_key_hint: 기본값: sk-xxxxxxxxxxxxxxxxxxxxxxxx
+no_input_detected: 입력이 감지되지 않았습니다
+reset_to_default: 기본값으로 재설정했습니다
+global_analysis_prompt_label: 전역 분석 프롬프트
+short_analysis_prompt_label: 짧은 분석 프롬프트
+load_skill_data_failed: Skill 데이터 로드 실패
+conversion_tools: 변환 도구
+encode_decode_section: 인코딩/디코딩
+base64_encode_btn: Base64인코딩
+base64_decode_btn: Base64디코딩
+hex_encode_btn: Hex인코딩
+hex_decode_btn: Hex디코딩
+unicode_encode_btn: Unicode인코딩
+unicode_decode_btn: Unicode디코딩
+url_encode_btn: URL인코딩
+url_decode_btn: URL디코딩
+rot13_encode_btn: ROT13인코딩
+rot13_decode_btn: ROT13디코딩
+binary_encode_btn: 이진인코딩
+binary_decode_btn: 이진디코딩
+decode_error_empty_input: 디코딩 실패: 입력이 비어 있습니다
+decode_error_invalid_binary: 디코딩 실패: 잘못된 이진 형식
+decode_error_binary_length: 디코딩 실패: 이진 길이는 8의 배수여야 합니다
+ai_prompt_input_label: 프롬프트를 입력하십시오
+ai_prompt_added: 빠른 프롬프트가 추가되었습니다
+quick_prompt_btn_label: 빠른 프롬프트
+skill_selector_label: 사용자 정의 Skill 선택(클릭하여 선택)
+skill_selected_label: 선택된 Skill:
+unknown_skill: 알 수 없음
+confirm_reset_title: 재설정 확인
+confirm_reset_message: 모든 구성을 기본값으로 재설정하시겠습니까?\n이 작업은 취소할 수 없습니다.
+confirm_reset_positive: 재설정 확인
+confirm_reset_negative: 취소
+confirm_cancel_title: 취소 확인
+confirm_cancel_message: 현재 분석을 취소하시겠습니까?
+confirm_cancel_positive: 취소 확인
+confirm_cancel_negative: 분석 계속
+thinking_label: 사고 과정:
+result_label: 분석 결과:
+initializing_text: 초기화 중...
+waiting_analysis_text: 분석 대기 중...
+analysis_result_title: AI 분석 중...
+background_running_msg: 백그라운드에서 분석이 실행 중입니다. 완료 후 결과가 표시됩니다
+cancel_analysis_confirm: 분석이 취소되었습니다
+analysis_failed_prefix: 분석 실패:
+background_analysis_failed_prefix: 백그라운드 분석 실패:
+copy_success_clipboard: 클립보드에 복사했습니다
+error_info_copied_clipboard: 오류 정보를 클립보드에 복사했습니다
+empty_result_title: 분석 결과가 비어 있습니다
+empty_result_msg: AI가 유효한 분석 결과를 반환하지 않았습니다.
+error_detail_label: 상세 오류 정보:
+content_truncated_msg: [내용이 잘렸습니다...]
+load_quick_prompts_failed: 빠른 프롬프트 로드 실패
+build_quick_prompt_btn_failed: 빠른 프롬프트 버튼 빌드 실패
+bind_quick_prompt_btn_failed: 빠른 프롬프트 버튼 바인딩 실패
+build_skill_names_failed: Skill 이름 빌드 실패
+get_skill_content_failed: Skill 내용 가져오기 실패

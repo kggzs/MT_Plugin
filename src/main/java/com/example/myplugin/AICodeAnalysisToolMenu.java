@@ -19,7 +19,7 @@ public class AICodeAnalysisToolMenu extends BaseTextEditorToolMenu {
     @NonNull
     @Override
     public String name() {
-        return "AI代码分析";
+        return "{ai_code_analysis}";
     }
 
     @NonNull

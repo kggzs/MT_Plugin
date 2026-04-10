@@ -1,6 +1,7 @@
 package com.example.myplugin;
 
 import android.graphics.drawable.Drawable;
+import androidx.annotation.NonNull;
 import bin.mt.plugin.api.editor.TextEditor;
 import bin.mt.plugin.api.editor.TextEditorFloatingMenu;
 import bin.mt.plugin.api.editor.BaseTextEditorFloatingMenu;
@@ -13,11 +14,13 @@ import java.util.Locale;
 import java.util.UUID;
 
 public class QuickInsertFunction extends BaseTextEditorFloatingMenu {
+    @NonNull
     @Override
     public String name() {
         return "{quick_insert_function}";
     }
 
+    @NonNull
     @Override
     public Drawable icon() {
         return MaterialIcons.get("add_circle");

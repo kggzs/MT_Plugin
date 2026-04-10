@@ -55,7 +55,7 @@ public class AICodeAnalysisHelper {
             quickPrompts = new JSONArray(AIHelper.getQuickPrompts(pluginUI.getContext()));
             quickPromptCount = Math.min(quickPrompts.length(), 8);
         } catch (Exception e) {
-            android.util.Log.w("AICodeAnalysisHelper", "加载快速提示词失败: " + e.getMessage());
+            android.util.Log.w("AICodeAnalysisHelper", "{load_quick_prompts_failed}: " + e.getMessage());
             quickPrompts = new JSONArray();
             quickPromptCount = 0;
         }
@@ -69,7 +69,7 @@ public class AICodeAnalysisHelper {
             skills = new JSONArray(AIHelper.getSkills(pluginUI.getContext()));
             skillCount = skills.length();
         } catch (Exception e) {
-            android.util.Log.w("AICodeAnalysisHelper", "加载 Skill 失败: " + e.getMessage());
+            android.util.Log.w("AICodeAnalysisHelper", "{load_skill_failed}: " + e.getMessage());
             skills = new JSONArray();
             skillCount = 0;
         }
@@ -84,12 +84,12 @@ public class AICodeAnalysisHelper {
         if (hasButtons) {
             // 构建包含按钮分组的视图
             var viewBuilder = pluginUI.buildVerticalLayout()
-                .addTextView().text("请输入提示词").marginBottomDp(4)
+                .addTextView().text("{ai_prompt_input_label}").marginBottomDp(4)
                 .addEditBox("user_prompt_input").text(defaultUserPrompt).minLines(minLines).maxLines(maxLines).textSize(12).widthMatchParent().marginBottomDp(8);
 
             // 添加快速提示词分组
             if (finalQuickPromptCount > 0) {
-                viewBuilder.addTextView().text("快速提示词").textSize(14).marginBottomDp(4);
+                viewBuilder.addTextView().text("{quick_prompt_btn_label}").textSize(14).marginBottomDp(4);
                 for (int i = 0; i < finalQuickPromptCount; i++) {
                     try {
                         JSONObject prompt = finalQuickPrompts.getJSONObject(i);
@@ -98,7 +98,7 @@ public class AICodeAnalysisHelper {
                         String buttonId = "quick_prompt_btn_" + i;
                         viewBuilder.addButton(buttonId).text(buttonName).widthMatchParent().marginBottomDp(4);
                     } catch (Exception e) {
-                        android.util.Log.w("AICodeAnalysisHelper", "构建快速提示词按钮失败: " + e.getMessage());
+                        android.util.Log.w("AICodeAnalysisHelper", "{build_quick_prompt_btn_failed}: " + e.getMessage());
                     }
                 }
             }
@@ -109,7 +109,7 @@ public class AICodeAnalysisHelper {
                 if (finalQuickPromptCount > 0) {
                     viewBuilder.addTextView().text("").marginBottomDp(4);
                 }
-                viewBuilder.addCheckBox("skill_selector").text("选择自定义 Skill（点击选择）").widthMatchParent();
+                viewBuilder.addCheckBox("skill_selector").text("{skill_selector_label}").widthMatchParent();
             }
 
             inputView = viewBuilder
@@ -119,7 +119,7 @@ public class AICodeAnalysisHelper {
         } else {
             // 没有按钮，使用简单布局
             inputView = pluginUI.buildVerticalLayout()
-                .addTextView().text("请输入提示词").marginBottomDp(4)
+                .addTextView().text("{ai_prompt_input_label}").marginBottomDp(4)
                 .addEditBox("user_prompt_input").text(defaultUserPrompt).minLines(minLines).maxLines(maxLines).textSize(12).widthMatchParent()
                 .paddingVertical(pluginUI.dialogPaddingVertical())
                 .paddingHorizontal(pluginUI.dialogPaddingHorizontal())
@@ -149,10 +149,10 @@ public class AICodeAnalysisHelper {
                             currentText += "\n";
                         }
                         userPromptInput.setText(currentText + finalPromptContent);
-                        pluginUI.showToast("已添加快速提示词");
+                        pluginUI.showToast("{ai_prompt_added}");
                     });
                 } catch (Exception e) {
-                    android.util.Log.w("AICodeAnalysisHelper", "绑定快速提示词按钮失败: " + e.getMessage());
+                    android.util.Log.w("AICodeAnalysisHelper", "{bind_quick_prompt_btn_failed}: " + e.getMessage());
                 }
             }
         }
@@ -169,7 +169,7 @@ public class AICodeAnalysisHelper {
                     skillNames[i] = skill.getString("name");
                 }
             } catch (Exception e) {
-                android.util.Log.w("AICodeAnalysisHelper", "构建 Skill 名称失败: " + e.getMessage());
+                android.util.Log.w("AICodeAnalysisHelper", "{build_skill_names_failed}: " + e.getMessage());
             }
 
             // 点击复选框时弹出多选列表
@@ -180,7 +180,7 @@ public class AICodeAnalysisHelper {
                 }
 
                 pluginUI.buildDialog()
-                    .setTitle("选择自定义 Skill")
+                    .setTitle("{skill_management}")
                     .setMultiChoiceItems(skillNames, checkedItems, (dialog, which, isChecked) -> {
                         if (isChecked) {
                             if (!selectedSkillIndexes.contains(which)) {
@@ -190,33 +190,33 @@ public class AICodeAnalysisHelper {
                             selectedSkillIndexes.remove(Integer.valueOf(which));
                         }
                     })
-                    .setPositiveButton("确定", (dialog, which) -> {
+                    .setPositiveButton("{confirm_selection}", (dialog, which) -> {
                         // 更新复选框显示文本
                         if (selectedSkillIndexes.isEmpty()) {
-                            skillCheckBox.setText("选择自定义 Skill（点击选择）");
+                            skillCheckBox.setText("{skill_selector_label}");
                         } else {
-                            StringBuilder sb = new StringBuilder("已选择 Skill：");
+                            StringBuilder sb = new StringBuilder("{skill_selected_label}");
                             for (int i = 0; i < selectedSkillIndexes.size(); i++) {
                                 if (i > 0) sb.append("、");
                                 try {
                                     sb.append(skillNames[selectedSkillIndexes.get(i)]);
                                 } catch (Exception e) {
-                                    sb.append("未知");
+                                    sb.append("{unknown_skill}");
                                 }
                             }
                             skillCheckBox.setText(sb.toString());
                         }
                     })
-                    .setNegativeButton("取消", null)
+                    .setNegativeButton("{cancel_selection}", null)
                     .show();
             });
         }
 
         // 构建最终的用户提示词（包含选中的 Skill 内容）
         pluginUI.buildDialog()
-                .setTitle("设置分析提示词")
+                .setTitle("{set_analysis_prompt}")
                 .setView(inputView)
-                .setPositiveButton("开始分析", (dialog, which) -> {
+                .setPositiveButton("{start_analysis}", (dialog, which) -> {
                     String userPrompt = userPromptInput.getText().toString().trim();
                     
                     // 如果有选中的 Skill，追加到提示词后面
@@ -233,7 +233,7 @@ public class AICodeAnalysisHelper {
                                     promptBuilder.append(skillPrompt);
                                 }
                             } catch (Exception e) {
-                                android.util.Log.w("AICodeAnalysisHelper", "获取 Skill 内容失败: " + e.getMessage());
+                                android.util.Log.w("AICodeAnalysisHelper", "{get_skill_content_failed}: " + e.getMessage());
                             }
                         }
                         userPrompt = promptBuilder.toString();
@@ -245,7 +245,7 @@ public class AICodeAnalysisHelper {
                     dialog.dismiss();
                     startAnalysis(pluginUI, code, userPrompt);
                 })
-                .setNegativeButton("取消", null)
+                .setNegativeButton("{cancel}", null)
                 .show();
     }
 
@@ -260,38 +260,38 @@ public class AICodeAnalysisHelper {
         isCancelled = false;
 
         PluginView contentView = pluginUI.buildVerticalLayout()
-                .addTextView().text("思考过程:").textSize(14).paddingBottomDp(4)
-                .addEditBox("thinking_edit").text("正在初始化...").minLines(5).maxLines(10).textSize(12).readOnly().widthMatchParent().softWrap(PluginEditText.SOFT_WRAP_KEEP_WORD)
+                .addTextView().text("{thinking_label}").textSize(14).paddingBottomDp(4)
+                .addEditBox("thinking_edit").text("{initializing_text}").minLines(5).maxLines(10).textSize(12).readOnly().widthMatchParent().softWrap(PluginEditText.SOFT_WRAP_KEEP_WORD)
                 .paddingVertical(pluginUI.dialogPaddingVertical())
                 .paddingHorizontal(pluginUI.dialogPaddingHorizontal())
-                .addTextView().text("分析结果:").textSize(14).paddingTopDp(8).paddingBottomDp(4)
-                .addEditBox("result_edit").text("等待分析...").minLines(10).maxLines(15).textSize(12).readOnly().widthMatchParent().softWrap(PluginEditText.SOFT_WRAP_KEEP_WORD)
+                .addTextView().text("{result_label}").textSize(14).paddingTopDp(8).paddingBottomDp(4)
+                .addEditBox("result_edit").text("{waiting_analysis_text}").minLines(10).maxLines(15).textSize(12).readOnly().widthMatchParent().softWrap(PluginEditText.SOFT_WRAP_KEEP_WORD)
                 .paddingVertical(pluginUI.dialogPaddingVertical())
                 .paddingHorizontal(pluginUI.dialogPaddingHorizontal())
                 .paddingBottom(16)
                 .build();
 
         PluginDialog dialog = pluginUI.buildDialog()
-                .setTitle("AI 分析中...")
+                .setTitle("{analysis_result_title}")
                 .setView(contentView)
                 .setCancelable(false)
-                .setNegativeButton("取消", (d, which) -> {
+                .setNegativeButton("{cancel}", (d, which) -> {
                     // 二次确认对话框
                     pluginUI.buildDialog()
-                        .setTitle("确认取消")
-                        .setMessage("确定要取消当前分析吗？")
-                        .setPositiveButton("确定取消", (dialog2, which2) -> {
+                        .setTitle("{confirm_cancel_title}")
+                        .setMessage("{confirm_cancel_message}")
+                        .setPositiveButton("{confirm_cancel_positive}", (dialog2, which2) -> {
                             isCancelled = true;
                             d.dismiss();
                             dialog2.dismiss();
-                            pluginUI.showToast("已取消分析");
+                            pluginUI.showToast("{cancel_analysis_confirm}");
                         })
-                        .setNegativeButton("继续分析", null)
+                        .setNegativeButton("{confirm_cancel_negative}", null)
                         .show();
                 })
-                .setNeutralButton("后台运行", (d, which) -> {
+                .setNeutralButton("{background_run}", (d, which) -> {
                     d.dismiss();
-                    pluginUI.showToast("已在后台运行分析，完成后将弹出结果");
+                    pluginUI.showToast("{background_running_msg}");
                     PluginEditText thinkingEdit2 = contentView.requireViewById("thinking_edit");
                     PluginEditText resultEdit2 = contentView.requireViewById("result_edit");
                     startBackgroundAnalysis(pluginUI, code, userPrompt, thinkingEdit2, resultEdit2);
@@ -332,7 +332,7 @@ public class AICodeAnalysisHelper {
                         if (errorMsg != null && errorMsg.contains("返回空结果")) {
                             showEmptyResultDialog(pluginUI, errorMsg);
                         } else {
-                            pluginUI.showToast("分析失败: " + errorMsg);
+                            pluginUI.showToast("{analysis_failed_prefix}" + errorMsg);
                         }
                     }
                 });
@@ -381,7 +381,7 @@ public class AICodeAnalysisHelper {
                         if (errorMsg != null && errorMsg.contains("返回空结果")) {
                             showEmptyResultDialog(pluginUI, errorMsg);
                         } else {
-                            pluginUI.showToast("后台分析失败: " + errorMsg);
+                            pluginUI.showToast("{background_analysis_failed_prefix}" + errorMsg);
                         }
                     }
                 });
@@ -401,7 +401,7 @@ public class AICodeAnalysisHelper {
         String cleanedResult = cleanMarkdown(result);
         
         PluginView resultView = pluginUI.buildVerticalLayout()
-                .addTextView().text("分析结果").textSize(16).paddingBottomDp(8)
+                .addTextView().text("{analysis_result}").textSize(16).paddingBottomDp(8)
                 .addEditBox("result_edit").text(cleanedResult).minLines(10).maxLines(20).textSize(12).readOnly().widthMatchParent().softWrap(PluginEditText.SOFT_WRAP_KEEP_WORD)
                 .paddingVertical(pluginUI.dialogPaddingVertical())
                 .paddingHorizontal(pluginUI.dialogPaddingHorizontal())
@@ -410,10 +410,10 @@ public class AICodeAnalysisHelper {
 
         pluginUI.buildDialog()
                 .setView(resultView)
-                .setNegativeButton("取消", null)
-                .setPositiveButton("复制", (dialog, which) -> {
+                .setNegativeButton("{cancel}", null)
+                .setPositiveButton("{copy}", (dialog, which) -> {
                     pluginUI.getContext().setClipboardText(cleanedResult);
-                    pluginUI.showToast("已复制到剪贴板");
+                    pluginUI.showToast("{copy_success_clipboard}");
                 })
                 .show();
     }
@@ -480,16 +480,16 @@ public class AICodeAnalysisHelper {
     private void showEmptyResultDialog(PluginUI pluginUI, String errorMsg) {
         String displayMsg = errorMsg;
         if (displayMsg.length() > 2000) {
-            displayMsg = displayMsg.substring(0, 2000) + "\n\n[内容已截断...]";
+            displayMsg = displayMsg.substring(0, 2000) + "\n\n{content_truncated_msg}";
         }
 
         pluginUI.buildDialog()
-                .setTitle("分析结果为空")
-                .setMessage("AI 未能返回有效的分析结果。\n\n详细错误信息:\n" + displayMsg)
-                .setPositiveButton("确定", null)
-                .setNegativeButton("复制错误信息", (dialog, which) -> {
+                .setTitle("{empty_result_title}")
+                .setMessage("{empty_result_msg}\n\n{error_detail_label}\n" + displayMsg)
+                .setPositiveButton("{confirm}", null)
+                .setNegativeButton("{copy}", (dialog, which) -> {
                     pluginUI.getContext().setClipboardText(errorMsg);
-                    pluginUI.showToast("错误信息已复制到剪贴板");
+                    pluginUI.showToast("{error_info_copied_clipboard}");
                 })
                 .show();
     }

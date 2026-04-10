@@ -2,6 +2,7 @@ package com.example.myplugin;
 
 import android.graphics.drawable.Drawable;
 import android.util.Base64;
+import androidx.annotation.NonNull;
 import bin.mt.plugin.api.editor.TextEditor;
 import bin.mt.plugin.api.editor.TextEditorFloatingMenu;
 import bin.mt.plugin.api.editor.BaseTextEditorFloatingMenu;
@@ -24,11 +25,13 @@ public class EncodeDecodeMenu extends BaseTextEditorFloatingMenu {
     private TextEditor currentEditor;
     private String originalText;
 
+    @NonNull
     @Override
     public String name() {
         return "{encode_decode_function}";
     }
 
+    @NonNull
     @Override
     public Drawable icon() {
         return MaterialIcons.get("code");
