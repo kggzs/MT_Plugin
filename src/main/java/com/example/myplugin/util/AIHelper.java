@@ -28,7 +28,7 @@ public class AIHelper {
     private static final String DEFAULT_API_URL = "https://api.kggzs.cn/v1";
     private static final String DEFAULT_AI_MODEL = "deepseek-v3.2";
     private static final String DEFAULT_API_KEY = "sk-K1m4b0U2WoorIub7EhbQTIYRFpQhURRXMdIoZBywCEruujOa";
-    private static final String DEFAULT_PROMPT = "你是一位资深的代码安全分析专家，精通基于 MT 管理器的安卓软件逆向分析，具备丰富的安卓代码审计与逆向工程实战经验。请针对提供的安卓软件代码（含 smali/Java 代码），结合 MT 管理器的操作特性，围绕 \"绕过权限验证\" 和 \"删除广告弹窗\" 两大核心目标，从以下维度进行专业、深度且精炼的分析，并输出分析结果：1. 与权限验证 / 广告弹窗相关的潜在安全逻辑点（含逻辑漏洞类型、触发条件、影响范围，明确在 MT 管理器中可验证该逻辑点的操作方式）2. 基于 MT 管理器的逆向工程检测方案（仅围绕 MT 管理器展开，聚焦权限验证 / 广告弹窗相关逻辑，含具体操作步骤、关键检测位置、需重点查看的代码特征 / 数值）3. 可落地的绕过权限验证、删除广告弹窗的具体操作方法（明确操作目标为 \"绕过指定权限验证\"/\"删除指定广告弹窗\"，并逐一列出在 MT 管理器中可直接执行的具体操作步骤，如文件定位、smali 代码修改、配置文件调整、搜索替换等）要求：所有输出内容均为纯文本格式，严禁使用任何 markdown 格式符号（包括但不限于 #、*、`、-、> 等），仅保留文字、数字、中文标点符号；分析结果需逻辑清晰、内容精炼，无冗余表述，不使用表情符号；所有操作方法需完全贴合 MT 管理器的操作逻辑，具备极强的实操性，避免提及其他无关工具。";
+    private static final String DEFAULT_PROMPT = "你是一位资深的代码安全分析专家，精通基于 MT 管理器的安卓软件逆向分析，具备丰富的安卓代码审计与逆向工程实战经验。请针对提供的安卓软件代码（含 smali/Java 代码），结合 MT 管理器的操作特性，围绕 \\\"绕过权限验证\\\" 和 \\\"删除广告弹窗\\\" 两大核心目标，从以下维度进行专业、深度且精炼的分析，并输出分析结果：1. 与权限验证 / 广告弹窗相关的潜在安全逻辑点（含逻辑漏洞类型、触发条件、影响范围，明确在 MT 管理器中可验证该逻辑点的操作方式）2. 基于 MT 管理器的逆向工程检测方案（仅围绕 MT 管理器展开，聚焦权限验证 / 广告弹窗相关逻辑，含具体操作步骤、关键检测位置、需重点查看的代码特征 / 数值）3. 可落地的绕过权限验证、删除广告弹窗的具体操作方法（明确操作目标为 \\\"绕过指定权限验证\\\"/\\\"删除指定广告弹窗\\\"，并逐一列出在 MT 管理器中可直接执行的具体操作步骤，如文件定位、smali 代码修改、配置文件调整、搜索替换等）要求：分析结果需逻辑清晰、内容精炼，无冗余表述，不使用表情符号；所有操作方法需完全贴合 MT 管理器的操作逻辑，具备极强的实操性，避免提及其他无关工具。";
     private static final String DEFAULT_SHORT_PROMPT = "请简要分析以下代码，指出主要问题和改进建议：";
 
     // SharedPreferences 键名
@@ -180,6 +180,27 @@ public class AIHelper {
     }
 
     /**
+     * AI 分析代码（用户提示词插入到系统提示词中）
+     * @param context 插件上下文
+     * @param code 要分析的代码
+     * @param userPrompt 用户提示词（将插入到系统提示词中）
+     * @param thinkingEdit 思考过程显示的编辑框
+     * @param dialog 显示对话框
+     * @return 分析结果数组，第一个元素是分析结果
+     */
+    @Nullable
+    public static String[] analyzeCodeWithUserPrompt(
+            @NonNull PluginContext context,
+            @NonNull String code,
+            @NonNull String userPrompt,
+            @NonNull PluginEditText thinkingEdit,
+            @NonNull PluginDialog dialog) throws Exception {
+        String systemPrompt = getPrompt(context);
+        String combinedSystemPrompt = userPrompt + "\n\n" + systemPrompt;
+        return analyzeCodeWithAI(context, code, thinkingEdit, dialog, true, combinedSystemPrompt);
+    }
+
+    /**
      * AI 分析代码
      * @param context 插件上下文
      * @param code 要分析的代码
@@ -253,9 +274,11 @@ public class AIHelper {
         BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         StringBuilder fullReasoning = new StringBuilder();
         StringBuilder fullContent = new StringBuilder();
+        StringBuilder rawResponse = new StringBuilder();
         String line;
 
         while ((line = reader.readLine()) != null) {
+            rawResponse.append(line).append("\n");
             if (line.startsWith("data: ")) {
                 String data = line.substring(6);
                 if (data.equals("[DONE]")) {
@@ -267,12 +290,41 @@ public class AIHelper {
                     JSONArray choices = chunk.optJSONArray("choices");
                     if (choices != null && choices.length() > 0) {
                         JSONObject firstChoice = choices.getJSONObject(0);
-                        JSONObject delta = firstChoice.optJSONObject("delta");
-                        if (delta != null) {
-                            String reasoningContent = delta.optString("reasoning_content", "");
-                            String content = delta.optString("content", "");
+                        if (firstChoice != null) {
+                            String reasoningContent = null;
+                            String content = null;
 
-                            if (showThinking && !reasoningContent.isEmpty() && !"null".equals(reasoningContent)) {
+                            // 格式1: delta.content (OpenAI标准流式格式)
+                            JSONObject delta = firstChoice.optJSONObject("delta");
+                            if (delta != null) {
+                                content = delta.optString("content", "");
+                                reasoningContent = delta.optString("reasoning_content", "");
+                                if (reasoningContent == null || reasoningContent.isEmpty()) {
+                                    reasoningContent = delta.optString("thinking", "");
+                                }
+                            }
+
+                            // 格式2: message.content (某些模型的变体)
+                            if ((content == null || content.isEmpty()) && (reasoningContent == null || reasoningContent.isEmpty())) {
+                                JSONObject message = firstChoice.optJSONObject("message");
+                                if (message != null) {
+                                    content = message.optString("content", "");
+                                    reasoningContent = message.optString("reasoning_content", "");
+                                }
+                            }
+
+                            // 格式3: text (某些简单接口格式)
+                            if ((content == null || content.isEmpty()) && (reasoningContent == null || reasoningContent.isEmpty())) {
+                                content = firstChoice.optString("text", "");
+                            }
+
+                            // 格式4: content (直接字段)
+                            if ((content == null || content.isEmpty()) && (reasoningContent == null || reasoningContent.isEmpty())) {
+                                content = firstChoice.optString("content", "");
+                            }
+
+                            // 处理思考过程
+                            if (showThinking && reasoningContent != null && !reasoningContent.isEmpty() && !"null".equals(reasoningContent)) {
                                 fullReasoning.append(reasoningContent);
                                 if (thinkingEdit != null) {
                                     final String currentReasoning = fullReasoning.toString();
@@ -283,24 +335,30 @@ public class AIHelper {
                                 }
                             }
 
-                            if (!content.isEmpty() && !"null".equals(content)) {
+                            // 处理主内容
+                            if (content != null && !content.isEmpty() && !"null".equals(content)) {
                                 fullContent.append(content);
                             }
                         }
                     }
                 } catch (Exception e) {
-                    // 忽略 JSON 解析错误
+                    android.util.Log.w("AIHelper", "JSON解析错误: " + e.getMessage() + ", data: " + data);
                 }
             }
         }
         reader.close();
         connection.disconnect();
 
+        // 只使用 content 作为最终结果，不使用 reasoning_content
+        // reasoning_content 是思考过程，不应该作为最终结果
         if (fullContent.length() == 0) {
-            throw new Exception("AI API返回空结果");
+            String errorDetail = "AI API返回空结果（未返回正式回答）\n\n思考过程:\n" + fullReasoning.toString() + "\n\n原始响应:\n" + rawResponse.toString();
+            android.util.Log.e("AIHelper", errorDetail);
+            throw new Exception(errorDetail);
         }
 
-        return new String[]{fullContent.toString()};
+        // 返回结果：result[0]=正式内容（content），result[1]=思考过程（reasoning_content）
+        return new String[]{fullContent.toString(), fullReasoning.toString()};
     }
 
     /**
