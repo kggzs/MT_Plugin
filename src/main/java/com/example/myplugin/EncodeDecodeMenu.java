@@ -58,35 +58,35 @@ public class EncodeDecodeMenu extends BaseTextEditorFloatingMenu {
                 .addButton("undo_btn").text("{undo}").height(buttonHeight).marginRight(smallMargin).onClick(v -> handleUndo(pluginUI))
                 .addButton("replace_btn").text("{replace}").height(buttonHeight).onClick(v -> handleReplace(pluginUI))
             ).marginBottom(largeMargin)
-            .addTextView("section_label1").text("转换工具").textSize(14).textColor(pluginUI.colorText()).marginBottom(smallMargin)
+            .addTextView("section_label1").text("{conversion_tools}").textSize(14).textColor(pluginUI.colorText()).marginBottom(smallMargin)
             .addHorizontalLayout("row1").children(row -> row
                 .addButton("timestamp_btn").text("{timestamp_function}").height(buttonHeight).marginRight(smallMargin).onClick(v -> handleTimestamp(pluginUI))
                 .addButton("hash_btn").text("{hash_function}").height(buttonHeight).onClick(v -> handleHash(pluginUI))
             ).marginBottom(mediumMargin)
-            .addTextView("section_label2").text("编码/解码").textSize(14).textColor(pluginUI.colorText()).marginBottom(smallMargin)
+            .addTextView("section_label2").text("{encode_decode_section}").textSize(14).textColor(pluginUI.colorText()).marginBottom(smallMargin)
             .addHorizontalLayout("row2").children(row -> row
-                .addButton("base64_encode_btn").text("Base64编码").height(buttonHeight).marginRight(smallMargin).onClick(v -> handleBase64Encode(pluginUI))
-                .addButton("base64_decode_btn").text("Base64解码").height(buttonHeight).onClick(v -> handleBase64Decode(pluginUI))
+                .addButton("base64_encode_btn").text("{base64_encode_btn}").height(buttonHeight).marginRight(smallMargin).onClick(v -> handleBase64Encode(pluginUI))
+                .addButton("base64_decode_btn").text("{base64_decode_btn}").height(buttonHeight).onClick(v -> handleBase64Decode(pluginUI))
             ).marginBottom(smallMargin)
             .addHorizontalLayout("row3").children(row -> row
-                .addButton("hex_encode_btn").text("Hex编码").height(buttonHeight).marginRight(smallMargin).onClick(v -> handleHexEncode(pluginUI))
-                .addButton("hex_decode_btn").text("Hex解码").height(buttonHeight).onClick(v -> handleHexDecode(pluginUI))
+                .addButton("hex_encode_btn").text("{hex_encode_btn}").height(buttonHeight).marginRight(smallMargin).onClick(v -> handleHexEncode(pluginUI))
+                .addButton("hex_decode_btn").text("{hex_decode_btn}").height(buttonHeight).onClick(v -> handleHexDecode(pluginUI))
             ).marginBottom(smallMargin)
             .addHorizontalLayout("row4").children(row -> row
-                .addButton("unicode_encode_btn").text("Unicode编码").height(buttonHeight).marginRight(smallMargin).onClick(v -> handleUnicodeEncode(pluginUI))
-                .addButton("unicode_decode_btn").text("Unicode解码").height(buttonHeight).onClick(v -> handleUnicodeDecode(pluginUI))
+                .addButton("unicode_encode_btn").text("{unicode_encode_btn}").height(buttonHeight).marginRight(smallMargin).onClick(v -> handleUnicodeEncode(pluginUI))
+                .addButton("unicode_decode_btn").text("{unicode_decode_btn}").height(buttonHeight).onClick(v -> handleUnicodeDecode(pluginUI))
             ).marginBottom(smallMargin)
             .addHorizontalLayout("row5").children(row -> row
-                .addButton("url_encode_btn").text("URL编码").height(buttonHeight).marginRight(smallMargin).onClick(v -> handleUrlEncode(pluginUI))
-                .addButton("url_decode_btn").text("URL解码").height(buttonHeight).onClick(v -> handleUrlDecode(pluginUI))
+                .addButton("url_encode_btn").text("{url_encode_btn}").height(buttonHeight).marginRight(smallMargin).onClick(v -> handleUrlEncode(pluginUI))
+                .addButton("url_decode_btn").text("{url_decode_btn}").height(buttonHeight).onClick(v -> handleUrlDecode(pluginUI))
             ).marginBottom(smallMargin)
             .addHorizontalLayout("row6").children(row -> row
-                .addButton("rot13_encode_btn").text("ROT13编码").height(buttonHeight).marginRight(smallMargin).onClick(v -> handleRot13Encode(pluginUI))
-                .addButton("rot13_decode_btn").text("ROT13解码").height(buttonHeight).onClick(v -> handleRot13Decode(pluginUI))
+                .addButton("rot13_encode_btn").text("{rot13_encode_btn}").height(buttonHeight).marginRight(smallMargin).onClick(v -> handleRot13Encode(pluginUI))
+                .addButton("rot13_decode_btn").text("{rot13_decode_btn}").height(buttonHeight).onClick(v -> handleRot13Decode(pluginUI))
             ).marginBottom(smallMargin)
             .addHorizontalLayout("row7").children(row -> row
-                .addButton("binary_encode_btn").text("二进制编码").height(buttonHeight).marginRight(smallMargin).onClick(v -> handleBinaryEncode(pluginUI))
-                .addButton("binary_decode_btn").text("二进制解码").height(buttonHeight).onClick(v -> handleBinaryDecode(pluginUI))
+                .addButton("binary_encode_btn").text("{binary_encode_btn}").height(buttonHeight).marginRight(smallMargin).onClick(v -> handleBinaryEncode(pluginUI))
+                .addButton("binary_decode_btn").text("{binary_decode_btn}").height(buttonHeight).onClick(v -> handleBinaryDecode(pluginUI))
             ).marginBottom(mediumMargin)
             .paddingHorizontal(padding)
             .paddingVertical(padding)
@@ -457,17 +457,17 @@ public class EncodeDecodeMenu extends BaseTextEditorFloatingMenu {
             String binary = selected.replaceAll("\\s+", "");
             
             if (binary.isEmpty()) {
-                pluginUI.showToast("{decode_error}: Empty input");
+                pluginUI.showToast("{decode_error_empty_input}");
                 return;
             }
             
             if (!binary.matches("[01]+")) {
-                pluginUI.showToast("{decode_error}: Invalid binary format");
+                pluginUI.showToast("{decode_error_invalid_binary}");
                 return;
             }
             
             if (binary.length() % 8 != 0) {
-                pluginUI.showToast("{decode_error}: Binary length must be multiple of 8");
+                pluginUI.showToast("{decode_error_binary_length}");
                 return;
             }
             
@@ -481,7 +481,7 @@ public class EncodeDecodeMenu extends BaseTextEditorFloatingMenu {
             replaceSelectedText(result);
             pluginUI.showToast("{decode_success}");
         } catch (NumberFormatException e) {
-            pluginUI.showToast("{decode_error}: Invalid binary format");
+            pluginUI.showToast("{decode_error_invalid_binary}");
         } catch (Exception e) {
             pluginUI.showToast("{decode_error}: " + e.getMessage());
         }

@@ -125,6 +125,7 @@ public class AIHelper {
      * @param code 要分析的代码
      * @param customPrompt 自定义提示词
      * @param thinkingEdit 思考过程显示的编辑框
+     * @param resultEdit 结果展示的编辑框
      * @param dialog 显示对话框
      * @return 分析结果数组，第一个元素是分析结果
      */
@@ -134,8 +135,9 @@ public class AIHelper {
             @NonNull String code,
             @NonNull String customPrompt,
             @NonNull PluginEditText thinkingEdit,
+            @NonNull PluginEditText resultEdit,
             @NonNull PluginDialog dialog) throws Exception {
-        return analyzeCodeWithAI(context, code, thinkingEdit, dialog, true, customPrompt);
+        return analyzeCodeWithAI(context, code, thinkingEdit, resultEdit, dialog, true, customPrompt);
     }
 
     /**
@@ -169,14 +171,21 @@ public class AIHelper {
 
     /**
      * AI 分析代码（显示思考过程）
+     * @param context 插件上下文
+     * @param code 要分析的代码
+     * @param thinkingEdit 思考过程显示的编辑框
+     * @param resultEdit 结果展示的编辑框
+     * @param dialog 显示对话框
+     * @return 分析结果数组，第一个元素是分析结果
      */
     @Nullable
     public static String[] analyzeCodeWithThinking(
             @NonNull PluginContext context,
             @NonNull String code,
             @NonNull PluginEditText thinkingEdit,
+            @NonNull PluginEditText resultEdit,
             @NonNull PluginDialog dialog) throws Exception {
-        return analyzeCodeWithAI(context, code, thinkingEdit, dialog, true, null);
+        return analyzeCodeWithAI(context, code, thinkingEdit, resultEdit, dialog, true, null);
     }
 
     /**
@@ -185,6 +194,7 @@ public class AIHelper {
      * @param code 要分析的代码
      * @param userPrompt 用户提示词（将插入到系统提示词中）
      * @param thinkingEdit 思考过程显示的编辑框
+     * @param resultEdit 结果展示的编辑框
      * @param dialog 显示对话框
      * @return 分析结果数组，第一个元素是分析结果
      */
@@ -194,10 +204,11 @@ public class AIHelper {
             @NonNull String code,
             @NonNull String userPrompt,
             @NonNull PluginEditText thinkingEdit,
+            @NonNull PluginEditText resultEdit,
             @NonNull PluginDialog dialog) throws Exception {
         String systemPrompt = getPrompt(context);
         String combinedSystemPrompt = userPrompt + "\n\n" + systemPrompt;
-        return analyzeCodeWithAI(context, code, thinkingEdit, dialog, true, combinedSystemPrompt);
+        return analyzeCodeWithAI(context, code, thinkingEdit, resultEdit, dialog, true, combinedSystemPrompt);
     }
 
     /**
@@ -205,6 +216,7 @@ public class AIHelper {
      * @param context 插件上下文
      * @param code 要分析的代码
      * @param thinkingEdit 思考过程显示的编辑框（可为 null）
+     * @param resultEdit 结果展示的编辑框（可为 null，如果提供则流式显示结果）
      * @param dialog 显示对话框（可为 null）
      * @param showThinking 是否显示思考过程
      * @param customPrompt 自定义提示词（如果为 null 则使用默认）
@@ -215,6 +227,7 @@ public class AIHelper {
             @NonNull PluginContext context,
             @NonNull String code,
             @Nullable PluginEditText thinkingEdit,
+            @Nullable PluginEditText resultEdit,
             @Nullable PluginDialog dialog,
             boolean showThinking,
             @Nullable String customPrompt) throws Exception {
@@ -335,9 +348,17 @@ public class AIHelper {
                                 }
                             }
 
-                            // 处理主内容
+                            // 处理主内容 - 流式显示
                             if (content != null && !content.isEmpty() && !"null".equals(content)) {
                                 fullContent.append(content);
+                                // 如果提供了 resultEdit，则流式显示结果
+                                if (resultEdit != null) {
+                                    final String currentContent = fullContent.toString();
+                                    runOnMainThread(() -> {
+                                        resultEdit.setText(currentContent);
+                                        resultEdit.selectEnd();
+                                    });
+                                }
                             }
                         }
                     }

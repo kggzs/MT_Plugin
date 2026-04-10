@@ -22,29 +22,25 @@ public class MyPreference implements PluginPreference {
         builder.addText("{plugin_website}")
                .summary("www.kggzs.cn");
 
-        // AI 配置分组
-        builder.addHeader("AI 代码分析配置");
+        builder.addHeader("{ai_config_group}");
 
-        // 统一配置入口
-        builder.addText("API 配置")
-               .summary("配置 API 地址、模型名称和 API 密钥")
+        builder.addText("{api_config}")
+               .summary("{api_config_summary}")
                .onClick((ui, preference) -> {
                    showApiConfigDialog(ui, context);
                });
 
-        // AI 能力配置入口（提示词 + Skill）
-        builder.addText("AI 能力配置")
-               .summary("管理全局分析提示词、简短分析提示词与自定义 Skill")
+        builder.addText("{ai_capability_config}")
+               .summary("{ai_capability_config_summary}")
                .onClick((ui, preference) -> {
                    showAiCapabilityDialog(ui, context);
                });
 
-        builder.addText("重置配置")
-               .summary("点击重置 AI 配置为默认值")
+        builder.addText("{reset_config}")
+               .summary("{reset_config_summary}")
                .onClick((ui, preference) -> {
                    AIHelper.resetToDefault(context);
-                   context.showToast("已重置为默认配置");
-                   // 重新打开设置界面以刷新显示
+                   context.showToast("{config_reset_success}");
                    ui.showPreference(MyPreference.class);
                });
 
@@ -93,14 +89,14 @@ public class MyPreference implements PluginPreference {
         int smallMargin = ui.dp2px(8);
 
         bin.mt.plugin.api.ui.PluginView view = ui.buildVerticalLayout()
-            .addTextView().text("API 地址").textSize(14).marginBottom(smallMargin)
-            .addEditText("api_url").hint("默认: https://api.kggzs.cn/v1")
+            .addTextView().text("{api_address}").textSize(14).marginBottom(smallMargin)
+            .addEditText("api_url").hint("{api_url_hint}")
                 .text(AIHelper.getApiUrl(context)).widthMatchParent().marginBottom(smallMargin)
-            .addTextView().text("模型名称").textSize(14).marginTop(smallMargin).marginBottom(smallMargin)
-            .addEditText("model_name").hint("默认: deepseek-v3.2")
+            .addTextView().text("{model_name}").textSize(14).marginTop(smallMargin).marginBottom(smallMargin)
+            .addEditText("model_name").hint("{model_name_hint}")
                 .text(AIHelper.getAiModel(context)).widthMatchParent().marginBottom(smallMargin)
-            .addTextView().text("API 密钥").textSize(14).marginTop(smallMargin).marginBottom(smallMargin)
-            .addEditText("api_key").hint("默认: sk-xxxxxxxxxxxxxxxxxxxxxxxx")
+            .addTextView().text("{api_key}").textSize(14).marginTop(smallMargin).marginBottom(smallMargin)
+            .addEditText("api_key").hint("{api_key_hint}")
                 .text(AIHelper.getApiKey(context)).widthMatchParent().marginBottom(smallMargin)
             .paddingHorizontal(padding)
             .paddingVertical(padding)
@@ -111,19 +107,18 @@ public class MyPreference implements PluginPreference {
         bin.mt.plugin.api.ui.PluginEditText apiKeyInput = view.requireViewById("api_key");
 
         ui.buildDialog()
-            .setTitle("API 配置")
+            .setTitle("{api_config}")
             .setView(view)
-            .setPositiveButton("保存", (dialog, which) -> {
+            .setPositiveButton("{save}", (dialog, which) -> {
                 String apiUrl = apiUrlInput.getText().toString().trim();
                 String modelName = modelNameInput.getText().toString().trim();
                 String apiKey = apiKeyInput.getText().toString().trim();
 
-                // 验证并保存
                 boolean hasValue = false;
 
                 if (!apiUrl.isEmpty()) {
                     if (!apiUrl.startsWith("http://") && !apiUrl.startsWith("https://")) {
-                        context.showToast("URL 必须以 http:// 或 https:// 开头");
+                        context.showToast("{url_format_error}");
                         return;
                     }
                     AIHelper.setApiUrl(context, apiUrl);
@@ -141,19 +136,18 @@ public class MyPreference implements PluginPreference {
                 }
 
                 if (hasValue) {
-                    context.showToast("已保存");
-                    // 刷新设置界面
+                    context.showToast("{saved}");
                     ui.showPreference(MyPreference.class);
                 } else {
-                    context.showToast("未检测到输入");
+                    context.showToast("{no_input_detected}");
                 }
             })
             .setNegativeButton("{cancel}", null)
-            .setNeutralButton("重置", (dialog, which) -> {
+            .setNeutralButton("{reset_config}", (dialog, which) -> {
                 AIHelper.setApiUrl(context, "");
                 AIHelper.setAiModel(context, "");
                 AIHelper.setApiKey(context, "");
-                context.showToast("已重置为默认值");
+                context.showToast("{reset_to_default}");
                 ui.showPreference(MyPreference.class);
             })
             .show();
@@ -168,10 +162,10 @@ public class MyPreference implements PluginPreference {
 
         // 构建视图
         bin.mt.plugin.api.ui.PluginView view = ui.buildVerticalLayout()
-            .addTextView().text("全局分析提示词").textSize(14).marginBottom(smallMargin)
+            .addTextView().text("{global_analysis_prompt_label}").textSize(14).marginBottom(smallMargin)
             .addEditBox("global_prompt").text(AIHelper.getPrompt(context))
                 .minLines(4).maxLines(8).widthMatchParent().marginBottom(smallMargin)
-            .addTextView().text("简短分析提示词").textSize(14).marginTop(smallMargin).marginBottom(smallMargin)
+            .addTextView().text("{short_analysis_prompt_label}").textSize(14).marginTop(smallMargin).marginBottom(smallMargin)
             .addEditBox("short_prompt").text(AIHelper.getShortPrompt(context))
                 .minLines(2).maxLines(4).widthMatchParent().marginBottom(smallMargin)
             .addButton("manage_skills").text("{manage_skills}").widthMatchParent()
@@ -254,7 +248,7 @@ public class MyPreference implements PluginPreference {
                 currentName = skill.getString("name");
                 currentPrompt = skill.getString("prompt");
             } catch (Exception e) {
-                context.showToast("{load_skill_data_failed}");
+                context.showToast("{load_skill_data_failed}: " + e.getMessage());
                 return;
             }
         }
@@ -358,11 +352,10 @@ public class MyPreference implements PluginPreference {
         ui.buildDialog()
             .setTitle(title)
             .setView(view)
-            .setPositiveButton("保存", (dialog, which) -> {
+            .setPositiveButton("{save}", (dialog, which) -> {
                 String value = input.getText().toString();
                 onSave.accept(value);
-                context.showToast("已保存");
-                // 刷新设置界面
+                context.showToast("{saved}");
                 ui.showPreference(MyPreference.class);
             })
             .setNegativeButton("{cancel}", null)

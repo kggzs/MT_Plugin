@@ -96,3 +96,53 @@ apply: 应用
 skill_applied: 已应用 Skill
 global_analysis_prompt: 全局分析提示词
 short_analysis_prompt: 简短分析提示词
+supplementary_prompt_hint: 请输入补充提示词...
+set_analysis_prompt: 设置分析提示词
+start_analysis: 开始分析
+initializing: 正在初始化...
+analysis_cancelled: 已取消分析
+analysis_failed: 分析失败: 
+empty_analysis_result: 分析结果为空
+copied_to_clipboard: 已复制到剪贴板
+config_reset_success: 已重置为默认配置
+url_format_error: URL 必须以 http:// 或 https:// 开头
+select_code_hint: 请先选择要分析的代码
+analysis_result: 分析结果
+analysis_result_empty_detail: AI 未能返回有效的分析结果。
+error_detail: 详细错误信息:
+content_truncated: 内容已截断...
+error_info_copied: 错误信息已复制到剪贴板
+ai_config_group: AI 代码分析配置
+api_config: API 配置
+api_config_summary: 配置 API 地址、模型名称和 API 密钥
+ai_capability_config_summary: 管理全局分析提示词、简短分析提示词与自定义 Skill
+reset_config: 重置配置
+reset_config_summary: 点击重置 AI 配置为默认值
+api_address: API 地址
+api_url_hint: 默认: https://api.kggzs.cn/v1
+model_name: 模型名称
+model_name_hint: 默认: deepseek-v3.2
+api_key: API 密钥
+api_key_hint: 默认: sk-xxxxxxxxxxxxxxxxxxxxxxxx
+no_input_detected: 未检测到输入
+reset_to_default: 已重置为默认值
+global_analysis_prompt_label: 全局分析提示词
+short_analysis_prompt_label: 简短分析提示词
+load_skill_data_failed: 加载 Skill 数据失败
+conversion_tools: 转换工具
+encode_decode_section: 编码/解码
+base64_encode_btn: Base64编码
+base64_decode_btn: Base64解码
+hex_encode_btn: Hex编码
+hex_decode_btn: Hex解码
+unicode_encode_btn: Unicode编码
+unicode_decode_btn: Unicode解码
+url_encode_btn: URL编码
+url_decode_btn: URL解码
+rot13_encode_btn: ROT13编码
+rot13_decode_btn: ROT13解码
+binary_encode_btn: 二进制编码
+binary_decode_btn: 二进制解码
+decode_error_empty_input: 解码失败: 输入为空
+decode_error_invalid_binary: 解码失败: 无效的二进制格式
+decode_error_binary_length: 解码失败: 二进制长度必须是8的倍数

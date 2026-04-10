@@ -96,3 +96,53 @@ apply: Apply
 skill_applied: Skill applied
 global_analysis_prompt: Global Analysis Prompt
 short_analysis_prompt: Short Analysis Prompt
+supplementary_prompt_hint: Enter supplementary prompt...
+set_analysis_prompt: Set Analysis Prompt
+start_analysis: Start Analysis
+initializing: Initializing...
+analysis_cancelled: Analysis cancelled
+analysis_failed: Analysis failed: 
+empty_analysis_result: Empty analysis result
+copied_to_clipboard: Copied to clipboard
+config_reset_success: Configuration reset to default
+url_format_error: URL must start with http:// or https://
+select_code_hint: Please select code to analyze first
+analysis_result: Analysis Result
+analysis_result_empty_detail: AI failed to return valid analysis result.
+error_detail: Detailed error information:
+content_truncated: Content truncated...
+error_info_copied: Error information copied to clipboard
+ai_config_group: AI Code Analysis Configuration
+api_config: API Configuration
+api_config_summary: Configure API URL, model name and API key
+ai_capability_config_summary: Manage global analysis prompt, short analysis prompt and custom Skills
+reset_config: Reset Configuration
+reset_config_summary: Click to reset AI configuration to default values
+api_address: API Address
+api_url_hint: Default: https://api.kggzs.cn/v1
+model_name: Model Name
+model_name_hint: Default: deepseek-v3.2
+api_key: API Key
+api_key_hint: Default: sk-xxxxxxxxxxxxxxxxxxxxxxxx
+no_input_detected: No input detected
+reset_to_default: Reset to default values
+global_analysis_prompt_label: Global Analysis Prompt
+short_analysis_prompt_label: Short Analysis Prompt
+load_skill_data_failed: Failed to load Skill data
+conversion_tools: Conversion Tools
+encode_decode_section: Encode/Decode
+base64_encode_btn: Base64 Encode
+base64_decode_btn: Base64 Decode
+hex_encode_btn: Hex Encode
+hex_decode_btn: Hex Decode
+unicode_encode_btn: Unicode Encode
+unicode_decode_btn: Unicode Decode
+url_encode_btn: URL Encode
+url_decode_btn: URL Decode
+rot13_encode_btn: ROT13 Encode
+rot13_decode_btn: ROT13 Decode
+binary_encode_btn: Binary Encode
+binary_decode_btn: Binary Decode
+decode_error_empty_input: Decode failed: Empty input
+decode_error_invalid_binary: Decode failed: Invalid binary format
+decode_error_binary_length: Decode failed: Binary length must be multiple of 8
