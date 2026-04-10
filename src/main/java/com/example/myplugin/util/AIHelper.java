@@ -26,9 +26,9 @@ import bin.mt.plugin.api.ui.dialog.PluginDialog;
 public class AIHelper {
     // 默认配置
     private static final String DEFAULT_API_URL = "https://api.kggzs.cn/v1";
-    private static final String DEFAULT_AI_MODEL = "deepseek-v3.2";
+    private static final String DEFAULT_AI_MODEL = "MT-v1";
     private static final String DEFAULT_API_KEY = "sk-K1m4b0U2WoorIub7EhbQTIYRFpQhURRXMdIoZBywCEruujOa";
-    private static final String DEFAULT_PROMPT = "你是一位资深的代码安全分析专家，精通基于 MT 管理器的安卓软件逆向分析，具备丰富的安卓代码审计与逆向工程实战经验。请针对提供的安卓软件代码（含 smali/Java 代码），结合 MT 管理器的操作特性，围绕 \\\"绕过权限验证\\\" 和 \\\"删除广告弹窗\\\" 两大核心目标，从以下维度进行专业、深度且精炼的分析，并输出分析结果：1. 与权限验证 / 广告弹窗相关的潜在安全逻辑点（含逻辑漏洞类型、触发条件、影响范围，明确在 MT 管理器中可验证该逻辑点的操作方式）2. 基于 MT 管理器的逆向工程检测方案（仅围绕 MT 管理器展开，聚焦权限验证 / 广告弹窗相关逻辑，含具体操作步骤、关键检测位置、需重点查看的代码特征 / 数值）3. 可落地的绕过权限验证、删除广告弹窗的具体操作方法（明确操作目标为 \\\"绕过指定权限验证\\\"/\\\"删除指定广告弹窗\\\"，并逐一列出在 MT 管理器中可直接执行的具体操作步骤，如文件定位、smali 代码修改、配置文件调整、搜索替换等）要求：分析结果需逻辑清晰、内容精炼，无冗余表述，不使用表情符号；所有操作方法需完全贴合 MT 管理器的操作逻辑，具备极强的实操性，避免提及其他无关工具。";
+    private static final String DEFAULT_PROMPT = "你是资深代码安全分析专家，精通MT管理器安卓逆向分析，擅长smali/Java代码审计。请严格按照用户后续指定的分析方向，结合MT管理器操作特性，对提供的安卓软件代码开展精准分析。输出要求：仅围绕用户指定目标，提供MT管理器可直接执行的检测方案、安全逻辑点分析、实操修改方法；内容精炼、逻辑清晰、无冗余、无表情符号，全程不使用MT管理器以外的任何工具。";
     private static final String DEFAULT_SHORT_PROMPT = "请简要分析以下代码，指出主要问题和改进建议：";
 
     // SharedPreferences 键名
@@ -259,7 +259,7 @@ public class AIHelper {
 
         requestBody.put("messages", messages);
         requestBody.put("temperature", 0.7);
-        requestBody.put("max_tokens", 2000);
+        // 移除max_tokens限制，让AI根据内容长度自由回答
 
         URL url = new URL(completionsUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -288,6 +288,9 @@ public class AIHelper {
         StringBuilder fullReasoning = new StringBuilder();
         StringBuilder fullContent = new StringBuilder();
         StringBuilder rawResponse = new StringBuilder();
+        StringBuilder contentBuffer = new StringBuilder();
+        boolean hasDetectedThinkingTag = false;
+        boolean hasFoundEndTag = false;
         String line;
 
         while ((line = reader.readLine()) != null) {
@@ -307,7 +310,9 @@ public class AIHelper {
                             String reasoningContent = null;
                             String content = null;
 
-                            // 格式1: delta.content (OpenAI标准流式格式)
+                            // ========== 格式A: 独立字段型 ==========
+                            
+                            // A1: DeepSeek/通义千问格式 - delta.reasoning_content
                             JSONObject delta = firstChoice.optJSONObject("delta");
                             if (delta != null) {
                                 content = delta.optString("content", "");
@@ -317,26 +322,103 @@ public class AIHelper {
                                 }
                             }
 
-                            // 格式2: message.content (某些模型的变体)
+                            // A2: 百度文心一言格式 - choices[0].thinking + choices[0].result
+                            if ((content == null || content.isEmpty()) && (reasoningContent == null || reasoningContent.isEmpty())) {
+                                reasoningContent = firstChoice.optString("thinking", "");
+                                content = firstChoice.optString("result", "");
+                            }
+
+                            // A3: 讯飞星火格式 - choices[0].text[0].thought + choices[0].text[0].content
+                            if ((content == null || content.isEmpty()) && (reasoningContent == null || reasoningContent.isEmpty())) {
+                                JSONArray textArray = firstChoice.optJSONArray("text");
+                                if (textArray != null && textArray.length() > 0) {
+                                    JSONObject textObj = textArray.getJSONObject(0);
+                                    content = textObj.optString("content", "");
+                                    reasoningContent = textObj.optString("thought", "");
+                                }
+                            }
+
+                            // A4: message.content 变体（某些模型）
                             if ((content == null || content.isEmpty()) && (reasoningContent == null || reasoningContent.isEmpty())) {
                                 JSONObject message = firstChoice.optJSONObject("message");
                                 if (message != null) {
                                     content = message.optString("content", "");
                                     reasoningContent = message.optString("reasoning_content", "");
+                                    if (reasoningContent == null || reasoningContent.isEmpty()) {
+                                        reasoningContent = message.optString("thinking", "");
+                                    }
                                 }
                             }
 
-                            // 格式3: text (某些简单接口格式)
+                            // ========== 格式B: 结构化块型 ==========
+                            
+                            // B1: Claude格式 - content[] 数组，type:thinking + type:text
+                            if ((content == null || content.isEmpty()) && (reasoningContent == null || reasoningContent.isEmpty())) {
+                                JSONArray contentArray = firstChoice.optJSONArray("content");
+                                if (contentArray != null && contentArray.length() > 0) {
+                                    StringBuilder contentBuilder = new StringBuilder();
+                                    StringBuilder reasoningBuilder = new StringBuilder();
+                                    for (int i = 0; i < contentArray.length(); i++) {
+                                        JSONObject block = contentArray.optJSONObject(i);
+                                        if (block != null) {
+                                            String type = block.optString("type", "");
+                                            if ("thinking".equals(type)) {
+                                                reasoningBuilder.append(block.optString("thinking", ""));
+                                            } else if ("text".equals(type)) {
+                                                contentBuilder.append(block.optString("text", ""));
+                                            }
+                                        }
+                                    }
+                                    if (reasoningBuilder.length() > 0) {
+                                        reasoningContent = reasoningBuilder.toString();
+                                    }
+                                    if (contentBuilder.length() > 0) {
+                                        content = contentBuilder.toString();
+                                    }
+                                }
+                            }
+
+                            // B2: Gemini格式 - parts[] 数组，thought + text
+                            if ((content == null || content.isEmpty()) && (reasoningContent == null || reasoningContent.isEmpty())) {
+                                JSONArray partsArray = firstChoice.optJSONArray("parts");
+                                if (partsArray != null && partsArray.length() > 0) {
+                                    StringBuilder contentBuilder = new StringBuilder();
+                                    StringBuilder reasoningBuilder = new StringBuilder();
+                                    for (int i = 0; i < partsArray.length(); i++) {
+                                        JSONObject part = partsArray.optJSONObject(i);
+                                        if (part != null) {
+                                            if (part.has("thought")) {
+                                                reasoningBuilder.append(part.optString("thought", ""));
+                                            }
+                                            if (part.has("text")) {
+                                                contentBuilder.append(part.optString("text", ""));
+                                            }
+                                        }
+                                    }
+                                    if (reasoningBuilder.length() > 0) {
+                                        reasoningContent = reasoningBuilder.toString();
+                                    }
+                                    if (contentBuilder.length() > 0) {
+                                        content = contentBuilder.toString();
+                                    }
+                                }
+                            }
+
+                            // ========== 格式C: 简单字段型 ==========
+                            
+                            // C1: text字段（某些简单接口）
                             if ((content == null || content.isEmpty()) && (reasoningContent == null || reasoningContent.isEmpty())) {
                                 content = firstChoice.optString("text", "");
                             }
 
-                            // 格式4: content (直接字段)
+                            // C2: content直接字段
                             if ((content == null || content.isEmpty()) && (reasoningContent == null || reasoningContent.isEmpty())) {
                                 content = firstChoice.optString("content", "");
                             }
 
-                            // 处理思考过程
+                            // ========== 处理思考过程和正式内容 ==========
+                            
+                            // 处理标准 reasoning_content/thinking/thought 字段
                             if (showThinking && reasoningContent != null && !reasoningContent.isEmpty() && !"null".equals(reasoningContent)) {
                                 fullReasoning.append(reasoningContent);
                                 if (thinkingEdit != null) {
@@ -348,16 +430,83 @@ public class AIHelper {
                                 }
                             }
 
-                            // 处理主内容 - 流式显示
+                            // 处理主内容 - 需要检测并分离内嵌标签型思考内容
                             if (content != null && !content.isEmpty() && !"null".equals(content)) {
-                                fullContent.append(content);
-                                // 如果提供了 resultEdit，则流式显示结果
-                                if (resultEdit != null) {
-                                    final String currentContent = fullContent.toString();
-                                    runOnMainThread(() -> {
-                                        resultEdit.setText(currentContent);
-                                        resultEdit.selectEnd();
-                                    });
+                                if (showThinking) {
+                                    // 累积内容到缓冲区
+                                    contentBuffer.append(content);
+                                    String allContent = contentBuffer.toString();
+
+                                    // 检测是否包含思考标签
+                                    if (!hasDetectedThinkingTag) {
+                                        if (containsThinkingTag(allContent)) {
+                                            hasDetectedThinkingTag = true;
+                                        } else if (allContent.length() > 100) {
+                                            // 超过100字符无标签，认为无思考过程
+                                            fullContent.append(allContent);
+                                            contentBuffer.setLength(0);
+                                            if (resultEdit != null) {
+                                                final String currentContent = fullContent.toString();
+                                                runOnMainThread(() -> {
+                                                    resultEdit.setText(currentContent);
+                                                    resultEdit.selectEnd();
+                                                });
+                                            }
+                                        }
+                                    }
+
+                                    // 如果检测到思考标签，分离并显示
+                                    if (hasDetectedThinkingTag) {
+                                        String[] result = separateThinkingFromContent(allContent);
+                                        String thinking = result[0];
+                                        String finalContent = result[1];
+                                        hasFoundEndTag = result[2].equals("true");
+
+                                        // 更新思考过程显示
+                                        if (!thinking.isEmpty()) {
+                                            fullReasoning.setLength(0);
+                                            fullReasoning.append(thinking);
+                                            if (thinkingEdit != null) {
+                                                final String currentReasoning = fullReasoning.toString();
+                                                runOnMainThread(() -> {
+                                                    thinkingEdit.setText(currentReasoning);
+                                                    thinkingEdit.selectEnd();
+                                                });
+                                            }
+                                        }
+
+                                        // 更新正式内容显示
+                                        if (!finalContent.isEmpty()) {
+                                            fullContent.setLength(0);
+                                            fullContent.append(finalContent);
+                                            if (resultEdit != null) {
+                                                final String currentContent = fullContent.toString();
+                                                runOnMainThread(() -> {
+                                                    resultEdit.setText(currentContent);
+                                                    resultEdit.selectEnd();
+                                                });
+                                            }
+                                        }
+                                    } else {
+                                        // 无思考标签，流式显示
+                                        if (resultEdit != null) {
+                                            final String currentContent = fullContent.toString();
+                                            runOnMainThread(() -> {
+                                                resultEdit.setText(currentContent);
+                                                resultEdit.selectEnd();
+                                            });
+                                        }
+                                    }
+                                } else {
+                                    // 不显示思考过程，直接追加
+                                    fullContent.append(content);
+                                    if (resultEdit != null) {
+                                        final String currentContent = fullContent.toString();
+                                        runOnMainThread(() -> {
+                                            resultEdit.setText(currentContent);
+                                            resultEdit.selectEnd();
+                                        });
+                                    }
                                 }
                             }
                         }
@@ -370,6 +519,20 @@ public class AIHelper {
         reader.close();
         connection.disconnect();
 
+        // 处理缓冲区中剩余的内容
+        if (contentBuffer.length() > 0 && hasDetectedThinkingTag) {
+            String[] result = separateThinkingFromContent(contentBuffer.toString());
+            String thinking = result[0];
+            String finalContent = result[1];
+
+            if (!thinking.isEmpty()) {
+                fullReasoning.append(thinking);
+            }
+            if (!finalContent.isEmpty()) {
+                fullContent.append(finalContent);
+            }
+        }
+
         // 只使用 content 作为最终结果，不使用 reasoning_content
         // reasoning_content 是思考过程，不应该作为最终结果
         if (fullContent.length() == 0) {
@@ -378,8 +541,138 @@ public class AIHelper {
             throw new Exception(errorDetail);
         }
 
+        // 清理 content 中可能混入的思考过程标记
+        String finalContent = fullContent.toString();
+        String cleanedContent = cleanThinkingTags(finalContent);
+
         // 返回结果：result[0]=正式内容（content），result[1]=思考过程（reasoning_content）
-        return new String[]{fullContent.toString(), fullReasoning.toString()};
+        return new String[]{cleanedContent, fullReasoning.toString()};
+    }
+
+    /**
+     * 检测内容是否包含思考标签
+     */
+    private static boolean containsThinkingTag(String content) {
+        if (content == null || content.isEmpty()) {
+            return false;
+        }
+        return content.contains("<think>") ||
+               content.contains("<thinking>") ||
+               content.contains("<reasoning>") ||
+               content.contains("[思考]") ||
+               content.contains("[Thinking]") ||
+               content.contains("**思考过程**");
+    }
+
+    /**
+     * 从内容中分离思考过程和正式内容
+     * 支持多种思考标签格式：<think>, <thinking>, <reasoning>, [思考], **思考过程** 等
+     *
+     * @param content 完整内容
+     * @return 数组：[0]=思考过程, [1]=正式内容, [2]=是否找到结束标签("true"/"false")
+     */
+    private static String[] separateThinkingFromContent(String content) {
+        if (content == null || content.isEmpty()) {
+            return new String[]{"", "", "false"};
+        }
+
+        String thinking = "";
+        String finalContent = "";
+        boolean foundEndTag = false;
+
+        // 定义思考标签的正则模式
+        String[][] thinkingPatterns = {
+            {"<think>", "</think>"},
+            {"<thinking>", "</thinking>"},
+            {"<reasoning>", "</reasoning>"},
+            {"\\[思考\\]", "\\[/思考\\]"},
+            {"\\[Thinking\\]", "\\[/Thinking\\]"},
+            {"\\*\\*思考过程\\*\\*", "\\*\\*分析结果\\*\\*"}
+        };
+
+        String remainingContent = content;
+
+        for (String[] pattern : thinkingPatterns) {
+            String startPattern = pattern[0];
+            String endPattern = pattern[1];
+
+            java.util.regex.Matcher startMatcher = java.util.regex.Pattern.compile(startPattern).matcher(remainingContent);
+            if (startMatcher.find()) {
+                int startIndex = startMatcher.start();
+                int startEnd = startMatcher.end();
+
+                // 检查是否有结束标签
+                java.util.regex.Matcher endMatcher = java.util.regex.Pattern.compile(endPattern).matcher(remainingContent);
+                if (endMatcher.find(startIndex)) {
+                    int endIndex = endMatcher.start();
+                    int endEnd = endMatcher.end();
+
+                    // 提取思考内容（不含标签）
+                    thinking = remainingContent.substring(startEnd, endIndex).trim();
+
+                    // 提取结束标签后的正式内容
+                    finalContent = remainingContent.substring(endEnd).trim();
+                    foundEndTag = true;
+                } else {
+                    // 结束标签还未出现，所有内容都是思考过程
+                    thinking = remainingContent;
+                    finalContent = "";
+                    foundEndTag = false;
+                }
+                break;
+            }
+        }
+
+        // 如果没有找到任何思考标签，所有内容都是正式内容
+        if (thinking.isEmpty() && finalContent.isEmpty()) {
+            finalContent = content;
+        }
+
+        return new String[]{thinking, finalContent, foundEndTag ? "true" : "false"};
+    }
+
+    /**
+     * 清理内容中的思考过程标记
+     * 某些模型会将思考过程混入 content 中，需要用此方法清理
+     *
+     * @param content AI 返回的内容
+     * @return 清理后的内容
+     */
+    private static String cleanThinkingTags(String content) {
+        if (content == null || content.isEmpty()) {
+            return content;
+        }
+
+        String result = content;
+
+        // 移除 <think>...</think> 标签及其内容
+        result = result.replaceAll("(?s)<think>.*?</think>", "");
+
+        // 移除 <think>...</think> 标签及其内容
+        result = result.replaceAll("(?s)<think>.*?</think>", "");
+
+        // 移除 <thinking>...</thinking> 标签及其内容
+        result = result.replaceAll("(?s)<thinking>.*?</thinking>", "");
+
+        // 移除 [思考]...[/思考] 标签及其内容
+        result = result.replaceAll("(?s)\\[思考\\].*?\\[/思考\\]", "");
+
+        // 移除 [Thinking]...[/Thinking] 标签及其内容
+        result = result.replaceAll("(?s)\\[Thinking\\].*?\\[/Thinking\\]", "");
+
+        // 移除 **思考过程** 开头到 **分析结果** 结尾之间的内容
+        result = result.replaceAll("(?s)\\*\\*思考过程\\*\\*.*?\\*\\*分析结果\\*\\*", "**分析结果**");
+
+        // 移除 "思考过程：" 开头到 "分析结果：" 之间的内容
+        result = result.replaceAll("(?s)思考过程[：:].*?分析结果[：:]", "分析结果：");
+
+        // 清理多余的空行
+        result = result.replaceAll("\n{3,}", "\n\n");
+
+        // 去除首尾空白
+        result = result.trim();
+
+        return result;
     }
 
     /**

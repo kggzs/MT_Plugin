@@ -164,10 +164,10 @@ public class MyPreference implements PluginPreference {
         bin.mt.plugin.api.ui.PluginView view = ui.buildVerticalLayout()
             .addTextView().text("{global_analysis_prompt_label}").textSize(14).marginBottom(smallMargin)
             .addEditBox("global_prompt").text(AIHelper.getPrompt(context))
-                .minLines(4).maxLines(8).widthMatchParent().marginBottom(smallMargin)
+                .minLines(4).maxLines(8).widthMatchParent().marginBottom(smallMargin).softWrap(bin.mt.plugin.api.ui.PluginEditText.SOFT_WRAP_KEEP_WORD)
             .addTextView().text("{short_analysis_prompt_label}").textSize(14).marginTop(smallMargin).marginBottom(smallMargin)
             .addEditBox("short_prompt").text(AIHelper.getShortPrompt(context))
-                .minLines(2).maxLines(4).widthMatchParent().marginBottom(smallMargin)
+                .minLines(2).maxLines(4).widthMatchParent().marginBottom(smallMargin).softWrap(bin.mt.plugin.api.ui.PluginEditText.SOFT_WRAP_KEEP_WORD)
             .addButton("manage_skills").text("{manage_skills}").widthMatchParent()
             .paddingHorizontal(padding)
             .paddingVertical(padding)
@@ -259,7 +259,7 @@ public class MyPreference implements PluginPreference {
             .addTextView().text("{skill_name}").textSize(14).marginBottom(smallMargin)
             .addEditText("skill_name").text(currentName).hint("{input_name}").widthMatchParent().marginBottom(smallMargin)
             .addTextView().text("{prompt_content}").textSize(14).marginTop(smallMargin).marginBottom(smallMargin)
-            .addEditBox("skill_prompt").text(currentPrompt).minLines(8).maxLines(15).widthMatchParent().marginBottom(smallMargin)
+            .addEditBox("skill_prompt").text(currentPrompt).minLines(8).maxLines(15).widthMatchParent().marginBottom(smallMargin).softWrap(bin.mt.plugin.api.ui.PluginEditText.SOFT_WRAP_KEEP_WORD)
             .addButton("delete_btn").text("{delete_this_skill}").widthMatchParent()
                 .textColor(0xFFFF5555).marginBottom(smallMargin)
             .paddingHorizontal(padding)
@@ -342,7 +342,7 @@ public class MyPreference implements PluginPreference {
                                           String title, String defaultValue,
                                           java.util.function.Consumer<String> onSave) {
         bin.mt.plugin.api.ui.PluginView view = ui.buildVerticalLayout()
-            .addEditBox("input").text(defaultValue).minLines(10).maxLines(20).widthMatchParent()
+            .addEditBox("input").text(defaultValue).minLines(10).maxLines(20).widthMatchParent().softWrap(bin.mt.plugin.api.ui.PluginEditText.SOFT_WRAP_KEEP_WORD)
             .paddingHorizontal(ui.dialogPaddingHorizontal())
             .paddingVertical(ui.dialogPaddingVertical())
             .build();
