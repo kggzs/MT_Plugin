@@ -38,6 +38,10 @@ public class AIHelper {
     private static final String PREF_CUSTOM_PROMPT = "ai_custom_prompt";
     private static final String PREF_SHORT_PROMPT = "ai_short_prompt";
     private static final String PREF_SKILLS = "ai_skills";
+    private static final String PREF_QUICK_PROMPTS = "ai_quick_prompts";
+
+    // 默认快速提示词
+    private static final String DEFAULT_QUICK_PROMPT_1 = "分析此代码是否存在混淆或解密情况，指出混淆技术和解密方法";
 
     /**
      * 获取 API 地址
@@ -120,6 +124,35 @@ public class AIHelper {
     }
 
     /**
+     * 获取快速提示词列表（JSON数组格式）
+     */
+    @NonNull
+    public static String getQuickPrompts(@NonNull PluginContext context) {
+        String prompts = context.getPreferences().getString(PREF_QUICK_PROMPTS, "");
+        if (prompts.isEmpty()) {
+            // 返回默认的快速提示词
+            JSONArray defaultPrompts = new JSONArray();
+            try {
+                JSONObject prompt1 = new JSONObject();
+                prompt1.put("name", "分析代码混淆");
+                prompt1.put("prompt", DEFAULT_QUICK_PROMPT_1);
+                defaultPrompts.put(prompt1);
+            } catch (Exception e) {
+                android.util.Log.e("AIHelper", "创建默认快速提示词失败", e);
+            }
+            return defaultPrompts.toString();
+        }
+        return prompts;
+    }
+
+    /**
+     * 保存快速提示词列表
+     */
+    public static void setQuickPrompts(@NonNull PluginContext context, @NonNull String promptsJson) {
+        context.getPreferences().edit().putString(PREF_QUICK_PROMPTS, promptsJson).apply();
+    }
+
+    /**
      * AI 分析代码（使用自定义提示词）
      * @param context 插件上下文
      * @param code 要分析的代码
@@ -166,6 +199,7 @@ public class AIHelper {
                 .remove(PREF_CUSTOM_PROMPT)
                 .remove(PREF_SHORT_PROMPT)
                 .remove(PREF_SKILLS)
+                .remove(PREF_QUICK_PROMPTS)
                 .apply();
     }
 
@@ -209,6 +243,23 @@ public class AIHelper {
         String systemPrompt = getPrompt(context);
         String combinedSystemPrompt = userPrompt + "\n\n" + systemPrompt;
         return analyzeCodeWithAI(context, code, thinkingEdit, resultEdit, dialog, true, combinedSystemPrompt);
+    }
+
+    /**
+     * AI 分析代码（无UI版本，用于后台分析）
+     * @param context 插件上下文
+     * @param code 要分析的代码
+     * @param userPrompt 用户提示词（将插入到系统提示词中）
+     * @return 分析结果数组，第一个元素是分析结果
+     */
+    @Nullable
+    public static String[] analyzeCodeWithUserPromptNoUI(
+            @NonNull PluginContext context,
+            @NonNull String code,
+            @NonNull String userPrompt) throws Exception {
+        String systemPrompt = getPrompt(context);
+        String combinedSystemPrompt = userPrompt + "\n\n" + systemPrompt;
+        return analyzeCodeWithAINoUI(context, code, true, combinedSystemPrompt);
     }
 
     /**
@@ -680,5 +731,125 @@ public class AIHelper {
      */
     public static void runOnMainThread(@NonNull Runnable action) {
         new Handler(Looper.getMainLooper()).post(action);
+    }
+
+    /**
+     * AI 分析代码（无UI版本，用于后台分析）
+     * @param context 插件上下文
+     * @param code 要分析的代码
+     * @param showThinking 是否显示思考过程
+     * @param customPrompt 自定义提示词（如果为 null 则使用默认）
+     * @return 分析结果数组，第一个元素是分析结果
+     */
+    @Nullable
+    public static String[] analyzeCodeWithAINoUI(
+            @NonNull PluginContext context,
+            @NonNull String code,
+            boolean showThinking,
+            @Nullable String customPrompt) throws Exception {
+
+        String apiUrl = getApiUrl(context);
+        String aiModel = getAiModel(context);
+        String apiKey = getApiKey(context);
+        String prompt = (customPrompt != null && !customPrompt.isEmpty()) ? customPrompt : getPrompt(context);
+
+        // 构建 API URL（确保以 /chat/completions 结尾）
+        String completionsUrl = apiUrl.endsWith("/chat/completions") ? apiUrl :
+                               (apiUrl.endsWith("/") ? apiUrl + "chat/completions" : apiUrl + "/chat/completions");
+
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("model", aiModel);
+        requestBody.put("enable_thinking", showThinking);
+        requestBody.put("stream", true);
+
+        JSONArray messages = new JSONArray();
+        JSONObject systemMessage = new JSONObject();
+        systemMessage.put("role", "system");
+        systemMessage.put("content", prompt);
+        messages.put(systemMessage);
+
+        JSONObject userMessage = new JSONObject();
+        userMessage.put("role", "user");
+        userMessage.put("content", "请分析以下代码：\n\n" + code);
+        messages.put(userMessage);
+
+        requestBody.put("messages", messages);
+        requestBody.put("temperature", 0.7);
+
+        URL url = new URL(completionsUrl);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty("Authorization", "Bearer " + apiKey);
+        connection.setConnectTimeout(30000);
+        connection.setReadTimeout(120000); // 后台分析给更多时间
+        connection.setDoOutput(true);
+
+        connection.getOutputStream().write(requestBody.toString().getBytes(StandardCharsets.UTF_8));
+
+        int responseCode = connection.getResponseCode();
+        if (responseCode != 200) {
+            BufferedReader errorReader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+            StringBuilder errorResponse = new StringBuilder();
+            String line;
+            while ((line = errorReader.readLine()) != null) {
+                errorResponse.append(line);
+            }
+            errorReader.close();
+            throw new Exception("AI API错误: " + responseCode + " - " + errorResponse.toString());
+        }
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        StringBuilder fullContent = new StringBuilder();
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+            if (line.startsWith("data: ")) {
+                String data = line.substring(6);
+                if (data.equals("[DONE]")) {
+                    break;
+                }
+
+                try {
+                    JSONObject chunk = new JSONObject(data);
+                    JSONArray choices = chunk.optJSONArray("choices");
+                    if (choices != null && choices.length() > 0) {
+                        JSONObject firstChoice = choices.getJSONObject(0);
+                        if (firstChoice != null) {
+                            String content = null;
+
+                            // 尝试多种格式获取内容
+                            JSONObject delta = firstChoice.optJSONObject("delta");
+                            if (delta != null) {
+                                content = delta.optString("content", "");
+                            }
+
+                            if (content == null || content.isEmpty()) {
+                                content = firstChoice.optString("text", "");
+                            }
+
+                            if (content == null || content.isEmpty()) {
+                                content = firstChoice.optString("content", "");
+                            }
+
+                            if (content != null && !content.isEmpty() && !"null".equals(content)) {
+                                fullContent.append(content);
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    android.util.Log.w("AIHelper", "JSON解析错误: " + e.getMessage());
+                }
+            }
+        }
+        reader.close();
+        connection.disconnect();
+
+        if (fullContent.length() == 0) {
+            throw new Exception("AI API返回空结果（未返回正式回答）");
+        }
+
+        String result = fullContent.toString();
+        return new String[]{result};
     }
 }

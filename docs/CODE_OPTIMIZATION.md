@@ -129,7 +129,7 @@ public abstract class BaseAICodeAnalysisMenu {
                 .minLines(getMinLines())
                 .maxLines(getMaxLines())
             .addEditText("userPrompt")
-                .hint("请输入补充提示词（将作为系统提示词的前缀）：")
+                .hint("请输入提示词")
                 .minLines(5)
                 .maxLines(8);
         
@@ -240,7 +240,7 @@ public class AICodeAnalysisFloatingMenu extends TextEditorFloatingMenu {
 |--------|----------|----------|
 | "AI代码分析" | AICodeAnalysisToolMenu.java | `ai_code_analysis` |
 | "AI快速分析" | AICodeAnalysisFloatingMenu.java | `ai_quick_analysis` |
-| "请输入补充提示词..." | 两个 AI 菜单类 | `supplementary_prompt_hint` |
+| "请输入提示词" | 两个 AI 菜单类 | `supplementary_prompt_hint` |
 | "设置分析提示词" | 两个 AI 菜单类 | `set_analysis_prompt` |
 | "开始分析" | 两个 AI 菜单类 | `start_analysis` |
 | "正在初始化..." | 两个 AI 菜单类 | `initializing` |
@@ -259,7 +259,7 @@ public class AICodeAnalysisFloatingMenu extends TextEditorFloatingMenu {
 # AI 分析相关
 ai_code_analysis=AI代码分析
 ai_quick_analysis=AI快速分析
-supplementary_prompt_hint=请输入补充提示词（将作为系统提示词的前缀）：
+supplementary_prompt_hint=请输入提示词
 set_analysis_prompt=设置分析提示词
 start_analysis=开始分析
 initializing=正在初始化...

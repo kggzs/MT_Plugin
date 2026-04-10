@@ -4,6 +4,13 @@ import androidx.annotation.NonNull;
 
 import com.example.myplugin.util.AIHelper;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import bin.mt.plugin.api.ui.PluginButton;
+import bin.mt.plugin.api.ui.PluginCheckBox;
 import bin.mt.plugin.api.ui.PluginEditText;
 import bin.mt.plugin.api.ui.PluginUI;
 import bin.mt.plugin.api.ui.PluginView;
@@ -41,21 +48,197 @@ public class AICodeAnalysisHelper {
      * @param code     待分析的代码
      */
     public void showPromptInputDialog(@NonNull PluginUI pluginUI, @NonNull String code) {
-        PluginView inputView = pluginUI.buildVerticalLayout()
-                .addTextView().text("请输入补充提示词（将作为系统提示词的前缀）：").marginBottomDp(4)
+        // 获取快速提示词列表
+        JSONArray quickPrompts;
+        int quickPromptCount;
+        try {
+            quickPrompts = new JSONArray(AIHelper.getQuickPrompts(pluginUI.getContext()));
+            quickPromptCount = Math.min(quickPrompts.length(), 8);
+        } catch (Exception e) {
+            android.util.Log.w("AICodeAnalysisHelper", "加载快速提示词失败: " + e.getMessage());
+            quickPrompts = new JSONArray();
+            quickPromptCount = 0;
+        }
+        final JSONArray finalQuickPrompts = quickPrompts;
+        final int finalQuickPromptCount = quickPromptCount;
+
+        // 获取 Skill 列表
+        JSONArray skills;
+        int skillCount;
+        try {
+            skills = new JSONArray(AIHelper.getSkills(pluginUI.getContext()));
+            skillCount = skills.length();
+        } catch (Exception e) {
+            android.util.Log.w("AICodeAnalysisHelper", "加载 Skill 失败: " + e.getMessage());
+            skills = new JSONArray();
+            skillCount = 0;
+        }
+        final JSONArray finalSkills = skills;
+        final int finalSkillCount = skillCount;
+
+        // 判断是否有按钮需要显示
+        boolean hasButtons = finalQuickPromptCount > 0 || finalSkillCount > 0;
+
+        // 构建视图
+        PluginView inputView;
+        if (hasButtons) {
+            // 构建包含按钮分组的视图
+            var viewBuilder = pluginUI.buildVerticalLayout()
+                .addTextView().text("请输入提示词").marginBottomDp(4)
+                .addEditBox("user_prompt_input").text(defaultUserPrompt).minLines(minLines).maxLines(maxLines).textSize(12).widthMatchParent().marginBottomDp(8);
+
+            // 添加快速提示词分组
+            if (finalQuickPromptCount > 0) {
+                viewBuilder.addTextView().text("快速提示词").textSize(14).marginBottomDp(4);
+                for (int i = 0; i < finalQuickPromptCount; i++) {
+                    try {
+                        JSONObject prompt = finalQuickPrompts.getJSONObject(i);
+                        String name = prompt.getString("name");
+                        String buttonName = name.length() > 8 ? name.substring(0, 8) : name;
+                        String buttonId = "quick_prompt_btn_" + i;
+                        viewBuilder.addButton(buttonId).text(buttonName).widthMatchParent().marginBottomDp(4);
+                    } catch (Exception e) {
+                        android.util.Log.w("AICodeAnalysisHelper", "构建快速提示词按钮失败: " + e.getMessage());
+                    }
+                }
+            }
+
+            // 添加 Skill 多选框
+            if (finalSkillCount > 0) {
+                // 如果有快速提示词，添加分隔
+                if (finalQuickPromptCount > 0) {
+                    viewBuilder.addTextView().text("").marginBottomDp(4);
+                }
+                viewBuilder.addCheckBox("skill_selector").text("选择自定义 Skill（点击选择）").widthMatchParent();
+            }
+
+            inputView = viewBuilder
+                .paddingVertical(pluginUI.dialogPaddingVertical())
+                .paddingHorizontal(pluginUI.dialogPaddingHorizontal())
+                .build();
+        } else {
+            // 没有按钮，使用简单布局
+            inputView = pluginUI.buildVerticalLayout()
+                .addTextView().text("请输入提示词").marginBottomDp(4)
                 .addEditBox("user_prompt_input").text(defaultUserPrompt).minLines(minLines).maxLines(maxLines).textSize(12).widthMatchParent()
                 .paddingVertical(pluginUI.dialogPaddingVertical())
                 .paddingHorizontal(pluginUI.dialogPaddingHorizontal())
                 .build();
+        }
 
         PluginEditText userPromptInput = inputView.requireViewById("user_prompt_input");
         userPromptInput.requestFocusAndShowIME();
 
+        // 存储用户选中的 Skill 索引
+        final ArrayList<Integer> selectedSkillIndexes = new ArrayList<>();
+
+        // 绑定快速提示词按钮事件 - 追加到现有内容
+        if (finalQuickPromptCount > 0 && finalQuickPrompts.length() > 0) {
+            for (int i = 0; i < finalQuickPromptCount; i++) {
+                try {
+                    JSONObject prompt = finalQuickPrompts.getJSONObject(i);
+                    String promptContent = prompt.getString("prompt");
+                    String buttonId = "quick_prompt_btn_" + i;
+
+                    PluginButton button = inputView.requireViewById(buttonId);
+                    final String finalPromptContent = promptContent;
+                    button.setOnClickListener(v -> {
+                        // 追加到现有内容
+                        String currentText = userPromptInput.getText().toString();
+                        if (!currentText.isEmpty() && !currentText.endsWith("\n")) {
+                            currentText += "\n";
+                        }
+                        userPromptInput.setText(currentText + finalPromptContent);
+                        pluginUI.showToast("已添加快速提示词");
+                    });
+                } catch (Exception e) {
+                    android.util.Log.w("AICodeAnalysisHelper", "绑定快速提示词按钮失败: " + e.getMessage());
+                }
+            }
+        }
+
+        // 绑定 Skill 多选框事件
+        if (finalSkillCount > 0 && finalSkills.length() > 0) {
+            final PluginCheckBox skillCheckBox = inputView.requireViewById("skill_selector");
+            
+            // 构建 Skill 名称数组
+            CharSequence[] skillNames = new CharSequence[finalSkillCount];
+            try {
+                for (int i = 0; i < finalSkillCount; i++) {
+                    JSONObject skill = finalSkills.getJSONObject(i);
+                    skillNames[i] = skill.getString("name");
+                }
+            } catch (Exception e) {
+                android.util.Log.w("AICodeAnalysisHelper", "构建 Skill 名称失败: " + e.getMessage());
+            }
+
+            // 点击复选框时弹出多选列表
+            skillCheckBox.setOnClickListener(v -> {
+                boolean[] checkedItems = new boolean[finalSkillCount];
+                for (int i = 0; i < selectedSkillIndexes.size(); i++) {
+                    checkedItems[selectedSkillIndexes.get(i)] = true;
+                }
+
+                pluginUI.buildDialog()
+                    .setTitle("选择自定义 Skill")
+                    .setMultiChoiceItems(skillNames, checkedItems, (dialog, which, isChecked) -> {
+                        if (isChecked) {
+                            if (!selectedSkillIndexes.contains(which)) {
+                                selectedSkillIndexes.add(which);
+                            }
+                        } else {
+                            selectedSkillIndexes.remove(Integer.valueOf(which));
+                        }
+                    })
+                    .setPositiveButton("确定", (dialog, which) -> {
+                        // 更新复选框显示文本
+                        if (selectedSkillIndexes.isEmpty()) {
+                            skillCheckBox.setText("选择自定义 Skill（点击选择）");
+                        } else {
+                            StringBuilder sb = new StringBuilder("已选择 Skill：");
+                            for (int i = 0; i < selectedSkillIndexes.size(); i++) {
+                                if (i > 0) sb.append("、");
+                                try {
+                                    sb.append(skillNames[selectedSkillIndexes.get(i)]);
+                                } catch (Exception e) {
+                                    sb.append("未知");
+                                }
+                            }
+                            skillCheckBox.setText(sb.toString());
+                        }
+                    })
+                    .setNegativeButton("取消", null)
+                    .show();
+            });
+        }
+
+        // 构建最终的用户提示词（包含选中的 Skill 内容）
         pluginUI.buildDialog()
                 .setTitle("设置分析提示词")
                 .setView(inputView)
                 .setPositiveButton("开始分析", (dialog, which) -> {
                     String userPrompt = userPromptInput.getText().toString().trim();
+                    
+                    // 如果有选中的 Skill，追加到提示词后面
+                    if (!selectedSkillIndexes.isEmpty() && finalSkills.length() > 0) {
+                        StringBuilder promptBuilder = new StringBuilder(userPrompt);
+                        for (Integer index : selectedSkillIndexes) {
+                            try {
+                                JSONObject skill = finalSkills.getJSONObject(index);
+                                String skillPrompt = skill.getString("prompt");
+                                if (!skillPrompt.isEmpty()) {
+                                    if (promptBuilder.length() > 0) {
+                                        promptBuilder.append("\n\n");
+                                    }
+                                    promptBuilder.append(skillPrompt);
+                                }
+                            } catch (Exception e) {
+                                android.util.Log.w("AICodeAnalysisHelper", "获取 Skill 内容失败: " + e.getMessage());
+                            }
+                        }
+                        userPrompt = promptBuilder.toString();
+                    }
+                    
                     if (userPrompt.isEmpty()) {
                         userPrompt = defaultUserPrompt;
                     }
@@ -85,6 +268,7 @@ public class AICodeAnalysisHelper {
                 .addEditBox("result_edit").text("等待分析...").minLines(10).maxLines(15).textSize(12).readOnly().widthMatchParent().softWrap(PluginEditText.SOFT_WRAP_KEEP_WORD)
                 .paddingVertical(pluginUI.dialogPaddingVertical())
                 .paddingHorizontal(pluginUI.dialogPaddingHorizontal())
+                .addButton("background_btn").text("后台运行（切换页面后继续分析）").widthMatchParent().marginTopDp(8)
                 .paddingBottom(16)
                 .build();
 
@@ -101,6 +285,14 @@ public class AICodeAnalysisHelper {
 
         PluginEditText thinkingEdit = contentView.requireViewById("thinking_edit");
         PluginEditText resultEdit = contentView.requireViewById("result_edit");
+        PluginButton backgroundBtn = contentView.requireViewById("background_btn");
+
+        // 后台运行按钮点击事件
+        backgroundBtn.setOnClickListener(v -> {
+            dialog.dismiss();
+            pluginUI.showToast("已在后台运行分析，完成后将弹出结果");
+            startBackgroundAnalysis(pluginUI, code, userPrompt, thinkingEdit, resultEdit);
+        });
 
         new Thread(() -> {
             try {
@@ -134,6 +326,55 @@ public class AICodeAnalysisHelper {
                             showEmptyResultDialog(pluginUI, errorMsg);
                         } else {
                             pluginUI.showToast("分析失败: " + errorMsg);
+                        }
+                    }
+                });
+            }
+        }).start();
+    }
+
+    /**
+     * 后台AI分析（不阻塞当前界面）
+     *
+     * @param pluginUI     插件UI上下文
+     * @param code         待分析的代码
+     * @param userPrompt   用户提示词
+     * @param thinkingEdit 思考过程编辑框（用于传递引用，实际不使用）
+     * @param resultEdit   结果编辑框（用于传递引用，实际不使用）
+     */
+    private void startBackgroundAnalysis(@NonNull PluginUI pluginUI, @NonNull String code, 
+                                         @NonNull String userPrompt, 
+                                         @NonNull PluginEditText thinkingEdit,
+                                         @NonNull PluginEditText resultEdit) {
+        new Thread(() -> {
+            try {
+                // 在后台线程中执行分析，不传入UI组件
+                String[] result = AIHelper.analyzeCodeWithUserPromptNoUI(
+                        pluginUI.getContext(),
+                        code,
+                        userPrompt
+                );
+
+                if (isCancelled) {
+                    return;
+                }
+
+                if (result != null) {
+                    AIHelper.runOnMainThread(() -> {
+                        if (!isCancelled) {
+                            // 分析完成，弹出结果对话框
+                            showResultDialog(pluginUI, result[0]);
+                        }
+                    });
+                }
+            } catch (Exception e) {
+                AIHelper.runOnMainThread(() -> {
+                    if (!isCancelled) {
+                        String errorMsg = e.getMessage();
+                        if (errorMsg != null && errorMsg.contains("返回空结果")) {
+                            showEmptyResultDialog(pluginUI, errorMsg);
+                        } else {
+                            pluginUI.showToast("后台分析失败: " + errorMsg);
                         }
                     }
                 });

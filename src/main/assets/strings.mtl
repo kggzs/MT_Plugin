@@ -94,9 +94,20 @@ skill_saved: Skill 已保存
 save_failed: 保存失败
 apply: 应用
 skill_applied: 已应用 Skill
+quick_prompts: 快速提示词
+quick_prompts_config: 配置快速提示词
+quick_prompts_summary: 配置最多10条快速提示词，在分析时快速选择使用
+add_quick_prompt: 添加快速提示词
+edit_quick_prompt: 编辑快速提示词
+delete_quick_prompt: 删除此提示词
+quick_prompt_max_limit: 最多只能添加10条快速提示词
+quick_prompt_name_hint: 按钮名称（取前8个字）
+quick_prompt_content_hint: 提示词内容
+apply_quick_prompt: 应用
+quick_prompt_applied: 已应用快速提示词
 global_analysis_prompt: 全局分析提示词
 short_analysis_prompt: 简短分析提示词
-supplementary_prompt_hint: 请输入补充提示词...
+supplementary_prompt_hint: 请输入补充提示词... 
 set_analysis_prompt: 设置分析提示词
 start_analysis: 开始分析
 initializing: 正在初始化...
