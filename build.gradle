@@ -62,7 +62,7 @@ mtPlugin {
      * - 测试版/共存请填写：bin.mt.plus.canary
      * 默认为自动检测
      */
-    pushTarget = "bin.mt.plus.canary"
+    pushTarget = "auto"
 
     /**
      * 插件ID，插件的唯一标识，类似于packageName
@@ -73,12 +73,12 @@ mtPlugin {
     /**
      * 插件版本号，低版本插件无法覆盖安装高版本插件
      */
-    versionCode = 4
+    versionCode = 3
 
     /**
      * 插件版本名称
      */
-    versionName = "v2.0.2"
+    versionName = "v2.0.1"
 
     /**
      * 插件名称
