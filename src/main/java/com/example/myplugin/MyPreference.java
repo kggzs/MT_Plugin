@@ -221,7 +221,7 @@ public class MyPreference implements PluginPreference {
                 JSONObject skill = skillsArray.getJSONObject(i);
                 skillNames.add(skill.getString("name"));
             }
-            skillNames.add("+ {new_skill}");
+            skillNames.add("+ " + context.getString("{new_skill}"));
 
             CharSequence[] items = skillNames.toArray(new CharSequence[0]);
 
@@ -252,7 +252,7 @@ public class MyPreference implements PluginPreference {
                 JSONObject prompt = promptsArray.getJSONObject(i);
                 promptNames.add(prompt.getString("name"));
             }
-            promptNames.add("+ {add_quick_prompt}");
+            promptNames.add("+ " + context.getString("{add_quick_prompt}"));
 
             CharSequence[] items = promptNames.toArray(new CharSequence[0]);
 

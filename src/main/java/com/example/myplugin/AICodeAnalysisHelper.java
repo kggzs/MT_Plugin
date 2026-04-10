@@ -268,7 +268,6 @@ public class AICodeAnalysisHelper {
                 .addEditBox("result_edit").text("等待分析...").minLines(10).maxLines(15).textSize(12).readOnly().widthMatchParent().softWrap(PluginEditText.SOFT_WRAP_KEEP_WORD)
                 .paddingVertical(pluginUI.dialogPaddingVertical())
                 .paddingHorizontal(pluginUI.dialogPaddingHorizontal())
-                .addButton("background_btn").text("后台运行（切换页面后继续分析）").widthMatchParent().marginTopDp(8)
                 .paddingBottom(16)
                 .build();
 
@@ -277,22 +276,30 @@ public class AICodeAnalysisHelper {
                 .setView(contentView)
                 .setCancelable(false)
                 .setNegativeButton("取消", (d, which) -> {
-                    isCancelled = true;
+                    // 二次确认对话框
+                    pluginUI.buildDialog()
+                        .setTitle("确认取消")
+                        .setMessage("确定要取消当前分析吗？")
+                        .setPositiveButton("确定取消", (dialog2, which2) -> {
+                            isCancelled = true;
+                            d.dismiss();
+                            dialog2.dismiss();
+                            pluginUI.showToast("已取消分析");
+                        })
+                        .setNegativeButton("继续分析", null)
+                        .show();
+                })
+                .setNeutralButton("后台运行", (d, which) -> {
                     d.dismiss();
-                    pluginUI.showToast("已取消分析");
+                    pluginUI.showToast("已在后台运行分析，完成后将弹出结果");
+                    PluginEditText thinkingEdit2 = contentView.requireViewById("thinking_edit");
+                    PluginEditText resultEdit2 = contentView.requireViewById("result_edit");
+                    startBackgroundAnalysis(pluginUI, code, userPrompt, thinkingEdit2, resultEdit2);
                 })
                 .show();
 
         PluginEditText thinkingEdit = contentView.requireViewById("thinking_edit");
         PluginEditText resultEdit = contentView.requireViewById("result_edit");
-        PluginButton backgroundBtn = contentView.requireViewById("background_btn");
-
-        // 后台运行按钮点击事件
-        backgroundBtn.setOnClickListener(v -> {
-            dialog.dismiss();
-            pluginUI.showToast("已在后台运行分析，完成后将弹出结果");
-            startBackgroundAnalysis(pluginUI, code, userPrompt, thinkingEdit, resultEdit);
-        });
 
         new Thread(() -> {
             try {
