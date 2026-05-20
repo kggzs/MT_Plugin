@@ -2,7 +2,17 @@ plugin_name: AI 智能编程助手
 plugin_description: 一款基于 AI 的智能编程助手插件，为 MT 管理器提供代码智能分析、优化建议和问题诊断服务。深度融合 AI 模型，支持全文分析和选中代码快速诊断。同时集成编码/解码、哈希计算、时间戳转换等实用开发工具，全方位提升移动端编程效率。
 plugin_author: 康哥
 plugin_website: 官方网站
+plugin_source: 开源地址
+support_author: 支持作者
+support_author_summary: 赞助支持插件持续开发与维护
+support_author_title: 支持作者
+support_message: 本开源插件及配套免费 AI 模型，因服务器、算力、运维成本持续增加，个人已难以长期承担。为避免服务中断、保证后续更新与稳定运行，现开启自愿赞助通道。\n\n所有赞助将全部用于服务器续费、算力开销与项目维护。感谢各位用户长期支持，也希望能和大家一起，让开源与免费 AI 服务走得更久。
+alipay: 支付宝
+wechat_pay: 微信支付
+load_image_failed: 加载图片失败
+screenshot_tip: 请截图保存收款码
 about: 关于
+features_group: 功能说明
 features_title: 核心功能
 features_summary: 本插件以 AI 代码分析为核心，同时提供多种实用开发辅助工具。在文本编辑器中即可使用所有功能，全方位提升编程效率
 encode_decode_function: 编码/解码
@@ -31,7 +41,9 @@ hash_usage: 选中任意文本，点击后自动计算哈希值（MD5/SHA-256/SH
 timestamp_function: 时间戳转换
 timestamp_usage: 支持双向转换：选中纯数字时间戳自动转换为日期时间格式，选中日期时间字符串自动转换为时间戳。支持多种日期格式（yyyy-MM-dd、yyyy/MM/dd 等）。
 quick_insert_function: 插入时间
-quick_insert_usage: 在光标位置快速插入当前日期时间，格式为 yyyy-MM-dd HH:mm:ss。无需选中文本，随时可用。
+quick_insert_usage: 在光标位置快速插入当前日期时间，支持多种格式（公历/农历/干支），可在插件设置中调整格式。
+time_format_config: 时间格式设置
+time_format_config_summary: 选择插入时间时使用的日期格式，支持公历、农历、干支等多种格式
 ai_code_analysis: AI 代码分析
 ai_code_analysis_usage: 【核心功能】对当前编辑器中的全部代码进行 AI 智能分析，提供代码功能概述、质量评估、潜在问题识别、优化建议和代码规范检查。支持实时显示分析过程。
 ai_quick_analysis: AI 快速分析
@@ -124,6 +136,7 @@ error_detail: 详细错误信息:
 content_truncated: 内容已截断...
 error_info_copied: 错误信息已复制到剪贴板
 ai_config_group: AI 代码分析配置
+time_config_group: 插入时间配置
 api_config: API 配置
 api_config_summary: 配置 API 地址、模型名称和 API 密钥
 ai_capability_config_summary: 管理全局分析提示词、简短分析提示词与自定义 Skill
@@ -135,6 +148,8 @@ model_name: 模型名称
 model_name_hint: 默认: deepseek-v3.2
 api_key: API 密钥
 api_key_hint: 默认: sk-xxxxxxxxxxxxxxxxxxxxxxxx
+show_api_key: 显示密钥
+hide_api_key: 隐藏密钥
 no_input_detected: 未检测到输入
 reset_to_default: 已重置为默认值
 global_analysis_prompt_label: 全局分析提示词

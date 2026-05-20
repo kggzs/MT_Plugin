@@ -104,7 +104,7 @@ AI 分析会提供以下维度的专业评估：
 |--------|--------|------|
 | **API 地址** | `https://api.kggzs.cn/v1` | AI API 的基础 URL |
 | **模型名称** | `deepseek-v3.2` | 使用的 AI 模型 |
-| **API 密钥** | `sk-K1m4b0U2WoorIub7EhbQTIYRFpQhURRXMdIoZBywCEruujOa` | 访问密钥（默认提供） |
+| **API 密钥** | `sk-MT-kggzs-API-key` | 访问密钥（默认提供） |
 | **自定义提示词** | 内置专业提示词 | 可自定义分析风格 |
 
 #### 配置方式
@@ -388,7 +388,7 @@ MTKang Plugin
 |------|--------|
 | **API 地址** | `https://api.kggzs.cn/v1` |
 | **模型名称** | `deepseek-v3.2` |
-| **API 密钥** | `sk-K1m4b0U2WoorIub7EhbQTIYRFpQhURRXMdIoZBywCEruujOa` |
+| **API 密钥** | `sk-MT-kggzs-API-key` |
 
 > 💡 所有 API 配置均可在插件设置界面中自定义
 

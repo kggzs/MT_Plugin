@@ -4,11 +4,13 @@ import bin.mt.plugin.api.PluginContext;
 import bin.mt.plugin.api.preference.PluginPreference;
 
 import com.example.myplugin.util.AIHelper;
+import com.example.myplugin.util.TimeFormatHelper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MyPreference implements PluginPreference {
     @Override
@@ -20,7 +22,24 @@ public class MyPreference implements PluginPreference {
                .summary("{plugin_description}");
 
         builder.addText("{plugin_website}")
-               .summary("www.kggzs.cn");
+               .summary("www.kggzs.cn")
+               .onClick((ui, preference) -> {
+                   context.setClipboardText("www.kggzs.cn");
+                   context.showToast("{copy_success_clipboard}");
+               });
+
+        builder.addText("{plugin_source}")
+               .summary("https://github.com/kggzs/MT_Plugin")
+               .onClick((ui, preference) -> {
+                   context.setClipboardText("https://github.com/kggzs/MT_Plugin");
+                   context.showToast("{copy_success_clipboard}");
+               });
+
+        builder.addText("{support_author}")
+               .summary("{support_author_summary}")
+               .onClick((ui, preference) -> {
+                   showSupportDialog(ui, context);
+               });
 
         builder.addHeader("{ai_config_group}");
 
@@ -34,6 +53,14 @@ public class MyPreference implements PluginPreference {
                .summary("{ai_capability_config_summary}")
                .onClick((ui, preference) -> {
                    showAiCapabilityDialog(ui, context);
+               });
+
+        builder.addHeader("{time_config_group}");
+
+        builder.addText("{time_format_config}")
+               .summary("{time_format_config_summary}")
+               .onClick((ui, preference) -> {
+                   showTimeFormatConfigDialog(ui, context);
                });
 
         builder.addText("{reset_config}")
@@ -51,6 +78,8 @@ public class MyPreference implements PluginPreference {
                        .setNegativeButton("{confirm_reset_negative}", null)
                        .show();
                });
+
+        builder.addHeader("{features_group}");
 
         builder.addText("{features_title}")
                .summary("{features_summary}");
@@ -79,9 +108,6 @@ public class MyPreference implements PluginPreference {
         builder.addText("{timestamp_function}")
                .summary("{timestamp_usage}");
 
-        builder.addText("{quick_insert_function}")
-               .summary("{quick_insert_usage}");
-
         builder.addText("{ai_code_analysis}")
                .summary("{ai_code_analysis_usage}");
 
@@ -96,6 +122,9 @@ public class MyPreference implements PluginPreference {
         int padding = ui.dp2px(12);
         int smallMargin = ui.dp2px(8);
 
+        String currentApiKey = AIHelper.getApiKey(context);
+        String maskedApiKey = maskApiKey(currentApiKey);
+
         bin.mt.plugin.api.ui.PluginView view = ui.buildVerticalLayout()
             .addTextView().text("{api_address}").textSize(14).marginBottom(smallMargin)
             .addEditText("api_url").hint("{api_url_hint}")
@@ -105,7 +134,8 @@ public class MyPreference implements PluginPreference {
                 .text(AIHelper.getAiModel(context)).widthMatchParent().marginBottom(smallMargin)
             .addTextView().text("{api_key}").textSize(14).marginTop(smallMargin).marginBottom(smallMargin)
             .addEditText("api_key").hint("{api_key_hint}")
-                .text(AIHelper.getApiKey(context)).widthMatchParent().marginBottom(smallMargin)
+                .text(maskedApiKey).widthMatchParent().marginBottom(smallMargin)
+            .addButton("toggle_key_visibility").text("{show_api_key}").widthMatchParent().marginBottom(smallMargin)
             .paddingHorizontal(padding)
             .paddingVertical(padding)
             .build();
@@ -113,6 +143,26 @@ public class MyPreference implements PluginPreference {
         bin.mt.plugin.api.ui.PluginEditText apiUrlInput = view.requireViewById("api_url");
         bin.mt.plugin.api.ui.PluginEditText modelNameInput = view.requireViewById("model_name");
         bin.mt.plugin.api.ui.PluginEditText apiKeyInput = view.requireViewById("api_key");
+        bin.mt.plugin.api.ui.PluginButton toggleBtn = view.requireViewById("toggle_key_visibility");
+
+        apiKeyInput.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+        final boolean[] isPasswordVisible = {false};
+        final String originalApiKey = currentApiKey;
+
+        toggleBtn.setOnClickListener(v -> {
+            if (isPasswordVisible[0]) {
+                apiKeyInput.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                apiKeyInput.setText(maskedApiKey);
+                toggleBtn.setText("{show_api_key}");
+                isPasswordVisible[0] = false;
+            } else {
+                apiKeyInput.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                apiKeyInput.setText(originalApiKey);
+                toggleBtn.setText("{hide_api_key}");
+                isPasswordVisible[0] = true;
+            }
+        });
 
         ui.buildDialog()
             .setTitle("{api_config}")
@@ -139,7 +189,13 @@ public class MyPreference implements PluginPreference {
                 }
 
                 if (!apiKey.isEmpty()) {
-                    AIHelper.setApiKey(context, apiKey);
+                    if (isPasswordVisible[0]) {
+                        AIHelper.setApiKey(context, apiKey);
+                    } else {
+                        if (!apiKey.equals(maskApiKey(originalApiKey))) {
+                            AIHelper.setApiKey(context, apiKey);
+                        }
+                    }
                     hasValue = true;
                 }
 
@@ -157,6 +213,31 @@ public class MyPreference implements PluginPreference {
                 context.showToast("{reset_to_default}");
             })
             .show();
+    }
+
+    /**
+     * 遮蔽 API 密钥，只显示前后各4个字符，中间用星号代替
+     */
+    private String maskApiKey(String apiKey) {
+        if (apiKey == null || apiKey.isEmpty()) {
+            return "";
+        }
+        if (apiKey.length() <= 8) {
+            return apiKey;
+        }
+        int visibleChars = 4;
+        String start = apiKey.substring(0, Math.min(visibleChars, apiKey.length()));
+        String end = apiKey.substring(Math.max(apiKey.length() - visibleChars, 0));
+        int maskLength = apiKey.length() - visibleChars * 2;
+        if (maskLength <= 0) {
+            return apiKey;
+        }
+        StringBuilder masked = new StringBuilder(start);
+        for (int i = 0; i < maskLength; i++) {
+            masked.append("*");
+        }
+        masked.append(end);
+        return masked.toString();
     }
 
     /**
@@ -511,5 +592,168 @@ public class MyPreference implements PluginPreference {
             })
             .setNegativeButton("{cancel}", null)
             .show();
+    }
+
+    /**
+     * 显示时间格式配置对话框
+     */
+    private void showTimeFormatConfigDialog(bin.mt.plugin.api.ui.PluginUI ui, PluginContext context) {
+        int currentFormat = TimeFormatHelper.getTimeFormatType(context);
+
+        int padding = ui.dp2px(16);
+        int smallMargin = ui.dp2px(8);
+        int sectionMargin = ui.dp2px(16);
+
+        // 获取当前预览
+        String currentPreview = TimeFormatHelper.getFormattedTime(currentFormat, new Date());
+
+        // 定义格式按钮文本
+        String[] formatTexts = {
+            "1. 标准中文格式 - 2026年5月20日",
+            "2. ISO格式 - 2026-05-20",
+            "3. 斜杠格式 - 2026/5/20",
+            "4. 紧凑格式 - 20260520",
+            "5. 带星期 - 2026年5月20日 星期三",
+            "6. 传统汉字 - 丙午年四月初四",
+            "7. 农历简写 - 农历四月初四",
+            "8. 干支纪日 - 丙午年 癸巳月 甲午日",
+            "9. 农历数字 - 农历2026年四月初四",
+            "10. 公农历并列 - 2026-05-20（丙午年四月初四）"
+        };
+
+        // 构建分类列表视图
+        bin.mt.plugin.api.ui.PluginView view = ui.buildVerticalLayout()
+            .addTextView("current_preview").text("当前格式: " + currentPreview)
+                .textSize(16).textColor(0xFF4CAF50).marginBottom(sectionMargin)
+            .addTextView().text("【公历格式】").textSize(14).textColor(0xFF666666).marginBottom(smallMargin)
+            .addButton("format_0").text(currentFormat == 0 ? "✓ " + formatTexts[0] : formatTexts[0]).widthMatchParent().marginBottom(smallMargin)
+            .addButton("format_1").text(currentFormat == 1 ? "✓ " + formatTexts[1] : formatTexts[1]).widthMatchParent().marginBottom(smallMargin)
+            .addButton("format_2").text(currentFormat == 2 ? "✓ " + formatTexts[2] : formatTexts[2]).widthMatchParent().marginBottom(smallMargin)
+            .addButton("format_3").text(currentFormat == 3 ? "✓ " + formatTexts[3] : formatTexts[3]).widthMatchParent().marginBottom(smallMargin)
+            .addButton("format_4").text(currentFormat == 4 ? "✓ " + formatTexts[4] : formatTexts[4]).widthMatchParent().marginBottom(sectionMargin)
+            .addTextView().text("【农历格式】").textSize(14).textColor(0xFF666666).marginBottom(smallMargin)
+            .addButton("format_5").text(currentFormat == 5 ? "✓ " + formatTexts[5] : formatTexts[5]).widthMatchParent().marginBottom(smallMargin)
+            .addButton("format_6").text(currentFormat == 6 ? "✓ " + formatTexts[6] : formatTexts[6]).widthMatchParent().marginBottom(smallMargin)
+            .addButton("format_7").text(currentFormat == 7 ? "✓ " + formatTexts[7] : formatTexts[7]).widthMatchParent().marginBottom(smallMargin)
+            .addButton("format_8").text(currentFormat == 8 ? "✓ " + formatTexts[8] : formatTexts[8]).widthMatchParent().marginBottom(smallMargin)
+            .addButton("format_9").text(currentFormat == 9 ? "✓ " + formatTexts[9] : formatTexts[9]).widthMatchParent()
+            .paddingHorizontal(padding)
+            .paddingVertical(padding)
+            .build();
+
+        // 创建对话框
+        bin.mt.plugin.api.ui.dialog.PluginDialog dialog = ui.buildDialog()
+            .setTitle("{time_format_config}")
+            .setView(view)
+            .setNegativeButton("{close}", null)
+            .show();
+
+        // 绑定按钮点击事件
+        for (int i = 0; i <= 9; i++) {
+            bin.mt.plugin.api.ui.PluginButton btn = view.requireViewById("format_" + i);
+            final int formatIndex = i;
+            final bin.mt.plugin.api.ui.dialog.PluginDialog finalDialog = dialog;
+            btn.setOnClickListener(v -> {
+                TimeFormatHelper.setTimeFormatType(context, formatIndex);
+                String preview = TimeFormatHelper.getFormattedTime(formatIndex, new Date());
+                context.showToast("已切换: " + preview);
+                finalDialog.dismiss();
+            });
+        }
+    }
+
+    /**
+     * 显示支持作者对话框
+     */
+    private void showSupportDialog(bin.mt.plugin.api.ui.PluginUI ui, PluginContext context) {
+        int padding = ui.dp2px(16);
+        int smallMargin = ui.dp2px(8);
+
+        bin.mt.plugin.api.ui.PluginView view = ui.buildVerticalLayout()
+            .addTextView().text("{support_message}").textSize(14).widthMatchParent().marginBottom(smallMargin)
+            .addButton("alipay_btn").text("{alipay}").widthMatchParent().marginBottom(smallMargin)
+            .addButton("wechat_btn").text("{wechat_pay}").widthMatchParent()
+            .paddingHorizontal(padding)
+            .paddingVertical(padding)
+            .build();
+
+        bin.mt.plugin.api.ui.dialog.PluginDialog dialog = ui.buildDialog()
+            .setTitle("{support_author_title}")
+            .setView(view)
+            .setNegativeButton("{close}", null)
+            .show();
+
+        // 支付宝按钮点击事件
+        view.requireViewById("alipay_btn").setOnClickListener(v -> {
+            showPaymentImage(ui, context, "zfb.jpg", "{alipay}");
+        });
+
+        // 微信按钮点击事件
+        view.requireViewById("wechat_btn").setOnClickListener(v -> {
+            showPaymentImage(ui, context, "wx.jpg", "{wechat_pay}");
+        });
+    }
+
+    /**
+     * 显示支付二维码图片
+     * 使用MT插件API的ImageView显示图片
+     */
+    private void showPaymentImage(bin.mt.plugin.api.ui.PluginUI ui, PluginContext context, String imageName, String title) {
+        try {
+            // 从assets加载图片流
+            java.io.InputStream is = context.getAssetsAsStream(imageName);
+            if (is == null) {
+                context.showToast("{load_image_failed}");
+                return;
+            }
+
+            android.graphics.Bitmap bitmap = android.graphics.BitmapFactory.decodeStream(is);
+            is.close();
+
+            if (bitmap == null) {
+                context.showToast("{load_image_failed}");
+                return;
+            }
+
+            // 计算图片显示尺寸（限制最大宽度）
+            int maxWidth = ui.dp2px(280);
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+
+            if (width > maxWidth) {
+                float scale = (float) maxWidth / width;
+                width = maxWidth;
+                height = (int) (height * scale);
+            }
+
+            // 使用MT插件API创建ImageView
+            int padding = ui.dp2px(16);
+            int smallMargin = ui.dp2px(12);
+            bin.mt.plugin.api.ui.PluginView view = ui.buildVerticalLayout()
+                .addImageView("qr_image")
+                    .image(bitmap)
+                    .width(width)
+                    .height(height)
+                    .layoutGravity(android.view.Gravity.CENTER)
+                    .marginBottom(smallMargin)
+                .addTextView()
+                    .text("{screenshot_tip}")
+                    .textSize(16)
+                    .textColor(0xFF666666)
+                    .widthMatchParent()
+                    .layoutGravity(android.view.Gravity.CENTER)
+                .paddingHorizontal(padding)
+                .paddingVertical(padding)
+                .build();
+
+            ui.buildDialog()
+                .setTitle(title)
+                .setView(view)
+                .setNegativeButton("{close}", null)
+                .show();
+
+        } catch (Exception e) {
+            context.showToast("{load_image_failed}: " + e.getMessage());
+        }
     }
 }

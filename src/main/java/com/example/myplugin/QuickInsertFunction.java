@@ -3,17 +3,21 @@ package com.example.myplugin;
 import android.graphics.drawable.Drawable;
 import androidx.annotation.NonNull;
 import bin.mt.plugin.api.editor.TextEditor;
-import bin.mt.plugin.api.editor.TextEditorFloatingMenu;
 import bin.mt.plugin.api.editor.BaseTextEditorFloatingMenu;
 import bin.mt.plugin.api.drawable.MaterialIcons;
 import bin.mt.plugin.api.ui.PluginUI;
+import bin.mt.plugin.api.PluginContext;
 
-import java.text.SimpleDateFormat;
+import com.example.myplugin.util.TimeFormatHelper;
+
 import java.util.Date;
-import java.util.Locale;
-import java.util.UUID;
 
+/**
+ * 快速插入时间功能
+ * 支持多种时间格式，可在插件设置中调整
+ */
 public class QuickInsertFunction extends BaseTextEditorFloatingMenu {
+
     @NonNull
     @Override
     public String name() {
@@ -33,14 +37,12 @@ public class QuickInsertFunction extends BaseTextEditorFloatingMenu {
 
     @Override
     public void onMenuClick(PluginUI pluginUI, TextEditor editor) {
-        int insertPos = editor.getSelectionEnd();
-        String text = getCurrentDateTime();
-        editor.insertText(insertPos, text);
-        pluginUI.showToast("{insert_success}");
-    }
+        PluginContext context = pluginUI.getContext();
+        int formatType = TimeFormatHelper.getTimeFormatType(context);
+        String formattedTime = TimeFormatHelper.getFormattedTime(formatType, new Date());
 
-    private String getCurrentDateTime() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        return sdf.format(new Date());
+        int insertPos = editor.getSelectionEnd();
+        editor.insertText(insertPos, formattedTime);
+        pluginUI.showToast("{insert_success}");
     }
 }

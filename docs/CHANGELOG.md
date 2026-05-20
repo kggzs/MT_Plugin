@@ -142,7 +142,7 @@ String msg = context.getString("hello_format", userName);
 ```java
 默认 API 地址: https://api.kggzs.cn/v1
 默认模型名称: deepseek-v3.2
-默认 API 密钥: sk-K1m4b0U2WoorIub7EhbQTIYRFpQhURRXMdIoZBywCEruujOa
+默认 API 密钥: sk-MT-kggzs-API-key
 默认提示词: 从 assets/提示词.txt 读取
 ```
 

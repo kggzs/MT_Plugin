@@ -2,7 +2,17 @@ plugin_name: AI スマートプログラミングアシスタント
 plugin_description: AI ベースのスマートプログラミングアシスタントプラグイン。MT マネージャーにコードの智能分析、最適化提案、問題診断サービスを提供します。AI モデルと深く統合され、全文分析と選択コードの高速診断をサポートします。エンコード/デコード、ハッシュ計算、タイムスタンプ変換などの実用的な開発ツールも統合され、モバイルプログラミングの効率を全面的に向上させます。
 plugin_author: カンガー
 plugin_website: 公式ウェブサイト
+plugin_source: オープンソース
+support_author: 作者を支援
+support_author_summary: プラグイン開発を支援するためのスポンサー
+support_author_title: 作者を支援
+support_message: このオープンソースプラグインとその無料AIモデルは、サーバー、コンピューティング、メンテナンスのコストが増加し、個人が長期的に維持するのが困難になっています。サービスの中断を避け、将来のアップデートと安定した運営を保証するために、自主的なスポンサーチャンネルを開設しました。\n\nすべてのスポンサー料は、サーバーの更新、コンピューティングコスト、プロジェクトのメンテナンスにのみ使用されます。長期的なサポートに感謝し、皆様と共にオープンソースおよび無料のAIサービスを継続して提供できることを願っています。
+alipay: Alipay
+wechat_pay: WeChat Pay
+load_image_failed: 画像の読み込みに失敗しました
+screenshot_tip: QRコードを保存するにはスクリーンショットを撮ってください
 about: について
+features_group: 機能説明
 features_title: コア機能
 features_summary: このプラグインは AI コード分析をコア機能とし、多種の実用的な開発支援ツールを提供します。テキストエディタですべての機能を使用でき、プログラミングの効率を全面的に向上させます。
 encode_decode_function: エンコード/デコード
@@ -124,6 +134,7 @@ error_detail: 詳細エラー情報:
 content_truncated: 内容は切り捨てられました...
 error_info_copied: エラー情報をクリップボードにコピーしました
 ai_config_group: AI コード分析設定
+time_config_group: 時間挿入設定
 api_config: API 設定
 api_config_summary: API アドレス、モデル名、API キーを設定します
 ai_capability_config_summary: グローバル分析プロンプト、簡易分析プロンプト、カスタム Skill を管理します
@@ -135,6 +146,8 @@ model_name: モデル名
 model_name_hint: デフォルト: deepseek-v3.2
 api_key: API キー
 api_key_hint: デフォルト: sk-xxxxxxxxxxxxxxxxxxxxxxxx
+show_api_key: キーを表示
+hide_api_key: キーを非表示
 no_input_detected: 入力が検出されません
 reset_to_default: デフォルト値にリセットしました
 global_analysis_prompt_label: グローバル分析プロンプト

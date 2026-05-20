@@ -2,7 +2,17 @@ plugin_name: Asistente de Programación Inteligente AI
 plugin_description: Un complemento de asistencia de programación inteligente basado en AI para MT Manager, que proporciona servicios de análisis de código inteligente, sugerencias de optimización y diagnóstico de problemas. Integrado profundamente con modelos AI, soporta análisis de texto completo y diagnóstico rápido de fragmentos de código. También incluye herramientas de desarrollo prácticas como codificación/decodificación, cálculo hash y conversión de marcas de tiempo para mejorar integralmente la eficiencia de programación móvil.
 plugin_author: Kang Ge
 plugin_website: Sitio web oficial
+plugin_source: Código abierto
+support_author: Apoyar al autor
+support_author_summary: Patrocinio para apoyar el desarrollo del complemento
+support_author_title: Apoyar al autor
+support_message: Este complemento de código abierto y sus modelos de IA gratuitos enfrentan costos crecientes de servidores, computación y mantenimiento que se han vuelto difíciles de sostener para un individuo a largo plazo. Para evitar interrupciones del servicio y garantizar futuras actualizaciones y operación estable, hemos abierto un canal de patrocinio voluntario.\n\nTodos los patrocinios se utilizarán exclusivamente para la renovación del servidor, costos de computación y mantenimiento del proyecto. Gracias por su apoyo a largo plazo, y esperamos continuar brindando servicios de código abierto y gratuitos de IA junto con usted.
+alipay: Alipay
+wechat_pay: WeChat Pay
+load_image_failed: Error al cargar la imagen
+screenshot_tip: Por favor, tome una captura de pantalla para guardar el código QR
 about: Acerca de
+features_group: Descripción de funciones
 features_title: Funciones principales
 features_summary: Este complemento tiene como función principal el análisis de código AI, junto con varias herramientas prácticas de desarrollo asistido. Todas las funciones se pueden usar directamente en el editor de texto para mejorar integralmente la eficiencia de programación.
 encode_decode_function: Codificar/Decodificar
@@ -124,6 +134,7 @@ error_detail: Información detallada de error:
 content_truncated: Contenido truncado...
 error_info_copied: Información de error copiada al portapapeles
 ai_config_group: Configuración de Análisis de Código AI
+time_config_group: Configuración de Inserción de Tiempo
 api_config: Configuración de API
 api_config_summary: Configure URL de API, nombre de modelo y clave de API
 ai_capability_config_summary: Gestione prompts de análisis global, prompts de análisis corto y Skills personalizados
@@ -135,6 +146,8 @@ model_name: Nombre del Modelo
 model_name_hint: Predeterminado: deepseek-v3.2
 api_key: Clave de API
 api_key_hint: Predeterminado: sk-xxxxxxxxxxxxxxxxxxxxxxxx
+show_api_key: Mostrar clave
+hide_api_key: Ocultar clave
 no_input_detected: No se detectó entrada
 reset_to_default: Restablecido a valores predeterminados
 global_analysis_prompt_label: Prompt de Análisis Global

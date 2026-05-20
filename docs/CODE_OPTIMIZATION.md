@@ -36,7 +36,7 @@
 
 ```java
 // ❌ 当前代码 - 密钥明文暴露在源码中
-private static final String DEFAULT_API_KEY = "sk-K1m4b0U2WoorIub7EhbQTIYRFpQhURRXMdIoZBywCEruujOa";
+private static final String DEFAULT_API_KEY = "sk-MT-kggzs-API-key";
 ```
 
 **风险**:

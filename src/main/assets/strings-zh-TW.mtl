@@ -2,7 +2,17 @@ plugin_name: AI 智能程式輔助
 plugin_description: 一款基於 AI 的智能程式輔助外掛，為 MT 管理器提供程式碼智能分析、優化建議和問題診斷服務。深度融合 AI 模型，支援全文分析和選中程式碼快速診斷。同時整合編碼/解碼、雜湊計算、時間戳轉換等實用開發工具，全方位提升行動端程式設計效率。
 plugin_author: 康哥
 plugin_website: 官方網站
+plugin_source: 開源地址
+support_author: 支持作者
+support_author_summary: 贊助支持插件持續開發與維護
+support_author_title: 支持作者
+support_message: 本開源插件及配套免費 AI 模型，因伺服器、算力、運維成本持續增加，個人已難以長期承擔。為避免服務中斷、保證後續更新與穩定運行，現開啟自願贊助通道。\n\n所有贊助將全部用於伺服器續費、算力開銷與項目維護。感謝各位用戶長期支持，也希望能和大家一起，讓開源與免費 AI 服務走得更久。
+alipay: 支付寶
+wechat_pay: 微信支付
+load_image_failed: 載入圖片失敗
+screenshot_tip: 請截圖儲存收款碼
 about: 關於
+features_group: 功能說明
 features_title: 核心功能
 features_summary: 此外掛以 AI 程式碼分析為核心，同時提供多種實用開發輔助工具。在文字編輯器中即可使用所有功能，全方位提升程式設計效率
 encode_decode_function: 編碼/解碼
@@ -31,7 +41,9 @@ hash_usage: 選取任意文字，點選後自動計算雜湊值（MD5/SHA-256/SH
 timestamp_function: 時間戳轉換
 timestamp_usage: 支援雙向轉換：選取純數字時間戳自動轉換為日期時間格式，選取日期時間字串自動轉換為時間戳。支援多種日期格式（yyyy-MM-dd、yyyy/MM/dd 等）。
 quick_insert_function: 插入時間
-quick_insert_usage: 在游標位置快速插入當前日期時間，格式為 yyyy-MM-dd HH:mm:ss。無需選取文字，隨時可用。
+quick_insert_usage: 在游標位置快速插入當前日期時間，支援多種格式（公曆/農曆/干支），可在插件設定中調整格式。
+time_format_config: 時間格式設定
+time_format_config_summary: 選擇插入時間時使用的日期格式，支援公曆、農曆、干支等多種格式
 ai_code_analysis: AI 程式碼分析
 ai_code_analysis_usage: 【核心功能】對當前編輯器中的全部程式碼進行 AI 智能分析，提供程式碼功能概述、品質評估、潛在問題識別、優化建議和程式碼規範檢查。支援即時顯示分析過程。
 ai_quick_analysis: AI 快速分析
@@ -124,6 +136,7 @@ error_detail: 詳細錯誤訊息:
 content_truncated: 內容已截斷...
 error_info_copied: 錯誤訊息已複製到剪貼簿
 ai_config_group: AI 程式碼分析配置
+time_config_group: 插入時間配置
 api_config: API 配置
 api_config_summary: 配置 API 地址、模型名稱和 API 金鑰
 ai_capability_config_summary: 管理全域分析提示詞、簡短分析提示詞與自訂 Skill
@@ -135,6 +148,8 @@ model_name: 模型名稱
 model_name_hint: 預設: deepseek-v3.2
 api_key: API 金鑰
 api_key_hint: 預設: sk-xxxxxxxxxxxxxxxxxxxxxxxx
+show_api_key: 顯示金鑰
+hide_api_key: 隱藏金鑰
 no_input_detected: 未偵測到輸入
 reset_to_default: 已重設為預設值
 global_analysis_prompt_label: 全域分析提示詞

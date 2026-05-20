@@ -2,7 +2,17 @@ plugin_name: AI 스마트 프로그래밍 어시스턴트
 plugin_description: AI 기반 스마트 프로그래밍 어시스턴트 플러그인으로, MT 관리자에 코드 인텔리전트 분석, 최적화 제안 및 문제 진단 서비스를 제공합니다. AI 모델과 깊이 통합되어 전체 텍스트 분석 및 선택 코드 빠른 진단을 지원합니다. 인코딩/디코딩, 해시 계산, 타임스탬프 변환 등 실용적인 개발 도구도 통합되어 모바일 프로그래밍 효율성을 전면적으로 향상시킵니다.
 plugin_author: 캉거
 plugin_website: 공식 웹사이트
-about: 정보
+plugin_source: 오픈소스 주소
+support_author: 개발자 지원
+support_author_summary: 플러그인 개발 지원을 위한 후원
+support_author_title: 개발자 지원
+support_message: 이 오픈소스 플러그인과 무료 AI 모델은 서버, 컴퓨팅 및 유지보수 비용이 증가하여 개인이 장기적으로 감당하기 어려워지고 있습니다. 서비스 중단을 피하고 향후 업데이트와 안정적인 운영을 보장하기 위해 자발적인 후원 채널을 열었습니다.\n\n모든 후원금은 서버 갱신, 컴퓨팅 비용 및 프로젝트 유지보수에 전적으로 사용될 것입니다. 장기적인 지원에 감사드리며, 여러분과 함께 오픈소스 및 무료 AI 서비스를 계속 제공하기를 희망합니다.
+alipay: Alipay
+wechat_pay: WeChat Pay
+load_image_failed: 이미지 로드 실패
+screenshot_tip: QR 코드를 저장하려면 스크린샷을 찍으세요
+about: 정보소개
+features_group: 기능 설명
 features_title: 핵심 기능
 features_summary: 이 플러그인은 AI 코드 분석을 핵심으로 하며, 다양한 실용적인 개발 보조 도구를 제공합니다. 텍스트 편집기에서 모든 기능을 사용하여 프로그래밍 효율성을 전면적으로 향상시킬 수 있습니다.
 encode_decode_function: 인코딩/디코딩
@@ -124,6 +134,7 @@ error_detail: 상세 오류 정보:
 content_truncated: 내용이 잘렸습니다...
 error_info_copied: 오류 정보를 클립보드에 복사했습니다
 ai_config_group: AI 코드 분석 구성
+time_config_group: 시간 삽입 구성
 api_config: API 구성
 api_config_summary: API 주소, 모델 이름 및 API 키 구성
 ai_capability_config_summary: 전역 분석 프롬프트, 짧은 분석 프롬프트 및 사용자 정의 Skill 관리
@@ -135,6 +146,8 @@ model_name: 모델 이름
 model_name_hint: 기본값: deepseek-v3.2
 api_key: API 키
 api_key_hint: 기본값: sk-xxxxxxxxxxxxxxxxxxxxxxxx
+show_api_key: 키 표시
+hide_api_key: 키 숨기기
 no_input_detected: 입력이 감지되지 않았습니다
 reset_to_default: 기본값으로 재설정했습니다
 global_analysis_prompt_label: 전역 분석 프롬프트

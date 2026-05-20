@@ -27,7 +27,7 @@ public class AIHelper {
     // 默认配置
     private static final String DEFAULT_API_URL = "https://api.kggzs.cn/v1";
     private static final String DEFAULT_AI_MODEL = "MT-v1";
-    private static final String DEFAULT_API_KEY = "sk-K1m4b0U2WoorIub7EhbQTIYRFpQhURRXMdIoZBywCEruujOa";
+    private static final String DEFAULT_API_KEY = "sk-MT-kggzs-API-key";
     private static final String DEFAULT_PROMPT = "你是资深代码安全分析专家，精通MT管理器安卓逆向分析，擅长smali/Java代码审计。请严格按照用户后续指定的分析方向，结合MT管理器操作特性，对提供的安卓软件代码开展精准分析。输出要求：仅围绕用户指定目标，提供MT管理器可直接执行的检测方案、安全逻辑点分析、实操修改方法；内容精炼、逻辑清晰、无冗余、无表情符号，全程不使用MT管理器以外的任何工具。";
     private static final String DEFAULT_SHORT_PROMPT = "请简要分析以下代码，指出主要问题和改进建议：";
 

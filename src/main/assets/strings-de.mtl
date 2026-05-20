@@ -2,7 +2,17 @@ plugin_name: AI Intelligenter Programmierassistent
 plugin_description: Ein KI-basierter intelligenter Programmierassistent-Plugin für MT Manager, der intelligente Codeanalyse, Optimierungsvorschläge und Problemdiagnosedienste bietet. Tief integriert mit KI-Modellen, unterstützt er Volltextanalyse und schnelle Diagnose von Code-Schnipseln. Enthält auch praktische Entwicklungstools wie Kodierung/Dekodierung, Hash-Berechnung und Zeitstempelkonvertierung, um die mobile Programmierungseffizienz umfassend zu verbessern.
 plugin_author: Kang Ge
 plugin_website: Offizielle Website
+plugin_source: Open Source
+support_author: Autor unterstützen
+support_author_summary: Sponsoring zur Unterstützung der Plugin-Entwicklung
+support_author_title: Autor unterstützen
+support_message: Dieses Open-Source-Plugin und seine kostenlosen KI-Modelle stehen vor steigenden Server-, Rechen- und Wartungskosten, die für eine Person langfristig schwer zu tragen sind. Um Serviceunterbrechungen zu vermeiden und zukünftige Updates und stabilen Betrieb zu gewährleisten, haben wir einen Kanal für freiwillige Sponsoring eröffnet.\n\nAlle Sponsoring-Beiträge werden ausschließlich für Server-Verlängerung, Rechenkosten und Projekt-Wartung verwendet. Vielen Dank für Ihre langfristige Unterstützung, und wir hoffen, gemeinsam mit Ihnen Open-Source- und kostenlose KI-Dienste weiterhin anzubieten.
+alipay: Alipay
+wechat_pay: WeChat Pay
+load_image_failed: Bild konnte nicht geladen werden
+screenshot_tip: Bitte machen Sie einen Screenshot, um den QR-Code zu speichern
 about: Über
+features_group: Funktionsbeschreibung
 features_title: Kernfunktionen
 features_summary: Dieses Plugin hat die KI-Codeanalyse als Kernfunktion, zusammen mit verschiedenen praktischen Entwicklungsunterstützungstools. Alle Funktionen können direkt im Texteditor verwendet werden, um die Programmierungseffizienz umfassend zu verbessern.
 encode_decode_function: Kodieren/Dekodieren
@@ -124,6 +134,7 @@ error_detail: Detaillierte Fehlerinformationen:
 content_truncated: Inhalt abgeschnitten...
 error_info_copied: Fehlerinformationen in die Zwischenablage kopiert
 ai_config_group: KI-Codeanalyse-Konfiguration
+time_config_group: Zeiteinfügekonfiguration
 api_config: API-Konfiguration
 api_config_summary: Konfigurieren Sie API-URL, Modellname und API-Schlüssel
 ai_capability_config_summary: Verwalten Sie globale Analyse-Prompts, kurze Analyse-Prompts und benutzerdefinierte Skills
@@ -135,6 +146,8 @@ model_name: Modellname
 model_name_hint: Standard: deepseek-v3.2
 api_key: API-Schlüssel
 api_key_hint: Standard: sk-xxxxxxxxxxxxxxxxxxxxxxxx
+show_api_key: Schlüssel anzeigen
+hide_api_key: Schlüssel ausblenden
 no_input_detected: Keine Eingabe erkannt
 reset_to_default: Auf Standardwerte zurückgesetzt
 global_analysis_prompt_label: Globaler Analyse-Prompt
