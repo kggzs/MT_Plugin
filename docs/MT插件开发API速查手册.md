@@ -223,7 +223,7 @@ mtPlugin {
     pushTarget = "auto"
     
     // 插件 ID（唯一标识）
-    pluginID = "com.example.myplugin"
+    pluginID = "com.kggzs.cn.mt"
     
     // 版本号（整数，用于版本比较）
     versionCode = 1
@@ -238,12 +238,12 @@ mtPlugin {
     description = "{plugin_description}"
     
     // 设置界面类（实现 Preference 接口）
-    mainPreference = "com.example.myplugin.MyPreference"
+    mainPreference = "com.kggzs.cn.mt.MyPreference"
     
     // 功能接口列表
     interfaces = [
-        "com.example.myplugin.MyFloatingMenu",
-        "com.example.myplugin.MyToolMenu"
+        "com.kggzs.cn.mt.MyFloatingMenu",
+        "com.kggzs.cn.mt.MyToolMenu"
     ]
 }
 ```
@@ -462,7 +462,7 @@ byte[] digest = sha256.digest(text.getBytes("UTF-8"));
 ```
 my-plugin/
 ├── src/main/
-│   ├── java/com/example/myplugin/
+│   ├── java/com/kggzs/cn/mt/
 │   │   ├── MyFloatingMenu.java    # 浮动菜单实现
 │   │   ├── MyToolMenu.java        # 工具菜单实现
 │   │   └── MyPreference.java      # 设置界面实现

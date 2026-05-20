@@ -1,4 +1,4 @@
-package com.example.myplugin;
+package com.kggzs.cn.mt;
 
 import android.graphics.drawable.Drawable;
 import androidx.annotation.NonNull;

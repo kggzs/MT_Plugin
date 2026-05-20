@@ -1,8 +1,8 @@
-package com.example.myplugin;
+package com.kggzs.cn.mt;
 
 import androidx.annotation.NonNull;
 
-import com.example.myplugin.util.AIHelper;
+import com.kggzs.cn.mt.util.AIHelper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

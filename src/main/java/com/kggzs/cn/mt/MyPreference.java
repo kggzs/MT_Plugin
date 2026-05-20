@@ -1,10 +1,10 @@
-package com.example.myplugin;
+package com.kggzs.cn.mt;
 
 import bin.mt.plugin.api.PluginContext;
 import bin.mt.plugin.api.preference.PluginPreference;
 
-import com.example.myplugin.util.AIHelper;
-import com.example.myplugin.util.TimeFormatHelper;
+import com.kggzs.cn.mt.util.AIHelper;
+import com.kggzs.cn.mt.util.TimeFormatHelper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

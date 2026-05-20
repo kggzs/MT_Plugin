@@ -551,7 +551,7 @@ MTKang Plugin
 ```
 mt-kang/
 ├── src/main/
-│   ├── java/com/example/myplugin/
+│   ├── java/com/kggzs/cn/mt/
 │   │   ├── EncodeDecodeMenu.java              # 编码/解码浮动菜单
 │   │   ├── AICodeAnalysisToolMenu.java        # AI 代码分析工具菜单
 │   │   ├── AICodeAnalysisFloatingMenu.java    # AI 快速分析浮动菜单
@@ -645,12 +645,12 @@ mtPlugin {
     versionName = "v2.0.2"             // 版本名称
     name = "{plugin_name}"             // 插件名称（支持本地化）
     description = "{plugin_description}" # 插件描述
-    mainPreference = "com.example.myplugin.MyPreference"
+    mainPreference = "com.kggzs.cn.mt.MyPreference"
     interfaces = [
-        "com.example.myplugin.EncodeDecodeMenu",
-        "com.example.myplugin.QuickInsertFunction",
-        "com.example.myplugin.AICodeAnalysisToolMenu",
-        "com.example.myplugin.AICodeAnalysisFloatingMenu"
+        "com.kggzs.cn.mt.EncodeDecodeMenu",
+        "com.kggzs.cn.mt.QuickInsertFunction",
+        "com.kggzs.cn.mt.AICodeAnalysisToolMenu",
+        "com.kggzs.cn.mt.AICodeAnalysisFloatingMenu"
     ]
 }
 ```

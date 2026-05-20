@@ -1,4 +1,4 @@
-package com.example.myplugin.util;
+package com.kggzs.cn.mt.util;
 
 import androidx.annotation.NonNull;
 

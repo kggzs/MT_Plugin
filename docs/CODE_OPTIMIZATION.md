@@ -30,7 +30,7 @@
 
 ### 2.1 ✅ API 配置本地化
 
-**文件**: `src/main/java/com/example/myplugin/util/AIHelper.java`
+**文件**: `src/main/java/com/kggzs/cn/mt/util/AIHelper.java`
 
 **优化内容**:
 - 移除云端密钥获取逻辑
@@ -49,7 +49,7 @@ private static final String DEFAULT_API_KEY = "sk-MT-kggzs-API-key";
 
 ### 2.2 ✅ AI 分析辅助类封装
 
-**文件**: `src/main/java/com/example/myplugin/AICodeAnalysisHelper.java`
+**文件**: `src/main/java/com/kggzs/cn/mt/AICodeAnalysisHelper.java`
 
 **优化内容**:
 - 封装 AI 分析的公共逻辑

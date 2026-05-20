@@ -64,12 +64,12 @@ mtPlugin {
     versionName = "v2.0.2"
     name = "{plugin_name}"
     description = "{plugin_description}"
-    mainPreference = "com.example.myplugin.MyPreference"
+    mainPreference = "com.kggzs.cn.mt.MyPreference"
     interfaces = [
-        "com.example.myplugin.EncodeDecodeMenu",
-        "com.example.myplugin.QuickInsertFunction",
-        "com.example.myplugin.AICodeAnalysisToolMenu",
-        "com.example.myplugin.AICodeAnalysisFloatingMenu"
+        "com.kggzs.cn.mt.EncodeDecodeMenu",
+        "com.kggzs.cn.mt.QuickInsertFunction",
+        "com.kggzs.cn.mt.AICodeAnalysisToolMenu",
+        "com.kggzs.cn.mt.AICodeAnalysisFloatingMenu"
     ]
 }
 ```
@@ -141,17 +141,17 @@ Get-ChildItem -Path E:\www\mt-kang -Recurse -Filter *.mtp -ErrorAction SilentlyC
 ```
 mt-kang/
 ├── src/main/
-│   ├── java/com/example/myplugin/    # Java 源代码
-│   │   ├── EncodeDecodeMenu.java     # 编码/解码菜单
+│   ├── java/com/kggzs/cn/mt/          # Java 源代码
+│   │   ├── EncodeDecodeMenu.java      # 编码/解码菜单
 │   │   ├── AICodeAnalysisToolMenu.java # AI 分析工具菜单
 │   │   ├── AICodeAnalysisFloatingMenu.java # AI 分析浮动菜单
-│   │   ├── AICodeAnalysisHelper.java # AI 分析辅助类
-│   │   ├── QuickInsertFunction.java  # 快速插入时间
-│   │   ├── MyPreference.java         # 设置界面
+│   │   ├── AICodeAnalysisHelper.java  # AI 分析辅助类
+│   │   ├── QuickInsertFunction.java   # 快速插入时间
+│   │   ├── MyPreference.java          # 设置界面
 │   │   └── util/
-│   │       ├── AIHelper.java         # AI 工具类
-│   │       ├── TimeFormatHelper.java # 时间格式工具
-│   │       └── LunarCalendar.java    # 农历计算
+│   │       ├── AIHelper.java          # AI 工具类
+│   │       ├── TimeFormatHelper.java  # 时间格式工具
+│   │       └── LunarCalendar.java     # 农历计算
 │   ├── assets/                       # 语言包和资源
 │   │   ├── strings.mtl               # 默认语言
 │   │   ├── strings-zh-CN.mtl         # 简体中文

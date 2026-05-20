@@ -69,15 +69,15 @@ mt-plugin = { id = "bin.mt.plugin", version.ref = "mt-plugin" }
 
 ```gradle
 mtPlugin {
-    pluginID = "com.example.myplugin"
+    pluginID = "com.kggzs.cn.mt"
     versionCode = 1
     versionName = "v1.0"
     name = "{plugin_name}"
     description = "{plugin_description}"
-    mainPreference = "com.example.myplugin.MyPreference"
+    mainPreference = "com.kggzs.cn.mt.MyPreference"
     interfaces = [
-        "com.example.myplugin.MyFloatingMenu",
-        "com.example.myplugin.MyToolMenu"
+        "com.kggzs.cn.mt.MyFloatingMenu",
+        "com.kggzs.cn.mt.MyToolMenu"
     ]
     pushTarget = "auto"
 }
@@ -330,10 +330,10 @@ public class QuickInsertFunction extends BaseTextEditorFloatingMenu {
 ```gradle
 mtPlugin {
     interfaces = [
-        "com.example.myplugin.EncodeDecodeMenu",
-        "com.example.myplugin.AICodeAnalysisToolMenu",
-        "com.example.myplugin.AICodeAnalysisFloatingMenu",
-        "com.example.myplugin.QuickInsertFunction"
+        "com.kggzs.cn.mt.EncodeDecodeMenu",
+        "com.kggzs.cn.mt.AICodeAnalysisToolMenu",
+        "com.kggzs.cn.mt.AICodeAnalysisFloatingMenu",
+        "com.kggzs.cn.mt.QuickInsertFunction"
     ]
 }
 ```
@@ -375,7 +375,7 @@ mtPlugin {
 ```
 mt-kang/
 ├── src/main/
-│   ├── java/com/example/myplugin/
+│   ├── java/com/kggzs/cn/mt/
 │   │   ├── EncodeDecodeMenu.java              # 编码/解码浮动菜单
 │   │   ├── AICodeAnalysisToolMenu.java        # AI 代码分析工具菜单
 │   │   ├── AICodeAnalysisFloatingMenu.java    # AI 快速分析浮动菜单

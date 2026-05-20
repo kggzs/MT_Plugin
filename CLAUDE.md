@@ -35,7 +35,7 @@
 ```
 mt-kang/
 ├── src/main/
-│   ├── java/com/example/myplugin/
+│   ├── java/com/kggzs/cn/mt/
 │   │   ├── EncodeDecodeMenu.java              # 编码/解码浮动菜单
 │   │   ├── AICodeAnalysisToolMenu.java        # AI 代码分析工具菜单
 │   │   ├── AICodeAnalysisFloatingMenu.java    # AI 快速分析浮动菜单
@@ -227,10 +227,10 @@ key: value
 
 ```gradle
 interfaces = [
-    "com.example.myplugin.EncodeDecodeMenu",           // 编码/解码浮动菜单
-    "com.example.myplugin.QuickInsertFunction",        // 快速插入时间
-    "com.example.myplugin.AICodeAnalysisToolMenu",     // AI 代码分析工具菜单
-    "com.example.myplugin.AICodeAnalysisFloatingMenu"  // AI 快速分析浮动菜单
+    "com.kggzs.cn.mt.EncodeDecodeMenu",           // 编码/解码浮动菜单
+    "com.kggzs.cn.mt.QuickInsertFunction",        // 快速插入时间
+    "com.kggzs.cn.mt.AICodeAnalysisToolMenu",     // AI 代码分析工具菜单
+    "com.kggzs.cn.mt.AICodeAnalysisFloatingMenu"  // AI 快速分析浮动菜单
 ]
 ```
 
@@ -285,7 +285,7 @@ interfaces = [
 
 ### 添加新功能
 
-1. 在 `src/main/java/com/example/myplugin/` 创建新的 Java 类
+1. 在 `src/main/java/com/kggzs/cn/mt/` 创建新的 Java 类
 2. 实现对应的 MT 插件接口
 3. 在 `build.gradle` 的 `interfaces` 中注册
 4. 在所有语言包中添加对应的键值

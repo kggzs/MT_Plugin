@@ -1,4 +1,4 @@
-package com.example.myplugin;
+package com.kggzs.cn.mt;
 
 import android.graphics.drawable.Drawable;
 import androidx.annotation.NonNull;
@@ -8,7 +8,7 @@ import bin.mt.plugin.api.drawable.MaterialIcons;
 import bin.mt.plugin.api.ui.PluginUI;
 import bin.mt.plugin.api.PluginContext;
 
-import com.example.myplugin.util.TimeFormatHelper;
+import com.kggzs.cn.mt.util.TimeFormatHelper;
 
 import java.util.Date;
 

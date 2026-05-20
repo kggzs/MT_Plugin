@@ -93,15 +93,12 @@ mtPlugin {
     /**
      * 主设置界面，可不填
      */
-    mainPreference = "com.example.myplugin.MyPreference"
+    mainPreference = "com.kggzs.cn.mt.MyPreference"
 
-    /**
-     * 插件对外接口，接口类型会自动判断
-     */
     interfaces = [
-        "com.example.myplugin.EncodeDecodeMenu",
-        "com.example.myplugin.QuickInsertFunction",
-        "com.example.myplugin.AICodeAnalysisToolMenu",
-        "com.example.myplugin.AICodeAnalysisFloatingMenu"
+        "com.kggzs.cn.mt.EncodeDecodeMenu",
+        "com.kggzs.cn.mt.QuickInsertFunction",
+        "com.kggzs.cn.mt.AICodeAnalysisToolMenu",
+        "com.kggzs.cn.mt.AICodeAnalysisFloatingMenu"
     ]
 }
