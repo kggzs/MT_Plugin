@@ -41,7 +41,13 @@ hash_usage: Sélectionnez n'importe quel texte pour calculer la valeur de hachag
 timestamp_function: Conversion d'Horodatage
 timestamp_usage: Prend en charge la conversion bidirectionnelle : sélectionnez un horodatage numérique pour le convertir automatiquement au format date/heure, ou sélectionnez une chaîne de date/heure pour la convertir en horodatage. Prend en charge plusieurs formats de date (yyyy-MM-dd, yyyy/MM/dd, etc.).
 quick_insert_function: Insérer l'Heure
-quick_insert_usage: Insérez rapidement la date et l'heure actuelles à la position du curseur au format yyyy-MM-dd HH:mm:ss. Pas besoin de sélectionner du texte, disponible à tout moment.
+quick_insert_usage: Insérez rapidement la date et l'heure actuelles à la position du curseur. Pas besoin de sélectionner du texte, disponible à tout moment.
+time_format_config: Paramètres de Format d'Heure
+time_format_config_summary: Sélectionnez le format de date pour l'insertion d'heure. Prend en charge Grégorien, Lunaire, Ganzhi et plus
+enable_custom_format: Activer le Format d'Heure Personnalisé
+custom_format_title: Format d'Heure Personnalisé
+custom_format_preview: Aperçu en Direct
+custom_format_input: Code de Format (max 2 lignes)
 ai_code_analysis: Analyse de Code IA
 ai_code_analysis_usage: 【Fonctionnalité principale】Effectuez une analyse intelligente de code IA sur tout le code de l'éditeur actuel, fournissant une vue d'ensemble du code, une évaluation de la qualité, l'identification des problèmes potentiels, des suggestions d'optimisation et la vérification des normes de code. Prend en charge l'affichage en temps réel du processus d'analyse.
 ai_quick_analysis: Analyse Rapide IA

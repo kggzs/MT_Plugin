@@ -181,3 +181,37 @@ background_run: Background Run
 confirm_selection: Confirm
 cancel_selection: Cancel
 confirm: OK
+ai_prompt_input_label: Please enter prompt
+ai_prompt_added: Quick prompt added
+quick_prompt_btn_label: Quick Prompts
+skill_selector_label: Select Custom Skill (Click to select)
+skill_selected_label: Selected Skill:
+unknown_skill: Unknown
+confirm_reset_title: Confirm Reset
+confirm_reset_message: Are you sure you want to reset all configurations to default values?\nThis operation cannot be undone.
+confirm_reset_positive: Confirm Reset
+confirm_reset_negative: Cancel
+confirm_cancel_title: Confirm Cancel
+confirm_cancel_message: Are you sure you want to cancel the current analysis?
+confirm_cancel_positive: Confirm Cancel
+confirm_cancel_negative: Continue Analysis
+thinking_label: Thinking Process:
+result_label: Analysis Result:
+initializing_text: Initializing...
+waiting_analysis_text: Waiting for analysis...
+analysis_result_title: AI Analyzing...
+background_running_msg: Analysis running in background, results will be shown when complete
+cancel_analysis_confirm: Analysis cancelled
+analysis_failed_prefix: Analysis failed:
+background_analysis_failed_prefix: Background analysis failed:
+copy_success_clipboard: Copied to clipboard
+error_info_copied_clipboard: Error information copied to clipboard
+empty_result_title: Empty analysis result
+empty_result_msg: AI failed to return a valid analysis result.
+error_detail_label: Detailed error information:
+content_truncated_msg: [Content truncated...]
+load_quick_prompts_failed: Failed to load quick prompts
+build_quick_prompt_btn_failed: Failed to build quick prompt button
+bind_quick_prompt_btn_failed: Failed to bind quick prompt button
+build_skill_names_failed: Failed to build Skill names
+get_skill_content_failed: Failed to get Skill content

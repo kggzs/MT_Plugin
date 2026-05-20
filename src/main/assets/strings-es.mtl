@@ -41,7 +41,13 @@ hash_usage: Seleccione cualquier texto para calcular el valor hash (MD5/SHA-256/
 timestamp_function: Conversión de Marca de Tiempo
 timestamp_usage: Soporta conversión bidireccional: seleccione una marca de tiempo numérica para convertirla automáticamente a formato de fecha/hora, o seleccione una cadena de fecha/hora para convertirla a marca de tiempo. Soporta múltiples formatos de fecha (yyyy-MM-dd, yyyy/MM/dd, etc.).
 quick_insert_function: Insertar Hora
-quick_insert_usage: Inserte rápidamente la fecha y hora actuales en la posición del cursor en formato yyyy-MM-dd HH:mm:ss. No necesita seleccionar texto, disponible en cualquier momento.
+quick_insert_usage: Inserte rápidamente la fecha y hora actuales en la posición del cursor. No necesita seleccionar texto, disponible en cualquier momento.
+time_format_config: Configuración de Formato de Tiempo
+time_format_config_summary: Seleccione el formato de fecha para insertar tiempo. Soporta Gregoriano, Lunar, Ganzhi y más
+enable_custom_format: Habilitar Formato de Tiempo Personalizado
+custom_format_title: Formato de Tiempo Personalizado
+custom_format_preview: Vista Previa en Vivo
+custom_format_input: Código de Formato (máx. 2 líneas)
 ai_code_analysis: Análisis de Código AI
 ai_code_analysis_usage: 【Función principal】Realice análisis inteligente de código AI en todo el código del editor actual, proporcionando descripción general del código, evaluación de calidad, identificación de problemas potenciales, sugerencias de optimización y verificación de estándares de código. Soporta visualización en tiempo real del proceso de análisis.
 ai_quick_analysis: Análisis Rápido AI

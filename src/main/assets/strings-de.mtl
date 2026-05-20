@@ -41,7 +41,13 @@ hash_usage: Wählen Sie beliebigen Text aus, um den Hash-Wert (MD5/SHA-256/SHA-5
 timestamp_function: Zeitstempelkonvertierung
 timestamp_usage: Unterstützt bidirektionale Konvertierung: Wählen Sie einen numerischen Zeitstempel aus, um ihn automatisch in das Datums-/Zeitformat zu konvertieren, oder wählen Sie eine Datums-/Zeitzeichenkette aus, um sie in einen Zeitstempel zu konvertieren. Unterstützt mehrere Datumsformate (yyyy-MM-dd, yyyy/MM/dd usw.).
 quick_insert_function: Zeit Einfügen
-quick_insert_usage: Fügen Sie schnell das aktuelle Datum und die aktuelle Zeit an der Cursorposition im Format yyyy-MM-dd HH:mm:ss ein. Keine Textauswahl erforderlich, jederzeit verfügbar.
+quick_insert_usage: Fügen Sie schnell das aktuelle Datum und die aktuelle Zeit an der Cursorposition ein. Keine Textauswahl erforderlich, jederzeit verfügbar.
+time_format_config: Zeitformat-Einstellungen
+time_format_config_summary: Wählen Sie das Datumsformat für das Einfügen von Zeit. Unterstützt Gregorianisch, Mondkalender, Ganzhi und mehr
+enable_custom_format: Benutzerdefiniertes Zeitformat aktivieren
+custom_format_title: Benutzerdefiniertes Zeitformat
+custom_format_preview: Live-Vorschau
+custom_format_input: Formatcode (max. 2 Zeilen)
 ai_code_analysis: KI-Codeanalyse
 ai_code_analysis_usage: 【Kernfunktion】Führen Sie eine intelligente KI-Codeanalyse für den gesamten Code im aktuellen Editor durch, die Codeübersicht, Qualitätsbewertung, Identifizierung potenzieller Probleme, Optimierungsvorschläge und Code-Standardprüfung bietet. Unterstützt die Echtzeitanzeige des Analyseprozesses.
 ai_quick_analysis: KI-Schnellanalyse

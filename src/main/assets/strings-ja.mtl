@@ -41,7 +41,13 @@ hash_usage: テキストを選択すると、ハッシュ値（MD5/SHA-256/SHA-5
 timestamp_function: タイムスタンプ変換
 timestamp_usage: 双方向変換をサポート：純数字のタイムスタンプを選択すると日付時刻形式に自動変換、日付時刻文字列を選択するとタイムスタンプに自動変換します。多种の日付形式（yyyy-MM-dd、yyyy/MM/dd など）をサポートします。
 quick_insert_function: 時間插入
-quick_insert_usage: カーソル位置に現在の日付時刻を yyyy-MM-dd HH:mm:ss 形式で快速に插入します。テキストを選択する必要はありません。いつでも使用できます。
+quick_insert_usage: カーソル位置に現在の日付時刻を快速に插入します。テキストを選択する必要はありません。いつでも使用できます。
+time_format_config: 時間フォーマット設定
+time_format_config_summary: 挿入時間の日付フォーマットを選択。グレゴリオ暦、農暦、干支など多様なフォーマットをサポート
+enable_custom_format: カスタム時間フォーマットを有効化
+custom_format_title: カスタム時間フォーマット
+custom_format_preview: リアルタイムプレビュー
+custom_format_input: フォーマットコード（最大2行）
 ai_code_analysis: AI コード分析
 ai_code_analysis_usage: 【コア機能】現在エディタ内のすべてのコードに対して AI 智能分析を実行し、コードの機能概要、品質評価、潜在問題の識別、最適化提案、コード標準チェックを提供します。分析プロセスのリアルタイム表示をサポートします。
 ai_quick_analysis: AI 高速分析
