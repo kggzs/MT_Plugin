@@ -10,8 +10,8 @@ MTKang Plugin 是一个 MT 管理器 V3 的 AI 智能编程助手插件，使用
 |------|------|
 | Java | 17 (LTS) |
 | Gradle | 8.13 |
-| Android SDK | Min SDK 21, Target SDK 28 |
-| MT 管理器 | 2.19.5+ (需要 VIP 权限) |
+| Android SDK | Min SDK 21, Target SDK 28, Compile SDK 36 |
+| MT 管理器 | 2.26.3+ (需要 VIP 权限) |
 
 ## 编译步骤
 
@@ -60,8 +60,8 @@ android {
 
 mtPlugin {
     pluginID = "com.kggzs.cn.mt"
-    versionCode = 2
-    versionName = "v2.0"
+    versionCode = 4
+    versionName = "v2.0.2"
     name = "{plugin_name}"
     description = "{plugin_description}"
     mainPreference = "com.example.myplugin.MyPreference"
@@ -72,6 +72,21 @@ mtPlugin {
         "com.example.myplugin.AICodeAnalysisFloatingMenu"
     ]
 }
+```
+
+### libs.versions.toml 版本目录
+
+```toml
+[versions]
+agp = "8.13.2"
+kotlin = "2.3.0"
+mt-plugin = "1.0.0-beta6"
+desugarJdkLibs = "2.1.5"
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+mt-plugin = { id = "bin.mt.plugin", version.ref = "mt-plugin" }
 ```
 
 ## 验证编译结果
@@ -87,7 +102,7 @@ Get-ChildItem -Path E:\www\mt-kang\build\outputs\mt-plugin -Filter *.mtp
 ```
 Name                Length LastWriteTime
 ----                ------ -------------
-com.kggzs.cn.mt.mtp  47822 2026/4/9 23:00:19
+com.kggzs.cn.mt.mtp  47822 2026/5/20 23:00:19
 ```
 
 ## 安装插件
@@ -114,26 +129,51 @@ com.kggzs.cn.mt.mtp  47822 2026/4/9 23:00:19
 Get-ChildItem -Path E:\www\mt-kang -Recurse -Filter *.mtp -ErrorAction SilentlyContinue
 ```
 
+### Q4: Gradle 同步失败
+
+**A**: 
+1. 检查网络连接，确保可以访问 Maven 仓库
+2. 清理 Gradle 缓存：`.\gradlew.bat clean`
+3. 删除 `.gradle` 文件夹后重新同步
+
 ## 项目结构
 
 ```
 mt-kang/
 ├── src/main/
 │   ├── java/com/example/myplugin/    # Java 源代码
-│   ├── assets/                       # 语言包和提示词
+│   │   ├── EncodeDecodeMenu.java     # 编码/解码菜单
+│   │   ├── AICodeAnalysisToolMenu.java # AI 分析工具菜单
+│   │   ├── AICodeAnalysisFloatingMenu.java # AI 分析浮动菜单
+│   │   ├── AICodeAnalysisHelper.java # AI 分析辅助类
+│   │   ├── QuickInsertFunction.java  # 快速插入时间
+│   │   ├── MyPreference.java         # 设置界面
+│   │   └── util/
+│   │       ├── AIHelper.java         # AI 工具类
+│   │       ├── TimeFormatHelper.java # 时间格式工具
+│   │       └── LunarCalendar.java    # 农历计算
+│   ├── assets/                       # 语言包和资源
+│   │   ├── strings.mtl               # 默认语言
+│   │   ├── strings-zh-CN.mtl         # 简体中文
+│   │   └── ...                       # 其他语言
 │   ├── resources/                    # 图标资源
 │   └── AndroidManifest.xml           # 清单文件
+├── docs/                             # 文档目录
+├── gradle/
+│   └── libs.versions.toml            # 版本目录
 ├── build.gradle                      # 构建配置
 ├── settings.gradle                   # Gradle 设置
 ├── gradle.properties                 # Gradle 属性
 ├── proguard-rules.pro                # 混淆规则
-└── BUILD.md                          # 本文件
+├── BUILD.md                          # 本文件
+└── README.md                         # 项目说明
 ```
 
 ## 更新日志
 
 | 日期 | 版本 | 说明 |
 |------|------|------|
+| 2026-05-20 | v2.0.2 | 更新编译文档，添加新功能说明 |
 | 2026-04-09 | v2.0 | 初始编译文档 |
 
 ---

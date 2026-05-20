@@ -599,16 +599,17 @@ public class MyPreference implements PluginPreference {
      */
     private void showTimeFormatConfigDialog(bin.mt.plugin.api.ui.PluginUI ui, PluginContext context) {
         int currentFormat = TimeFormatHelper.getTimeFormatType(context);
+        int currentMode = TimeFormatHelper.getTimeMode(context);
 
         int padding = ui.dp2px(16);
         int smallMargin = ui.dp2px(8);
         int sectionMargin = ui.dp2px(16);
 
         // 获取当前预览
-        String currentPreview = TimeFormatHelper.getFormattedTime(currentFormat, new Date());
+        String currentPreview = TimeFormatHelper.getFormattedTime(context, new Date());
 
-        // 定义格式按钮文本
-        String[] formatTexts = {
+        // 定义格式按钮文本（不带时间）
+        String[] formatTextsDateOnly = {
             "1. 标准中文格式 - 2026年5月20日",
             "2. ISO格式 - 2026-05-20",
             "3. 斜杠格式 - 2026/5/20",
@@ -621,22 +622,44 @@ public class MyPreference implements PluginPreference {
             "10. 公农历并列 - 2026-05-20（丙午年四月初四）"
         };
 
+        // 定义格式按钮文本（带时间）
+        String[] formatTextsWithTime = {
+            "1. 标准中文格式 - 2026年5月20日 19:29:55",
+            "2. ISO格式 - 2026-05-20 19:29:55",
+            "3. 斜杠格式 - 2026/5/20 19:29:55",
+            "4. 紧凑格式 - 20260520 19:29:55",
+            "5. 带星期 - 2026年5月20日 星期三 19:29:55",
+            "6. 传统汉字 - 丙午年四月初四 19:29:55",
+            "7. 农历简写 - 农历四月初四 19:29:55",
+            "8. 干支纪日 - 丙午年 癸巳月 甲午日 19:29:55",
+            "9. 农历数字 - 农历2026年四月初四 19:29:55",
+            "10. 公农历并列 - 2026-05-20（丙午年四月初四） 19:29:55"
+        };
+
+        // 根据当前模式选择显示的文本
+        String[] formatTexts = (currentMode == TimeFormatHelper.MODE_DATE_ONLY) ? formatTextsDateOnly : formatTextsWithTime;
+        boolean isCustom = (currentMode == TimeFormatHelper.MODE_CUSTOM);
+
         // 构建分类列表视图
         bin.mt.plugin.api.ui.PluginView view = ui.buildVerticalLayout()
             .addTextView("current_preview").text("当前格式: " + currentPreview)
                 .textSize(16).textColor(0xFF4CAF50).marginBottom(sectionMargin)
+            .addTextView().text("【显示模式】").textSize(14).textColor(0xFF666666).marginBottom(smallMargin)
+            .addButton("mode_date_only").text(currentMode == TimeFormatHelper.MODE_DATE_ONLY ? "✓ 不带时间（只显示日期）" : "不带时间（只显示日期）").widthMatchParent().marginBottom(smallMargin)
+            .addButton("mode_date_time").text(currentMode == TimeFormatHelper.MODE_DATE_TIME ? "✓ 带时间（显示日期+时分秒）" : "带时间（显示日期+时分秒）").widthMatchParent().marginBottom(smallMargin)
+            .addButton("mode_custom").text(currentMode == TimeFormatHelper.MODE_CUSTOM ? "✓ 自定义格式" : "自定义格式").widthMatchParent().marginBottom(sectionMargin)
             .addTextView().text("【公历格式】").textSize(14).textColor(0xFF666666).marginBottom(smallMargin)
-            .addButton("format_0").text(currentFormat == 0 ? "✓ " + formatTexts[0] : formatTexts[0]).widthMatchParent().marginBottom(smallMargin)
-            .addButton("format_1").text(currentFormat == 1 ? "✓ " + formatTexts[1] : formatTexts[1]).widthMatchParent().marginBottom(smallMargin)
-            .addButton("format_2").text(currentFormat == 2 ? "✓ " + formatTexts[2] : formatTexts[2]).widthMatchParent().marginBottom(smallMargin)
-            .addButton("format_3").text(currentFormat == 3 ? "✓ " + formatTexts[3] : formatTexts[3]).widthMatchParent().marginBottom(smallMargin)
-            .addButton("format_4").text(currentFormat == 4 ? "✓ " + formatTexts[4] : formatTexts[4]).widthMatchParent().marginBottom(sectionMargin)
+            .addButton("format_0").text(currentFormat == 0 && !isCustom ? "✓ " + formatTexts[0] : formatTexts[0]).widthMatchParent().marginBottom(smallMargin)
+            .addButton("format_1").text(currentFormat == 1 && !isCustom ? "✓ " + formatTexts[1] : formatTexts[1]).widthMatchParent().marginBottom(smallMargin)
+            .addButton("format_2").text(currentFormat == 2 && !isCustom ? "✓ " + formatTexts[2] : formatTexts[2]).widthMatchParent().marginBottom(smallMargin)
+            .addButton("format_3").text(currentFormat == 3 && !isCustom ? "✓ " + formatTexts[3] : formatTexts[3]).widthMatchParent().marginBottom(smallMargin)
+            .addButton("format_4").text(currentFormat == 4 && !isCustom ? "✓ " + formatTexts[4] : formatTexts[4]).widthMatchParent().marginBottom(sectionMargin)
             .addTextView().text("【农历格式】").textSize(14).textColor(0xFF666666).marginBottom(smallMargin)
-            .addButton("format_5").text(currentFormat == 5 ? "✓ " + formatTexts[5] : formatTexts[5]).widthMatchParent().marginBottom(smallMargin)
-            .addButton("format_6").text(currentFormat == 6 ? "✓ " + formatTexts[6] : formatTexts[6]).widthMatchParent().marginBottom(smallMargin)
-            .addButton("format_7").text(currentFormat == 7 ? "✓ " + formatTexts[7] : formatTexts[7]).widthMatchParent().marginBottom(smallMargin)
-            .addButton("format_8").text(currentFormat == 8 ? "✓ " + formatTexts[8] : formatTexts[8]).widthMatchParent().marginBottom(smallMargin)
-            .addButton("format_9").text(currentFormat == 9 ? "✓ " + formatTexts[9] : formatTexts[9]).widthMatchParent()
+            .addButton("format_5").text(currentFormat == 5 && !isCustom ? "✓ " + formatTexts[5] : formatTexts[5]).widthMatchParent().marginBottom(smallMargin)
+            .addButton("format_6").text(currentFormat == 6 && !isCustom ? "✓ " + formatTexts[6] : formatTexts[6]).widthMatchParent().marginBottom(smallMargin)
+            .addButton("format_7").text(currentFormat == 7 && !isCustom ? "✓ " + formatTexts[7] : formatTexts[7]).widthMatchParent().marginBottom(smallMargin)
+            .addButton("format_8").text(currentFormat == 8 && !isCustom ? "✓ " + formatTexts[8] : formatTexts[8]).widthMatchParent().marginBottom(smallMargin)
+            .addButton("format_9").text(currentFormat == 9 && !isCustom ? "✓ " + formatTexts[9] : formatTexts[9]).widthMatchParent()
             .paddingHorizontal(padding)
             .paddingVertical(padding)
             .build();
@@ -648,18 +671,106 @@ public class MyPreference implements PluginPreference {
             .setNegativeButton("{close}", null)
             .show();
 
-        // 绑定按钮点击事件
+        // 绑定模式按钮事件
+        bin.mt.plugin.api.ui.PluginButton modeDateOnlyBtn = view.requireViewById("mode_date_only");
+        bin.mt.plugin.api.ui.PluginButton modeDateTimeBtn = view.requireViewById("mode_date_time");
+        bin.mt.plugin.api.ui.PluginButton modeCustomBtn = view.requireViewById("mode_custom");
+
+        modeDateOnlyBtn.setOnClickListener(v -> {
+            TimeFormatHelper.setTimeMode(context, TimeFormatHelper.MODE_DATE_ONLY);
+            String preview = TimeFormatHelper.getFormattedTime(context, new Date());
+            context.showToast("已切换: " + preview);
+            dialog.dismiss();
+            showTimeFormatConfigDialog(ui, context);
+        });
+
+        modeDateTimeBtn.setOnClickListener(v -> {
+            TimeFormatHelper.setTimeMode(context, TimeFormatHelper.MODE_DATE_TIME);
+            String preview = TimeFormatHelper.getFormattedTime(context, new Date());
+            context.showToast("已切换: " + preview);
+            dialog.dismiss();
+            showTimeFormatConfigDialog(ui, context);
+        });
+
+        modeCustomBtn.setOnClickListener(v -> {
+            dialog.dismiss();
+            showCustomFormatEditorDialog(ui, context);
+        });
+
+        // 绑定预设格式按钮点击事件
         for (int i = 0; i <= 9; i++) {
             bin.mt.plugin.api.ui.PluginButton btn = view.requireViewById("format_" + i);
             final int formatIndex = i;
             final bin.mt.plugin.api.ui.dialog.PluginDialog finalDialog = dialog;
             btn.setOnClickListener(v -> {
+                int mode = TimeFormatHelper.getTimeMode(context);
+                if (mode == TimeFormatHelper.MODE_CUSTOM) {
+                    TimeFormatHelper.setTimeMode(context, TimeFormatHelper.MODE_DATE_TIME);
+                }
                 TimeFormatHelper.setTimeFormatType(context, formatIndex);
-                String preview = TimeFormatHelper.getFormattedTime(formatIndex, new Date());
+                String preview = TimeFormatHelper.getFormattedTime(context, new Date());
                 context.showToast("已切换: " + preview);
                 finalDialog.dismiss();
             });
         }
+    }
+
+    /**
+     * 显示自定义格式编辑对话框
+     */
+    private void showCustomFormatEditorDialog(bin.mt.plugin.api.ui.PluginUI ui, PluginContext context) {
+        int padding = ui.dp2px(16);
+        int smallMargin = ui.dp2px(8);
+
+        String currentFormat = TimeFormatHelper.getCustomFormatString(context);
+        String preview = TimeFormatHelper.parseCustomFormat(currentFormat, new Date());
+
+        // 详细的格式说明
+        String formatHelp = "【年份】yyyy-4位(2026) yy-2位(26)\n" +
+            "【月份】MM-补0(05) M-不补0(5) N-农历(四月)\n" +
+            "【日期】dd-补0(20) d-不补0(20) e-农历(初四)\n" +
+            "【星期】E-周几(周三)\n" +
+            "【时段】a-上午/下午 aa-精确(傍晚/凌晨)\n" +
+            "【小时】HH-24时补0(19) H-24时(19)\n" +
+            "       hh-12时补0(07) h-12时(7)\n" +
+            "【分钟】mm-补0(08) m-不补0(8)\n" +
+            "【秒数】ss-补0(55) s-不补0(55)\n" +
+            "【时辰】l-地支(酉)";
+
+        bin.mt.plugin.api.ui.PluginView view = ui.buildVerticalLayout()
+            .addTextView().text("{custom_format_preview}").textSize(14).textColor(0xFF666666).marginBottom(smallMargin)
+            .addTextView("format_preview").text(preview).textSize(16).textColor(0xFF4CAF50).marginBottom(smallMargin)
+            .addTextView().text("{custom_format_input}").textSize(14).textColor(0xFF666666).marginTop(smallMargin).marginBottom(smallMargin)
+            .addEditBox("format_input").text(currentFormat).minLines(2).maxLines(2).widthMatchParent().marginBottom(smallMargin)
+                .softWrap(bin.mt.plugin.api.ui.PluginEditText.SOFT_WRAP_KEEP_WORD)
+            .addTextView().text("【格式说明】").textSize(13).textColor(0xFF333333).marginTop(smallMargin).marginBottom(smallMargin)
+            .addTextView().text(formatHelp).textSize(12).textColor(0xFF666666)
+            .paddingHorizontal(padding)
+            .paddingVertical(padding)
+            .build();
+
+        bin.mt.plugin.api.ui.PluginEditText formatInput = view.requireViewById("format_input");
+
+        ui.buildDialog()
+            .setTitle("{custom_format_title}")
+            .setView(view)
+            .setPositiveButton("{save}", (d, which) -> {
+                String format = formatInput.getText().toString().trim();
+                if (format.isEmpty()) {
+                    format = TimeFormatHelper.DEFAULT_CUSTOM_FORMAT;
+                }
+                TimeFormatHelper.setCustomFormatString(context, format);
+                TimeFormatHelper.setTimeMode(context, TimeFormatHelper.MODE_CUSTOM);
+                String finalPreview = TimeFormatHelper.parseCustomFormat(format, new Date());
+                context.showToast("已保存: " + finalPreview);
+            })
+            .setNegativeButton("{cancel}", null)
+            .setNeutralButton("{reset_default}", (d, which) -> {
+                TimeFormatHelper.setCustomFormatString(context, TimeFormatHelper.DEFAULT_CUSTOM_FORMAT);
+                TimeFormatHelper.setTimeMode(context, TimeFormatHelper.MODE_CUSTOM);
+                context.showToast("已重置为默认格式");
+            })
+            .show();
     }
 
     /**

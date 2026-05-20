@@ -150,6 +150,7 @@ show_api_key: Afficher la clé
 hide_api_key: Masquer la clé
 no_input_detected: Aucune entrée détectée
 reset_to_default: Réinitialisé aux valeurs par défaut
+reset_default: Réinitialiser par défaut
 global_analysis_prompt_label: Prompt d'Analyse Global
 short_analysis_prompt_label: Prompt d'Analyse Court
 load_skill_data_failed: Échec du chargement des données de Skill

@@ -43,7 +43,11 @@ timestamp_usage: Supports bidirectional conversion: Select a numeric timestamp t
 quick_insert_function: Insert Time
 quick_insert_usage: Quickly insert the current date and time at the cursor position. Supports multiple formats (Gregorian/Lunar/Ganzhi). Format can be adjusted in plugin settings.
 time_format_config: Time Format Settings
-time_format_config_summary: Select the date format for inserting time. Supports Gregorian, Lunar, Ganzhi and other formats
+time_format_config_summary: Select the date format for inserting time. Supports Gregorian, Lunar, Ganzhi and custom formats
+enable_custom_format: Enable Custom Time Format
+custom_format_title: Custom Time Format
+custom_format_preview: Live Preview
+custom_format_input: Format Code (max 2 lines)
 ai_code_analysis: AI Code Analysis
 ai_code_analysis_usage: [Core Feature] Perform AI intelligent analysis on all code in the current editor, providing code overview, quality assessment, potential issue identification, optimization suggestions, and code standard checks. Supports real-time display of the analysis process.
 ai_quick_analysis: AI Quick Analysis
@@ -152,6 +156,7 @@ show_api_key: Show API Key
 hide_api_key: Hide API Key
 no_input_detected: No input detected
 reset_to_default: Reset to default values
+reset_default: Reset Default
 global_analysis_prompt_label: Global Analysis Prompt
 short_analysis_prompt_label: Short Analysis Prompt
 load_skill_data_failed: Failed to load Skill data

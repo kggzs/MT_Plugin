@@ -38,8 +38,7 @@ public class QuickInsertFunction extends BaseTextEditorFloatingMenu {
     @Override
     public void onMenuClick(PluginUI pluginUI, TextEditor editor) {
         PluginContext context = pluginUI.getContext();
-        int formatType = TimeFormatHelper.getTimeFormatType(context);
-        String formattedTime = TimeFormatHelper.getFormattedTime(formatType, new Date());
+        String formattedTime = TimeFormatHelper.getFormattedTime(context, new Date());
 
         int insertPos = editor.getSelectionEnd();
         editor.insertText(insertPos, formattedTime);

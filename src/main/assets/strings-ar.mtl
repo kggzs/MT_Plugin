@@ -150,6 +150,7 @@ show_api_key: إظهار المفتاح
 hide_api_key: إخفاء المفتاح
 no_input_detected: لم يتم اكتشاف إدخال
 reset_to_default: تم إعادة التعيين إلى القيم الافتراضية
+reset_default: إعادة تعيين الافتراضي
 global_analysis_prompt_label: تلميح التحليل العام
 short_analysis_prompt_label: تلميح التحليل القصير
 load_skill_data_failed: فشل تحميل بيانات Skill

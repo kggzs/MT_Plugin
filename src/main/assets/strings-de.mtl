@@ -150,6 +150,7 @@ show_api_key: Schlüssel anzeigen
 hide_api_key: Schlüssel ausblenden
 no_input_detected: Keine Eingabe erkannt
 reset_to_default: Auf Standardwerte zurückgesetzt
+reset_default: Standard wiederherstellen
 global_analysis_prompt_label: Globaler Analyse-Prompt
 short_analysis_prompt_label: Kurzer Analyse-Prompt
 load_skill_data_failed: Skill-Daten konnten nicht geladen werden

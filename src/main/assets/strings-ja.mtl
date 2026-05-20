@@ -150,6 +150,7 @@ show_api_key: キーを表示
 hide_api_key: キーを非表示
 no_input_detected: 入力が検出されません
 reset_to_default: デフォルト値にリセットしました
+reset_default: デフォルトに戻す
 global_analysis_prompt_label: グローバル分析プロンプト
 short_analysis_prompt_label: 簡易分析プロンプト
 load_skill_data_failed: Skill データのロードに失敗しました

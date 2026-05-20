@@ -150,6 +150,7 @@ show_api_key: Показать ключ
 hide_api_key: Скрыть ключ
 no_input_detected: Ввод не обнаружен
 reset_to_default: Сброшено до значений по умолчанию
+reset_default: Сбросить по умолчанию
 global_analysis_prompt_label: Глобальная подсказка анализа
 short_analysis_prompt_label: Краткая подсказка анализа
 load_skill_data_failed: Ошибка загрузки данных Skill

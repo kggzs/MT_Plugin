@@ -43,7 +43,11 @@ timestamp_usage: 支持双向转换：选中纯数字时间戳自动转换为日
 quick_insert_function: 插入时间
 quick_insert_usage: 在光标位置快速插入当前日期时间，支持多种格式（公历/农历/干支），可在插件设置中调整格式。
 time_format_config: 时间格式设置
-time_format_config_summary: 选择插入时间时使用的日期格式，支持公历、农历、干支等多种格式
+time_format_config_summary: 选择插入时间时使用的日期格式，支持公历、农历、干支等多种格式，支持自定义格式
+enable_custom_format: 启用自定义时间格式
+custom_format_title: 自定义时间格式
+custom_format_preview: 实时预览
+custom_format_input: 格式代码（最多2行）
 ai_code_analysis: AI 代码分析
 ai_code_analysis_usage: 【核心功能】对当前编辑器中的全部代码进行 AI 智能分析，提供代码功能概述、质量评估、潜在问题识别、优化建议和代码规范检查。支持实时显示分析过程。
 ai_quick_analysis: AI 快速分析
@@ -152,6 +156,7 @@ show_api_key: 显示密钥
 hide_api_key: 隐藏密钥
 no_input_detected: 未检测到输入
 reset_to_default: 已重置为默认值
+reset_default: 恢复默认
 global_analysis_prompt_label: 全局分析提示词
 short_analysis_prompt_label: 简短分析提示词
 load_skill_data_failed: 加载 Skill 数据失败

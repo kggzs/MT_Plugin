@@ -150,6 +150,7 @@ show_api_key: 키 표시
 hide_api_key: 키 숨기기
 no_input_detected: 입력이 감지되지 않았습니다
 reset_to_default: 기본값으로 재설정했습니다
+reset_default: 기본값 복원
 global_analysis_prompt_label: 전역 분석 프롬프트
 short_analysis_prompt_label: 짧은 분석 프롬프트
 load_skill_data_failed: Skill 데이터 로드 실패

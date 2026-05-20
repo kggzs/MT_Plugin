@@ -43,7 +43,11 @@ timestamp_usage: 支援雙向轉換：選取純數字時間戳自動轉換為日
 quick_insert_function: 插入時間
 quick_insert_usage: 在游標位置快速插入當前日期時間，支援多種格式（公曆/農曆/干支），可在插件設定中調整格式。
 time_format_config: 時間格式設定
-time_format_config_summary: 選擇插入時間時使用的日期格式，支援公曆、農曆、干支等多種格式
+time_format_config_summary: 選擇插入時間時使用的日期格式，支援公曆、農曆、干支等多種格式，支援自定義格式
+enable_custom_format: 啟用自定義時間格式
+custom_format_title: 自定義時間格式
+custom_format_preview: 即時預覽
+custom_format_input: 格式代碼（最多2行）
 ai_code_analysis: AI 程式碼分析
 ai_code_analysis_usage: 【核心功能】對當前編輯器中的全部程式碼進行 AI 智能分析，提供程式碼功能概述、品質評估、潛在問題識別、優化建議和程式碼規範檢查。支援即時顯示分析過程。
 ai_quick_analysis: AI 快速分析
@@ -152,6 +156,7 @@ show_api_key: 顯示金鑰
 hide_api_key: 隱藏金鑰
 no_input_detected: 未偵測到輸入
 reset_to_default: 已重設為預設值
+reset_default: 恢復預設
 global_analysis_prompt_label: 全域分析提示詞
 short_analysis_prompt_label: 簡短分析提示詞
 load_skill_data_failed: 載入 Skill 資料失敗
