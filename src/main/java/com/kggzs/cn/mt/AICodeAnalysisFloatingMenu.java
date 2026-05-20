@@ -19,7 +19,7 @@ public class AICodeAnalysisFloatingMenu extends BaseTextEditorFloatingMenu {
     @NonNull
     @Override
     public String name() {
-        return "AI快速分析";
+        return "{ai_quick_analysis}";
     }
 
     @NonNull
@@ -40,7 +40,7 @@ public class AICodeAnalysisFloatingMenu extends BaseTextEditorFloatingMenu {
         String selectedText = editor.subText(start, end);
 
         if (selectedText.trim().isEmpty()) {
-            pluginUI.showToast("请先选择要分析的代码");
+            pluginUI.showToast("{please_select_code_first}");
             return;
         }
 

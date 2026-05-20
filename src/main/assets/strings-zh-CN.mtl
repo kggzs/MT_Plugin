@@ -215,3 +215,8 @@ build_quick_prompt_btn_failed: 构建快速提示词按钮失败
 bind_quick_prompt_btn_failed: 绑定快速提示词按钮失败
 build_skill_names_failed: 构建 Skill 名称失败
 get_skill_content_failed: 获取 Skill 内容失败
+please_select_code_first: 请先选择要分析的代码
+reset_input: 重置输入
+reset_input_success: 重置成功
+decode_error_invalid_hex: 解码失败: 无效的十六进制格式（长度必须为偶数）
+load_quick_prompt_data_failed: 加载快速提示词数据失败

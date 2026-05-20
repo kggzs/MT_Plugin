@@ -215,3 +215,8 @@ build_quick_prompt_btn_failed: Ошибка создания кнопки быс
 bind_quick_prompt_btn_failed: Ошибка привязки кнопки быстрой подсказки
 build_skill_names_failed: Ошибка создания имен skills
 get_skill_content_failed: Ошибка получения содержания skill
+please_select_code_first: Пожалуйста, сначала выберите код
+reset_input: Сбросить ввод
+reset_input_success: Ввод успешно сброшен
+decode_error_invalid_hex: Ошибка декодирования: Неверный шестнадцатеричный формат
+load_quick_prompt_data_failed: Ошибка загрузки данных быстрых подсказок

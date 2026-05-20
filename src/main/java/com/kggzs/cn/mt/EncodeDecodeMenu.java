@@ -18,6 +18,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class EncodeDecodeMenu extends BaseTextEditorFloatingMenu {
@@ -58,7 +60,7 @@ public class EncodeDecodeMenu extends BaseTextEditorFloatingMenu {
         PluginView view = pluginUI.buildVerticalLayout()
             .addEditText("input_text").hint("{select_text_hint}").widthMatchParent().height(pluginUI.dp2px(80)).marginBottom(mediumMargin)
             .addHorizontalLayout("action_row").children(row -> row
-                .addButton("undo_btn").text("{undo}").height(buttonHeight).marginRight(smallMargin).onClick(v -> handleUndo(pluginUI))
+                .addButton("reset_btn").text("{reset_input}").height(buttonHeight).marginRight(smallMargin).onClick(v -> handleResetInput(pluginUI))
                 .addButton("replace_btn").text("{replace}").height(buttonHeight).onClick(v -> handleReplace(pluginUI))
             ).marginBottom(largeMargin)
             .addTextView("section_label1").text("{conversion_tools}").textSize(14).textColor(pluginUI.colorText()).marginBottom(smallMargin)
@@ -127,10 +129,10 @@ public class EncodeDecodeMenu extends BaseTextEditorFloatingMenu {
         return "";
     }
 
-    private void handleUndo(PluginUI pluginUI) {
+    private void handleResetInput(PluginUI pluginUI) {
         if (inputEditText != null && originalText != null) {
             inputEditText.setText(originalText);
-            pluginUI.showToast("{undo_success}");
+            pluginUI.showToast("{reset_input_success}");
         }
     }
 
@@ -187,7 +189,7 @@ public class EncodeDecodeMenu extends BaseTextEditorFloatingMenu {
             String result;
             if (isTimestamp(selected)) {
                 long timestamp = Long.parseLong(selected);
-                if (timestamp > 10000000000000L) {
+                if (timestamp > 9999999999L) {
                     timestamp = timestamp / 1000;
                 }
                 result = formatTimestamp(timestamp);
@@ -222,13 +224,9 @@ public class EncodeDecodeMenu extends BaseTextEditorFloatingMenu {
             .setPositiveButton("{copy}", (dialog, which) -> {
                 String hash = calculateHash(selected, hashTypes[selection[0]]);
                 pluginUI.getContext().setClipboardText(hash);
-                pluginUI.showToast(hashTypes[selection[0]] + ": " + copy_success(pluginUI, hash));
+                pluginUI.showToast(hashTypes[selection[0]] + ": " + pluginUI.getContext().getString("{copy_success}"));
             })
             .show();
-    }
-
-    private String copy_success(PluginUI pluginUI, String hash) {
-        return pluginUI.getContext().getString("{copy_success}");
     }
 
     private void handleBase64Encode(PluginUI pluginUI) {
@@ -291,9 +289,16 @@ public class EncodeDecodeMenu extends BaseTextEditorFloatingMenu {
         }
 
         try {
+            String hex = selected.replaceAll("\\s+", "");
+            
+            if (hex.length() % 2 != 0) {
+                pluginUI.showToast("{decode_error_invalid_hex}");
+                return;
+            }
+            
             StringBuilder result = new StringBuilder();
-            for (int i = 0; i < selected.length(); i += 2) {
-                String str = selected.substring(i, i + 2);
+            for (int i = 0; i < hex.length(); i += 2) {
+                String str = hex.substring(i, i + 2);
                 result.append((char) Integer.parseInt(str, 16));
             }
             replaceSelectedText(result.toString());
@@ -331,17 +336,18 @@ public class EncodeDecodeMenu extends BaseTextEditorFloatingMenu {
 
         try {
             StringBuilder result = new StringBuilder();
-            String[] parts = selected.split("\\\\u");
-            for (String part : parts) {
-                if (part.isEmpty()) {
-                    continue;
-                }
+            Matcher matcher = Pattern.compile("\\\\u([0-9a-fA-F]{4})").matcher(selected);
+            int lastEnd = 0;
+            while (matcher.find()) {
+                result.append(selected, lastEnd, matcher.start());
                 try {
-                    result.append((char) Integer.parseInt(part, 16));
+                    result.append((char) Integer.parseInt(matcher.group(1), 16));
                 } catch (Exception e) {
-                    result.append(part);
+                    result.append(matcher.group());
                 }
+                lastEnd = matcher.end();
             }
+            result.append(selected.substring(lastEnd));
             replaceSelectedText(result.toString());
             pluginUI.showToast("{decode_success}");
         } catch (Exception e) {
@@ -524,6 +530,7 @@ public class EncodeDecodeMenu extends BaseTextEditorFloatingMenu {
         for (String format : formats) {
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
+                sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
                 return sdf.parse(text.trim()).getTime() / 1000;
             } catch (ParseException e) {
                 continue;
@@ -535,6 +542,7 @@ public class EncodeDecodeMenu extends BaseTextEditorFloatingMenu {
     private String formatTimestamp(long timestamp) {
         Date date = new Date(timestamp * 1000);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         return sdf.format(date);
     }
 

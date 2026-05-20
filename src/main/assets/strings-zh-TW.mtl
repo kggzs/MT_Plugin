@@ -215,3 +215,8 @@ build_quick_prompt_btn_failed: 建構快速提示詞按鈕失敗
 bind_quick_prompt_btn_failed: 綁定快速提示詞按鈕失敗
 build_skill_names_failed: 建構 Skill 名稱失敗
 get_skill_content_failed: 獲取 Skill 內容失敗
+please_select_code_first: 請先選擇程式碼
+reset_input: 重置輸入
+reset_input_success: 重置輸入成功
+decode_error_invalid_hex: 解碼失敗: 無效的十六進位格式
+load_quick_prompt_data_failed: 載入快速提示詞資料失敗

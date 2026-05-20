@@ -215,3 +215,8 @@ build_quick_prompt_btn_failed: Schnelle Prompt-Schaltfläche konnte nicht erstel
 bind_quick_prompt_btn_failed: Schnelle Prompt-Schaltfläche konnte nicht gebunden werden
 build_skill_names_failed: Skill-Namen konnten nicht erstellt werden
 get_skill_content_failed: Skill-Inhalt konnte nicht abgerufen werden
+please_select_code_first: Bitte wählen Sie zuerst Code aus
+reset_input: Eingabe zurücksetzen
+reset_input_success: Eingabe erfolgreich zurückgesetzt
+decode_error_invalid_hex: Dekodierung fehlgeschlagen: Ungültiges Hexadezimalformat
+load_quick_prompt_data_failed: Schnelle Prompt-Daten konnten nicht geladen werden

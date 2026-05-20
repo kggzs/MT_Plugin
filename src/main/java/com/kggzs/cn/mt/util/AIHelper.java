@@ -325,17 +325,20 @@ public class AIHelper {
 
         int responseCode = connection.getResponseCode();
         if (responseCode != 200) {
-            BufferedReader errorReader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+            java.io.InputStream errorStream = connection.getErrorStream();
             StringBuilder errorResponse = new StringBuilder();
-            String line;
-            while ((line = errorReader.readLine()) != null) {
-                errorResponse.append(line);
+            if (errorStream != null) {
+                try (BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream, StandardCharsets.UTF_8))) {
+                    String line;
+                    while ((line = errorReader.readLine()) != null) {
+                        errorResponse.append(line);
+                    }
+                }
             }
-            errorReader.close();
+            connection.disconnect();
             throw new Exception("AI API错误: " + responseCode + " - " + errorResponse.toString());
         }
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         StringBuilder fullReasoning = new StringBuilder();
         StringBuilder fullContent = new StringBuilder();
         StringBuilder rawResponse = new StringBuilder();
@@ -343,6 +346,8 @@ public class AIHelper {
         boolean hasDetectedThinkingTag = false;
         boolean hasFoundEndTag = false;
         String line;
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
 
         while ((line = reader.readLine()) != null) {
             rawResponse.append(line).append("\n");
@@ -570,8 +575,7 @@ public class AIHelper {
                 }
             }
         }
-        reader.close();
-        connection.disconnect();
+        }
 
         // 处理缓冲区中剩余的内容
         if (contentBuffer.length() > 0) {
@@ -709,9 +713,6 @@ public class AIHelper {
         // 移除 <think>...</think> 标签及其内容
         result = result.replaceAll("(?s)<think>.*?</think>", "");
 
-        // 移除 <think>...</think> 标签及其内容
-        result = result.replaceAll("(?s)<think>.*?</think>", "");
-
         // 移除 <thinking>...</thinking> 标签及其内容
         result = result.replaceAll("(?s)<thinking>.*?</thinking>", "");
 
@@ -792,27 +793,32 @@ public class AIHelper {
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Authorization", "Bearer " + apiKey);
         connection.setConnectTimeout(30000);
-        connection.setReadTimeout(120000); // 后台分析给更多时间
+        connection.setReadTimeout(120000);
         connection.setDoOutput(true);
 
         connection.getOutputStream().write(requestBody.toString().getBytes(StandardCharsets.UTF_8));
 
         int responseCode = connection.getResponseCode();
         if (responseCode != 200) {
-            BufferedReader errorReader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+            java.io.InputStream errorStream = connection.getErrorStream();
             StringBuilder errorResponse = new StringBuilder();
-            String line;
-            while ((line = errorReader.readLine()) != null) {
-                errorResponse.append(line);
+            if (errorStream != null) {
+                try (BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream, StandardCharsets.UTF_8))) {
+                    String line;
+                    while ((line = errorReader.readLine()) != null) {
+                        errorResponse.append(line);
+                    }
+                }
             }
-            errorReader.close();
+            connection.disconnect();
             throw new Exception("AI API错误: " + responseCode + " - " + errorResponse.toString());
         }
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         StringBuilder fullContent = new StringBuilder();
         StringBuilder contentBuffer = new StringBuilder();
         String line;
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
 
         while ((line = reader.readLine()) != null) {
             if (line.startsWith("data: ")) {
@@ -853,8 +859,7 @@ public class AIHelper {
                 }
             }
         }
-        reader.close();
-        connection.disconnect();
+        }
 
         // 处理缓冲区剩余内容
         if (contentBuffer.length() > 0) {

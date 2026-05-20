@@ -215,3 +215,8 @@ build_quick_prompt_btn_failed: Failed to build quick prompt button
 bind_quick_prompt_btn_failed: Failed to bind quick prompt button
 build_skill_names_failed: Failed to build Skill names
 get_skill_content_failed: Failed to get Skill content
+please_select_code_first: Please select code to analyze first
+reset_input: Reset Input
+reset_input_success: Reset successful
+decode_error_invalid_hex: Decode failed: Invalid hexadecimal format (length must be even)
+load_quick_prompt_data_failed: Failed to load quick prompt data

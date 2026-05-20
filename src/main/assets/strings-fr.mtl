@@ -215,3 +215,8 @@ build_quick_prompt_btn_failed: Échec de la construction du bouton de prompt rap
 bind_quick_prompt_btn_failed: Échec de la liaison du bouton de prompt rapide
 build_skill_names_failed: Échec de la construction des noms de skills
 get_skill_content_failed: Échec de l'obtention du contenu du skill
+please_select_code_first: Veuillez d'abord sélectionner du code
+reset_input: Réinitialiser l'entrée
+reset_input_success: Entrée réinitialisée avec succès
+decode_error_invalid_hex: Échec du décodage : Format hexadécimal invalide
+load_quick_prompt_data_failed: Échec du chargement des données de prompts rapides

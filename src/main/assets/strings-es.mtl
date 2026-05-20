@@ -215,3 +215,8 @@ build_quick_prompt_btn_failed: Error al construir botón de prompt rápido
 bind_quick_prompt_btn_failed: Error al vincular botón de prompt rápido
 build_skill_names_failed: Error al construir nombres de skills
 get_skill_content_failed: Error al obtener contenido de skill
+please_select_code_first: Por favor seleccione código primero
+reset_input: Restablecer entrada
+reset_input_success: Entrada restablecida exitosamente
+decode_error_invalid_hex: Error de decodificación: Formato hexadecimal inválido
+load_quick_prompt_data_failed: Error al cargar datos de prompts rápidos

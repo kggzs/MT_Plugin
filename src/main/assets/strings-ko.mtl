@@ -215,3 +215,8 @@ build_quick_prompt_btn_failed: 빠른 프롬프트 버튼 빌드 실패
 bind_quick_prompt_btn_failed: 빠른 프롬프트 버튼 바인딩 실패
 build_skill_names_failed: Skill 이름 빌드 실패
 get_skill_content_failed: Skill 내용 가져오기 실패
+please_select_code_first: 코드를 선택하십시오
+reset_input: 입력 재설정
+reset_input_success: 입력 재설정 성공
+decode_error_invalid_hex: 디코딩 실패: 잘못된 16진수 형식
+load_quick_prompt_data_failed: 빠른 프롬프트 데이터 로드 실패

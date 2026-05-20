@@ -354,7 +354,7 @@ public class MyPreference implements PluginPreference {
                 .setNegativeButton("{close}", null)
                 .show();
         } catch (Exception e) {
-            context.showToast("加载快速提示词失败: " + e.getMessage());
+            context.showToast("{load_quick_prompts_failed}: " + e.getMessage());
         }
     }
 
@@ -376,7 +376,7 @@ public class MyPreference implements PluginPreference {
                 currentName = prompt.getString("name");
                 currentPrompt = prompt.getString("prompt");
             } catch (Exception e) {
-                context.showToast("加载快速提示词数据失败: " + e.getMessage());
+                context.showToast("{load_quick_prompt_data_failed}: " + e.getMessage());
                 return;
             }
         }
@@ -417,7 +417,7 @@ public class MyPreference implements PluginPreference {
                             d.dismiss();
                             showQuickPromptsManagementDialog(ui, context);
                         } catch (Exception e) {
-                            context.showToast("删除失败: " + e.getMessage());
+                            context.showToast("{delete_failed}: " + e.getMessage());
                         }
                     })
                     .setNegativeButton("{cancel}", null)
