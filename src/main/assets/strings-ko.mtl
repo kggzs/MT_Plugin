@@ -152,8 +152,7 @@ model_name: 모델 이름
 model_name_hint: 기본값: deepseek-v3.2
 api_key: API 키
 api_key_hint: 기본값: sk-xxxxxxxxxxxxxxxxxxxxxxxx
-show_api_key: 키 표시
-hide_api_key: 키 숨기기
+
 no_input_detected: 입력이 감지되지 않았습니다
 reset_to_default: 기본값으로 재설정했습니다
 reset_default: 기본값 복원
@@ -215,3 +214,47 @@ build_quick_prompt_btn_failed: 빠른 프롬프트 버튼 빌드 실패
 bind_quick_prompt_btn_failed: 빠른 프롬프트 버튼 바인딩 실패
 build_skill_names_failed: Skill 이름 빌드 실패
 get_skill_content_failed: Skill 내용 가져오기 실패
+mcp_service_config: MCP 서비스 설정
+mcp_service_summary: MCP (Model Context Protocol) 서버 및 독립 Skill 설정
+mcp_service_desc: 외부 MCP 서버에 연결하여 AI 기능 확장
+mcp_enable_title: MCP 서비스 활성화/비활성화
+mcp_status_enabled: MCP 서비스 활성화됨
+mcp_status_disabled: MCP 서비스 비활성화됨
+mcp_enable_confirm: MCP 서비스를 활성화하시겠습니까?
+mcp_disable_confirm: MCP 서비스를 비활성화하시겠습니까?
+mcp_enabled: MCP 서비스가 활성화되었습니다
+mcp_disabled: MCP 서비스가 비활성화되었습니다
+mcp_server_config: MCP 서버 설정
+mcp_server_config_summary: MCP 서버 주소 설정
+mcp_server_url: MCP 서버 주소
+mcp_server_url_hint: MCP 서버 URL 입력
+mcp_url_empty_error: MCP 서버 주소는 비울 수 없습니다
+mcp_test_connection: 연결 테스트
+mcp_test_connection_summary: MCP 서버 연결 테스트
+mcp_connecting: 연결 중...
+mcp_connection_success: 연결 성공!
+mcp_tools_view: MCP 도구 목록
+mcp_tools_view_summary: MCP 서버에서 사용 가능한 도구 보기
+mcp_loading_tools: 도구 목록 로딩 중...
+mcp_no_tools_found: 사용 가능한 도구가 없습니다
+mcp_load_tools_failed: 도구 로딩 실패
+mcp_skill_config: MCP Skill 설정
+mcp_skill_config_summary: MCP 전용 Skill 관리
+mcp_new_skill: + 새 MCP Skill
+
+mcp_reset_summary: MCP 설정을 기본값으로 초기화
+mcp_reset_confirm_message: 모든 MCP 설정을 기본값으로 초기화하시겠습니까?\n이 작업은 취소할 수 없습니다.
+ai_chat_title: AI 채팅
+ai_chat_welcome: AI 채팅에 오신 것을 환영합니다!\n여기에서 AI와 직접 대화할 수 있습니다.\nMCP 서비스가 설정된 경우 AI가 자동으로 MCP 도구를 사용하여 응답을 향상시킵니다.
+ai_chat_input_hint: 질문을 입력하세요...
+ai_chat_send: 보내기
+ai_chat_sending: 보내는 중...
+ai_chat_clear: 대화 지우기
+ai_chat_cleared: 대화가 지워졌습니다
+ai_chat_empty_input: 질문을 입력해주세요
+ai_chat_you: 당신
+ai_chat_assistant: AI
+ai_chat_error: 오류
+ai_chat_settings_summary: AI 채팅 창을 열어 AI와 직접 대화
+ai_chat_use_system_prompt: 시스템 프롬프트 사용 (MCP 스킬 포함)
+ai_mcp_active: 활성화됨

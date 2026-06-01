@@ -43,6 +43,18 @@ public class MyPreference implements PluginPreference {
 
         builder.addHeader("{ai_config_group}");
 
+        builder.addText("{ai_chat_title}")
+               .summary("{ai_chat_settings_summary}")
+               .onClick((ui, preference) -> {
+                   AIChatMenu.showDialog(ui, context);
+               });
+
+        builder.addText("{mcp_service_config}")
+               .summary("{mcp_service_summary}")
+               .onClick((ui, preference) -> {
+                   MCPServiceMenu.showMainDialog(ui, context);
+               });
+
         builder.addText("{api_config}")
                .summary("{api_config_summary}")
                .onClick((ui, preference) -> {
@@ -135,7 +147,6 @@ public class MyPreference implements PluginPreference {
             .addTextView().text("{api_key}").textSize(14).marginTop(smallMargin).marginBottom(smallMargin)
             .addEditText("api_key").hint("{api_key_hint}")
                 .text(maskedApiKey).widthMatchParent().marginBottom(smallMargin)
-            .addButton("toggle_key_visibility").text("{show_api_key}").widthMatchParent().marginBottom(smallMargin)
             .paddingHorizontal(padding)
             .paddingVertical(padding)
             .build();
@@ -143,26 +154,8 @@ public class MyPreference implements PluginPreference {
         bin.mt.plugin.api.ui.PluginEditText apiUrlInput = view.requireViewById("api_url");
         bin.mt.plugin.api.ui.PluginEditText modelNameInput = view.requireViewById("model_name");
         bin.mt.plugin.api.ui.PluginEditText apiKeyInput = view.requireViewById("api_key");
-        bin.mt.plugin.api.ui.PluginButton toggleBtn = view.requireViewById("toggle_key_visibility");
 
         apiKeyInput.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
-
-        final boolean[] isPasswordVisible = {false};
-        final String originalApiKey = currentApiKey;
-
-        toggleBtn.setOnClickListener(v -> {
-            if (isPasswordVisible[0]) {
-                apiKeyInput.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                apiKeyInput.setText(maskedApiKey);
-                toggleBtn.setText("{show_api_key}");
-                isPasswordVisible[0] = false;
-            } else {
-                apiKeyInput.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                apiKeyInput.setText(originalApiKey);
-                toggleBtn.setText("{hide_api_key}");
-                isPasswordVisible[0] = true;
-            }
-        });
 
         ui.buildDialog()
             .setTitle("{api_config}")
@@ -189,12 +182,8 @@ public class MyPreference implements PluginPreference {
                 }
 
                 if (!apiKey.isEmpty()) {
-                    if (isPasswordVisible[0]) {
+                    if (!apiKey.equals(maskedApiKey)) {
                         AIHelper.setApiKey(context, apiKey);
-                    } else {
-                        if (!apiKey.equals(maskApiKey(originalApiKey))) {
-                            AIHelper.setApiKey(context, apiKey);
-                        }
                     }
                     hasValue = true;
                 }

@@ -152,8 +152,7 @@ model_name: Model Name
 model_name_hint: Default: deepseek-v3.2
 api_key: API Key
 api_key_hint: Default: sk-xxxxxxxxxxxxxxxxxxxxxxxx
-show_api_key: Show API Key
-hide_api_key: Hide API Key
+
 no_input_detected: No input detected
 reset_to_default: Reset to default values
 reset_default: Reset Default
@@ -215,3 +214,47 @@ build_quick_prompt_btn_failed: Failed to build quick prompt button
 bind_quick_prompt_btn_failed: Failed to bind quick prompt button
 build_skill_names_failed: Failed to build Skill names
 get_skill_content_failed: Failed to get Skill content
+mcp_service_config: MCP Service Config
+mcp_service_summary: Configure MCP (Model Context Protocol) server and independent Skills
+mcp_service_desc: Connect to external MCP server to extend AI capabilities
+mcp_enable_title: Enable/Disable MCP Service
+mcp_status_enabled: MCP Service Enabled
+mcp_status_disabled: MCP Service Disabled
+mcp_enable_confirm: Are you sure you want to enable MCP service?
+mcp_disable_confirm: Are you sure you want to disable MCP service?
+mcp_enabled: MCP service enabled
+mcp_disabled: MCP service disabled
+mcp_server_config: MCP Server Config
+mcp_server_config_summary: Set MCP server URL
+mcp_server_url: MCP Server URL
+mcp_server_url_hint: Enter MCP server URL
+mcp_url_empty_error: MCP server URL cannot be empty
+mcp_test_connection: Test Connection
+mcp_test_connection_summary: Test connection to MCP server
+mcp_connecting: Connecting...
+mcp_connection_success: Connection successful!
+mcp_tools_view: MCP Tools
+mcp_tools_view_summary: View available tools on MCP server
+mcp_loading_tools: Loading tools...
+mcp_no_tools_found: No tools found
+mcp_load_tools_failed: Failed to load tools
+mcp_skill_config: MCP Skill Config
+mcp_skill_config_summary: Manage MCP-specific Skills
+mcp_new_skill: + New MCP Skill
+
+mcp_reset_summary: Reset MCP config to default
+mcp_reset_confirm_message: Are you sure you want to reset all MCP configurations?\nThis operation cannot be undone.
+ai_chat_title: AI Chat
+ai_chat_welcome: Welcome to AI Chat!\nYou can have direct conversations with AI here.\nIf MCP service is configured, AI will automatically use MCP tools to enhance responses.
+ai_chat_input_hint: Enter your question...
+ai_chat_send: Send
+ai_chat_sending: Sending...
+ai_chat_clear: Clear Chat
+ai_chat_cleared: Chat cleared
+ai_chat_empty_input: Please enter a question
+ai_chat_you: You
+ai_chat_assistant: AI
+ai_chat_error: Error
+ai_chat_settings_summary: Open AI chat window to talk directly with AI
+ai_chat_use_system_prompt: Use system prompt (includes MCP skills)
+ai_mcp_active: Active

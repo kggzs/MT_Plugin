@@ -152,8 +152,7 @@ model_name: Имя модели
 model_name_hint: По умолчанию: deepseek-v3.2
 api_key: Ключ API
 api_key_hint: По умолчанию: sk-xxxxxxxxxxxxxxxxxxxxxxxx
-show_api_key: Показать ключ
-hide_api_key: Скрыть ключ
+
 no_input_detected: Ввод не обнаружен
 reset_to_default: Сброшено до значений по умолчанию
 reset_default: Сбросить по умолчанию
@@ -215,3 +214,47 @@ build_quick_prompt_btn_failed: Ошибка создания кнопки быс
 bind_quick_prompt_btn_failed: Ошибка привязки кнопки быстрой подсказки
 build_skill_names_failed: Ошибка создания имен skills
 get_skill_content_failed: Ошибка получения содержания skill
+mcp_service_config: Настройка MCP сервиса
+mcp_service_summary: Настройка MCP сервера и независимых Skills
+mcp_service_desc: Подключение к внешнему MCP серверу для расширения возможностей AI
+mcp_enable_title: Включить/Отключить MCP сервис
+mcp_status_enabled: MCP сервис включён
+mcp_status_disabled: MCP сервис отключён
+mcp_enable_confirm: Вы уверены, что хотите включить MCP сервис?
+mcp_disable_confirm: Вы уверены, что хотите отключить MCP сервис?
+mcp_enabled: MCP сервис включён
+mcp_disabled: MCP сервис отключён
+mcp_server_config: Настройка MCP сервера
+mcp_server_config_summary: Установить адрес MCP сервера
+mcp_server_url: Адрес MCP сервера
+mcp_server_url_hint: Введите URL MCP сервера
+mcp_url_empty_error: Адрес MCP сервера не может быть пустым
+mcp_test_connection: Проверка соединения
+mcp_test_connection_summary: Проверить соединение с MCP сервером
+mcp_connecting: Подключение...
+mcp_connection_success: Подключение успешно!
+mcp_tools_view: Список инструментов MCP
+mcp_tools_view_summary: Просмотр доступных инструментов на MCP сервере
+mcp_loading_tools: Загрузка списка инструментов...
+mcp_no_tools_found: Инструменты не найдены
+mcp_load_tools_failed: Ошибка загрузки инструментов
+mcp_skill_config: Настройка MCP Skills
+mcp_skill_config_summary: Управление Skills для MCP
+mcp_new_skill: + Новый MCP Skill
+
+mcp_reset_summary: Сбросить настройки MCP по умолчанию
+mcp_reset_confirm_message: Вы уверены, что хотите сбросить все настройки MCP?\nЭто действие нельзя отменить.
+ai_chat_title: AI Чат
+ai_chat_welcome: Добро пожаловать в AI Чат!\nЗдесь вы можете напрямую общаться с AI.\nЕсли настроен MCP сервис, AI будет автоматически использовать инструменты MCP для улучшения ответов.
+ai_chat_input_hint: Введите ваш вопрос...
+ai_chat_send: Отправить
+ai_chat_sending: Отправка...
+ai_chat_clear: Очистить чат
+ai_chat_cleared: Чат очищен
+ai_chat_empty_input: Пожалуйста, введите вопрос
+ai_chat_you: Вы
+ai_chat_assistant: AI
+ai_chat_error: Ошибка
+ai_chat_settings_summary: Открыть окно чата AI для прямого общения
+ai_chat_use_system_prompt: Использовать системный промпт (включая MCP навыки)
+ai_mcp_active: Активен

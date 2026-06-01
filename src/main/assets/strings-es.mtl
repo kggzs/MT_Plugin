@@ -152,8 +152,7 @@ model_name: Nombre del Modelo
 model_name_hint: Predeterminado: deepseek-v3.2
 api_key: Clave de API
 api_key_hint: Predeterminado: sk-xxxxxxxxxxxxxxxxxxxxxxxx
-show_api_key: Mostrar clave
-hide_api_key: Ocultar clave
+
 no_input_detected: No se detectó entrada
 reset_to_default: Restablecido a valores predeterminados
 reset_default: Restablecer por defecto
@@ -215,3 +214,47 @@ build_quick_prompt_btn_failed: Error al construir botón de prompt rápido
 bind_quick_prompt_btn_failed: Error al vincular botón de prompt rápido
 build_skill_names_failed: Error al construir nombres de skills
 get_skill_content_failed: Error al obtener contenido de skill
+mcp_service_config: Configuración del servicio MCP
+mcp_service_summary: Configurar servidor MCP y Skills independientes
+mcp_service_desc: Conectar servidor MCP externo para ampliar capacidades AI
+mcp_enable_title: Activar/Desactivar servicio MCP
+mcp_status_enabled: Servicio MCP activado
+mcp_status_disabled: Servicio MCP desactivado
+mcp_enable_confirm: ¿Estás seguro de activar el servicio MCP?
+mcp_disable_confirm: ¿Estás seguro de desactivar el servicio MCP?
+mcp_enabled: Servicio MCP activado
+mcp_disabled: Servicio MCP desactivado
+mcp_server_config: Configuración del servidor MCP
+mcp_server_config_summary: Establecer la URL del servidor MCP
+mcp_server_url: URL del servidor MCP
+mcp_server_url_hint: Ingresa la URL del servidor MCP
+mcp_url_empty_error: La URL del servidor MCP no puede estar vacía
+mcp_test_connection: Probar conexión
+mcp_test_connection_summary: Probar conexión al servidor MCP
+mcp_connecting: Conectando...
+mcp_connection_success: ¡Conexión exitosa!
+mcp_tools_view: Herramientas MCP
+mcp_tools_view_summary: Ver herramientas disponibles en el servidor MCP
+mcp_loading_tools: Cargando herramientas...
+mcp_no_tools_found: No se encontraron herramientas disponibles
+mcp_load_tools_failed: Error al cargar herramientas
+mcp_skill_config: Configuración de Skills MCP
+mcp_skill_config_summary: Gestionar Skills exclusivos de MCP
+mcp_new_skill: + Nuevo Skill MCP
+
+mcp_reset_summary: Restablecer configuración MCP por defecto
+mcp_reset_confirm_message: ¿Estás seguro de restablecer toda la configuración MCP?\nEsta operación no se puede deshacer.
+ai_chat_title: Chat AI
+ai_chat_welcome: ¡Bienvenido al Chat AI!\nPuede tener conversaciones directas con la IA aquí.\nSi el servicio MCP está configurado, la IA usará automáticamente herramientas MCP para mejorar las respuestas.
+ai_chat_input_hint: Ingrese su pregunta...
+ai_chat_send: Enviar
+ai_chat_sending: Enviando...
+ai_chat_clear: Limpiar chat
+ai_chat_cleared: Chat limpiado
+ai_chat_empty_input: Por favor ingrese una pregunta
+ai_chat_you: Tú
+ai_chat_assistant: IA
+ai_chat_error: Error
+ai_chat_settings_summary: Abrir ventana de chat AI para hablar directamente con la IA
+ai_chat_use_system_prompt: Usar mensaje del sistema (incluye habilidades MCP)
+ai_mcp_active: Activado

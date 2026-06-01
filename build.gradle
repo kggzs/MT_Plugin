@@ -98,6 +98,7 @@ mtPlugin {
     interfaces = [
         "com.kggzs.cn.mt.EncodeDecodeMenu",
         "com.kggzs.cn.mt.QuickInsertFunction",
+        "com.kggzs.cn.mt.AIChatMenu",
         "com.kggzs.cn.mt.AICodeAnalysisToolMenu",
         "com.kggzs.cn.mt.AICodeAnalysisFloatingMenu"
     ]

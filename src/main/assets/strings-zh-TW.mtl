@@ -152,8 +152,7 @@ model_name: 模型名稱
 model_name_hint: 預設: deepseek-v3.2
 api_key: API 金鑰
 api_key_hint: 預設: sk-xxxxxxxxxxxxxxxxxxxxxxxx
-show_api_key: 顯示金鑰
-hide_api_key: 隱藏金鑰
+
 no_input_detected: 未偵測到輸入
 reset_to_default: 已重設為預設值
 reset_default: 恢復預設
@@ -215,3 +214,47 @@ build_quick_prompt_btn_failed: 建構快速提示詞按鈕失敗
 bind_quick_prompt_btn_failed: 綁定快速提示詞按鈕失敗
 build_skill_names_failed: 建構 Skill 名稱失敗
 get_skill_content_failed: 獲取 Skill 內容失敗
+mcp_service_config: MCP 服務配置
+mcp_service_summary: 配置 MCP (Model Context Protocol) 伺服器及獨立 Skill 技能
+mcp_service_desc: 連接外部 MCP 伺服器，擴展 AI 能力
+mcp_enable_title: 啟用/停用 MCP 服務
+mcp_status_enabled: MCP 服務已啟用
+mcp_status_disabled: MCP 服務已停用
+mcp_enable_confirm: 確定要啟用 MCP 服務嗎？
+mcp_disable_confirm: 確定要停用 MCP 服務嗎？
+mcp_enabled: MCP 服務已啟用
+mcp_disabled: MCP 服務已停用
+mcp_server_config: MCP 伺服器配置
+mcp_server_config_summary: 設定 MCP 伺服器位址
+mcp_server_url: MCP 伺服器位址
+mcp_server_url_hint: 輸入 MCP 伺服器 URL
+mcp_url_empty_error: MCP 伺服器位址不能為空
+mcp_test_connection: 測試連線
+mcp_test_connection_summary: 測試與 MCP 伺服器的連線
+mcp_connecting: 正在連線...
+mcp_connection_success: 連線成功！
+mcp_tools_view: MCP 工具列表
+mcp_tools_view_summary: 檢視 MCP 伺服器上可用的工具
+mcp_loading_tools: 正在載入工具列表...
+mcp_no_tools_found: 沒有找到可用工具
+mcp_load_tools_failed: 載入工具失敗
+mcp_skill_config: MCP Skill 配置
+mcp_skill_config_summary: 管理 MCP 專屬 Skill 技能
+mcp_new_skill: + 新建 MCP Skill
+
+mcp_reset_summary: 重置 MCP 配置為預設值
+mcp_reset_confirm_message: 確定要重置所有 MCP 配置為預設值嗎？\n此操作不可撤銷。
+ai_chat_title: AI 對話
+ai_chat_welcome: 歡迎使用 AI 對話！\n您可以在這裡與 AI 進行直接對話。\n如果已配置 MCP 服務，AI 將自動使用 MCP 工具增強回答。
+ai_chat_input_hint: 輸入您的問題...
+ai_chat_send: 發送
+ai_chat_sending: 發送中...
+ai_chat_clear: 清空對話
+ai_chat_cleared: 對話已清空
+ai_chat_empty_input: 請輸入問題
+ai_chat_you: 你
+ai_chat_assistant: AI
+ai_chat_error: 錯誤
+ai_chat_settings_summary: 打開 AI 對話視窗，與 AI 直接聊天
+ai_chat_use_system_prompt: 啟用系統提示詞（含 MCP 技能）
+ai_mcp_active: 已啟用

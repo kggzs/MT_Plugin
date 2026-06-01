@@ -26,8 +26,8 @@ import bin.mt.plugin.api.ui.dialog.PluginDialog;
 public class AIHelper {
     // 默认配置
     private static final String DEFAULT_API_URL = "https://api.kggzs.cn/v1";
-    private static final String DEFAULT_AI_MODEL = "MT-v1";
-    private static final String DEFAULT_API_KEY = "sk-MT-kggzs-API-key";
+    private static final String DEFAULT_AI_MODEL = "MT-v2";
+    private static final String DEFAULT_API_KEY = "sk-MT-kggzs-API-key-1724464998";
     private static final String DEFAULT_PROMPT = "你是资深代码安全分析专家，精通MT管理器安卓逆向分析，擅长smali/Java代码审计。请严格按照用户后续指定的分析方向，结合MT管理器操作特性，对提供的安卓软件代码开展精准分析。输出要求：仅围绕用户指定目标，提供MT管理器可直接执行的检测方案、安全逻辑点分析、实操修改方法；内容精炼、逻辑清晰、无冗余、无表情符号，全程不使用MT管理器以外的任何工具。";
     private static final String DEFAULT_SHORT_PROMPT = "请简要分析以下代码，指出主要问题和改进建议：";
 
@@ -39,6 +39,11 @@ public class AIHelper {
     private static final String PREF_SHORT_PROMPT = "ai_short_prompt";
     private static final String PREF_SKILLS = "ai_skills";
     private static final String PREF_QUICK_PROMPTS = "ai_quick_prompts";
+
+    // MCP 配置键名
+    private static final String PREF_MCP_ENABLED = "mcp_enabled";
+    private static final String PREF_MCP_SERVER_URL = "mcp_server_url";
+    private static final String PREF_MCP_SKILLS = "mcp_skills";
 
     // 默认快速提示词
     private static final String DEFAULT_QUICK_PROMPT_1 = "分析此代码是否存在混淆或解密情况，指出混淆技术和解密方法";
@@ -188,6 +193,57 @@ public class AIHelper {
         context.getPreferences().edit().putString(PREF_SKILLS, skillsJson).apply();
     }
 
+    // ============================================================
+    // MCP 配置方法
+    // ============================================================
+
+    /**
+     * 获取 MCP 服务是否启用
+     */
+    public static boolean isMcpEnabled(@NonNull PluginContext context) {
+        return context.getPreferences().getBoolean(PREF_MCP_ENABLED, false);
+    }
+
+    /**
+     * 设置 MCP 服务是否启用
+     */
+    public static void setMcpEnabled(@NonNull PluginContext context, boolean enabled) {
+        context.getPreferences().edit().putBoolean(PREF_MCP_ENABLED, enabled).apply();
+    }
+
+    /**
+     * 获取 MCP 服务器地址
+     */
+    @NonNull
+    public static String getMcpServerUrl(@NonNull PluginContext context) {
+        String url = context.getPreferences().getString(PREF_MCP_SERVER_URL, "");
+        return url.isEmpty() ? "http://127.0.0.1:8787/mcp" : url;
+    }
+
+    /**
+     * 设置 MCP 服务器地址
+     */
+    public static void setMcpServerUrl(@NonNull PluginContext context, @NonNull String url) {
+        context.getPreferences().edit().putString(PREF_MCP_SERVER_URL, url).apply();
+    }
+
+    /**
+     * 获取 MCP Skill 列表（JSON数组格式）
+     * 每个元素：{"name": "Skill名称", "prompt": "提示词内容"}
+     */
+    @NonNull
+    public static String getMcpSkills(@NonNull PluginContext context) {
+        String skills = context.getPreferences().getString(PREF_MCP_SKILLS, "");
+        return skills.isEmpty() ? "[]" : skills;
+    }
+
+    /**
+     * 保存 MCP Skill 列表
+     */
+    public static void setMcpSkills(@NonNull PluginContext context, @NonNull String skillsJson) {
+        context.getPreferences().edit().putString(PREF_MCP_SKILLS, skillsJson).apply();
+    }
+
     /**
      * 重置为默认配置
      */
@@ -200,6 +256,9 @@ public class AIHelper {
                 .remove(PREF_SHORT_PROMPT)
                 .remove(PREF_SKILLS)
                 .remove(PREF_QUICK_PROMPTS)
+                .remove(PREF_MCP_ENABLED)
+                .remove(PREF_MCP_SERVER_URL)
+                .remove(PREF_MCP_SKILLS)
                 .apply();
     }
 
@@ -699,7 +758,7 @@ public class AIHelper {
      * @param content AI 返回的内容
      * @return 清理后的内容
      */
-    private static String cleanThinkingTags(String content) {
+    public static String cleanThinkingTags(String content) {
         if (content == null || content.isEmpty()) {
             return content;
         }
