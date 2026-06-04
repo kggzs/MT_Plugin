@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 
 import bin.mt.plugin.api.PluginContext;
 
+import com.kggzs.cn.mt.AIChatMenu;
 import com.kggzs.cn.mt.util.MCPClient;
 
 /**
@@ -39,6 +40,10 @@ public class AIChatHelper {
 
     public void setUseSystemPrompt(boolean use) {
         this.useSystemPrompt = use;
+    }
+
+    public boolean isUseSystemPrompt() {
+        return this.useSystemPrompt;
     }
 
     /**
@@ -206,7 +211,6 @@ public class AIChatHelper {
         requestBody.put("model", aiModel);
         requestBody.put("stream", true);
         requestBody.put("messages", messages);
-        requestBody.put("temperature", 0.7);
 
         URL url = new URL(completionsUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -216,6 +220,9 @@ public class AIChatHelper {
         connection.setConnectTimeout(30000);
         connection.setReadTimeout(120000);
         connection.setDoOutput(true);
+
+        // 注册活跃连接，支持中断
+        AIChatMenu.setActiveConnection(connection);
 
         connection.getOutputStream().write(requestBody.toString().getBytes(StandardCharsets.UTF_8));
 
@@ -229,6 +236,7 @@ public class AIChatHelper {
                 errorResponse.append(line);
             }
             errorReader.close();
+            AIChatMenu.setActiveConnection(null);
             throw new Exception("AI API错误: " + responseCode + " - " + errorResponse);
         }
 
@@ -248,20 +256,9 @@ public class AIChatHelper {
                     JSONArray choices = chunk.optJSONArray("choices");
                     if (choices != null && choices.length() > 0) {
                         JSONObject firstChoice = choices.getJSONObject(0);
-                        String content = null;
+                        String content = AIHelper.StreamChunkParser.extractContent(firstChoice);
 
-                        JSONObject delta = firstChoice.optJSONObject("delta");
-                        if (delta != null) {
-                            content = delta.optString("content", "");
-                        }
-                        if (content == null || content.isEmpty()) {
-                            content = firstChoice.optString("text", "");
-                        }
-                        if (content == null || content.isEmpty()) {
-                            content = firstChoice.optString("content", "");
-                        }
-
-                        if (content != null && !content.isEmpty() && !"null".equals(content)) {
+                        if (!content.isEmpty()) {
                             fullContent.append(content);
                             if (onStream != null) {
                                 onStream.onStream(AIHelper.cleanThinkingTags(fullContent.toString()));
@@ -275,6 +272,7 @@ public class AIChatHelper {
         }
         reader.close();
         connection.disconnect();
+        AIChatMenu.setActiveConnection(null);
 
         String result = AIHelper.cleanThinkingTags(fullContent.toString());
         if (result.isEmpty()) {

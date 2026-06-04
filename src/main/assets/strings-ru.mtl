@@ -256,5 +256,6 @@ ai_chat_you: Вы
 ai_chat_assistant: AI
 ai_chat_error: Ошибка
 ai_chat_settings_summary: Открыть окно чата AI для прямого общения
+ai_chat_stop: Стоп
 ai_chat_use_system_prompt: Использовать системный промпт (включая MCP навыки)
 ai_mcp_active: Активен

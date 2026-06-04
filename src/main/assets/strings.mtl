@@ -256,5 +256,6 @@ ai_chat_you: You
 ai_chat_assistant: AI
 ai_chat_error: Error
 ai_chat_settings_summary: Open AI chat window to talk directly with AI
+ai_chat_stop: Stop
 ai_chat_use_system_prompt: Use system prompt (includes MCP skills)
 ai_mcp_active: Active

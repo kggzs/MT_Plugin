@@ -256,5 +256,6 @@ ai_chat_you: あなた
 ai_chat_assistant: AI
 ai_chat_error: エラー
 ai_chat_settings_summary: AI チャットウィンドウを開いて AI と直接会話
+ai_chat_stop: 停止
 ai_chat_use_system_prompt: システムプロンプトを使用（MCP スキルを含む）
 ai_mcp_active: 有効

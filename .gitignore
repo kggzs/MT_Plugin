@@ -2,7 +2,8 @@
 *.apk
 *.aab
 *.mtp
-
+.trae
+.claude
 # Files for the ART/Dalvik VM
 *.dex
 

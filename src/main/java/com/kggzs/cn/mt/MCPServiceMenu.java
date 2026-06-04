@@ -252,7 +252,7 @@ public class MCPServiceMenu {
                 JSONObject skill = skillsArray.getJSONObject(i);
                 skillNames.add(skill.getString("name"));
             }
-            skillNames.add("+ " + context.getString("{mcp_new_skill}"));
+            skillNames.add(context.getString("{mcp_new_skill}"));
 
             CharSequence[] items = skillNames.toArray(new CharSequence[0]);
 
@@ -315,29 +315,8 @@ public class MCPServiceMenu {
         bin.mt.plugin.api.ui.PluginEditText nameInput = view.requireViewById("skill_name");
         bin.mt.plugin.api.ui.PluginEditText promptEdit = view.requireViewById("skill_prompt");
 
-        if (skillIndex >= 0) {
-            view.requireViewById("delete_btn").setOnClickListener(v -> {
-                ui.buildDialog()
-                    .setTitle("{confirm_delete}")
-                    .setMessage("{sure_to_delete_skill}: " + nameInput.getText() + "?")
-                    .setPositiveButton("{delete}", (d, w) -> {
-                        try {
-                            JSONArray skillsArray = new JSONArray(AIHelper.getMcpSkills(context));
-                            skillsArray.remove(finalSkillIndex);
-                            AIHelper.setMcpSkills(context, skillsArray.toString());
-                            context.showToast("{deleted}");
-                            d.dismiss();
-                            showMcpSkillManagementDialog(ui, context);
-                        } catch (Exception e) {
-                            context.showToast("{delete_failed}: " + e.getMessage());
-                        }
-                    })
-                    .setNegativeButton("{cancel}", null)
-                    .show();
-            });
-        }
-
-        ui.buildDialog()
+        // 先构建编辑器对话框，确保 editorDialog 变量已声明
+        bin.mt.plugin.api.ui.dialog.PluginDialog editorDialog = ui.buildDialog()
             .setTitle(skillIndex >= 0 ? "{edit_skill}" : "{mcp_new_skill}")
             .setView(view)
             .setPositiveButton("{save}", (d, which) -> {
@@ -366,5 +345,29 @@ public class MCPServiceMenu {
             })
             .setNegativeButton("{cancel}", null)
             .show();
+
+        // 编辑模式下显示删除按钮
+        if (skillIndex >= 0) {
+            view.requireViewById("delete_btn").setOnClickListener(v -> {
+                ui.buildDialog()
+                    .setTitle("{confirm_delete}")
+                    .setMessage(context.getString("{sure_to_delete_skill}") + " " + nameInput.getText() + "?")
+                    .setPositiveButton("{delete}", (d, w) -> {
+                        try {
+                            JSONArray skillsArray = new JSONArray(AIHelper.getMcpSkills(context));
+                            skillsArray.remove(finalSkillIndex);
+                            AIHelper.setMcpSkills(context, skillsArray.toString());
+                            context.showToast("{deleted}");
+                            d.dismiss();
+                            editorDialog.dismiss();
+                            showMcpSkillManagementDialog(ui, context);
+                        } catch (Exception e) {
+                            context.showToast("{delete_failed}: " + e.getMessage());
+                        }
+                    })
+                    .setNegativeButton("{cancel}", null)
+                    .show();
+            });
+        }
     }
 }

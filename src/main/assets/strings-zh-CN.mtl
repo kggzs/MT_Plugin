@@ -256,5 +256,6 @@ ai_chat_you: 你
 ai_chat_assistant: AI
 ai_chat_error: 错误
 ai_chat_settings_summary: 打开 AI 对话窗口，与 AI 直接聊天
+ai_chat_stop: 停止
 ai_chat_use_system_prompt: 启用系统提示词（含 MCP 技能）
 ai_mcp_active: 已启用
