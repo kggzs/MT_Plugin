@@ -143,12 +143,12 @@ Get-ChildItem -Path E:\www\mt-kang -Recurse -Filter *.mtp -ErrorAction SilentlyC
 mt-kang/
 ├── src/main/
 │   ├── java/com/kggzs/cn/mt/          # Java 源代码
-│   │   ├── AIChatMenu.java           # AI 对话浮动菜单
+│   │   ├── AIChatMenu.java           # AI 对话浮动菜单（新增）
 │   │   ├── AICodeAnalysisFloatingMenu.java # AI 快速分析浮动菜单
 │   │   ├── AICodeAnalysisHelper.java  # AI 分析辅助类
 │   │   ├── AICodeAnalysisToolMenu.java # AI 代码分析工具菜单
 │   │   ├── EncodeDecodeMenu.java      # 编码/解码菜单
-│   │   ├── MCPServiceMenu.java        # MCP 服务配置
+│   │   ├── MCPServiceMenu.java        # MCP 服务配置（新增）
 │   │   ├── MyPreference.java          # 设置界面
 │   │   ├── PreferenceApiDialog.java   # API 配置对话框
 │   │   ├── PreferenceSkillDialog.java # AI 能力配置对话框
@@ -156,9 +156,9 @@ mt-kang/
 │   │   ├── QuickInsertFunction.java   # 快速插入时间
 │   │   └── util/
 │   │       ├── AIHelper.java          # AI 核心工具类
-│   │       ├── AIChatHelper.java      # AI 对话辅助
+│   │       ├── AIChatHelper.java      # AI 对话辅助（新增）
 │   │       ├── LunarCalendar.java     # 农历计算
-│   │       ├── MCPClient.java         # MCP 客户端
+│   │       ├── MCPClient.java         # MCP 客户端（新增）
 │   │       ├── SkillManager.java      # Skill 管理工具类
 │   │       ├── StreamParser.java      # 流式解析工具类
 │   │       ├── ThreadPoolManager.java # 线程池管理
@@ -199,6 +199,7 @@ mt-kang/
 
 | 日期 | 版本 | 说明 |
 |------|------|------|
+| 2026-06-05 | v2.1.0 | 新增 AI 对话功能、MCP 服务配置、MCP Agent 模式 |
 | 2026-05-20 | v2.0.2 | 更新编译文档，添加新功能说明 |
 | 2026-04-09 | v2.0 | 初始编译文档 |
 

@@ -3,7 +3,7 @@
 <div align="center">
 
 [![MT Manager](https://img.shields.io/badge/MT%20Manager-V3-blue.svg)](https://mt2.cn)
-[![Plugin Version](https://img.shields.io/badge/Version-v2.0.2-green.svg)](https://github.com)
+[![Plugin Version](https://img.shields.io/badge/Version-v2.1.0-green.svg)](https://github.com)
 [![Min SDK](https://img.shields.io/badge/Min%20SDK-21-orange.svg)](https://developer.android.com)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -51,8 +51,10 @@
 
 - [插件简介](#-插件简介)
 - [核心功能](#-核心功能)
+  - [AI 对话](#ai-对话)
   - [AI 代码分析](#ai-代码分析)
   - [AI 快速分析](#ai-快速分析)
+  - [MCP 服务配置](#mcp-服务配置)
   - [自定义 AI 配置](#自定义-ai-配置)
 - [辅助功能](#-辅助功能)
   - [编码/解码工具](#编码解码工具)
@@ -84,6 +86,37 @@
 ---
 
 ## ✨ 核心功能
+
+### 🤖 AI 对话
+
+**新增功能**，提供与 AI 直接对话的交互界面：
+
+#### 功能特点
+
+- **多轮对话** - 支持连续对话，AI 会记住上下文
+- **流式响应** - 实时显示 AI 回复，无需等待
+- **MCP 工具调用** - 启用 MCP 后，AI 可自动调用外部工具（Agent 模式）
+- **对话历史** - 自动保存对话记录，可随时清空
+- **停止控制** - 支持中断正在进行的对话
+
+#### MCP Agent 模式
+
+当启用 MCP 服务后，AI 对话进入 Agent 模式：
+
+1. AI 分析用户问题，判断是否需要调用工具
+2. 如需调用工具，AI 输出工具调用 JSON
+3. 系统自动执行 MCP 工具并将结果反馈给 AI
+4. AI 根据工具结果继续回答或调用更多工具
+5. 支持最多 10 轮工具调用循环
+
+#### 使用方式
+
+在 MT 管理器文本编辑器中：
+
+- 点击顶部「编辑」菜单中的 **AI 对话**
+- 或在插件设置中点击「AI 对话」快捷入口
+
+---
 
 ### 🤖 AI 代码分析
 
@@ -127,6 +160,42 @@ AI 分析会提供以下维度的专业评估：
 - **适用场景** - 检查特定函数、代码块或可疑代码段
 - **快速提示词** - 支持一键追加预设提示词
 - **Skill 选择** - 支持选择自定义 Skill 追加到提示词
+
+---
+
+### 🔌 MCP 服务配置
+
+**新增功能**，支持 MCP (Model Context Protocol) 服务配置：
+
+#### 功能特点
+
+- **MCP 协议支持** - 基于 JSON-RPC 2.0 协议与 MCP 服务器通信
+- **服务器配置** - 配置 MCP 服务器地址
+- **连接测试** - 测试与 MCP 服务器的连接状态
+- **工具列表** - 查看 MCP 服务器提供的工具
+- **MCP Skill 管理** - 管理 MCP 专属 Skill 技能
+- **启用/禁用控制** - 随时开启或关闭 MCP 服务
+
+#### MCP 协议说明
+
+MCP (Model Context Protocol) 是一种标准化的 AI 工具调用协议：
+
+- **tools/list** - 列出可用工具
+- **tools/call** - 调用指定工具
+- **resources/list** - 列出可用资源
+- **resources/read** - 读取指定资源
+
+#### 配置方式
+
+在插件设置界面的 **MCP 服务配置** 分组中：
+
+1. **启用/禁用 MCP** - 切换 MCP 服务状态
+2. **服务器配置** - 设置 MCP 服务器 URL
+3. **测试连接** - 验证服务器连接是否正常
+4. **查看工具** - 查看服务器提供的工具列表
+5. **MCP Skill** - 管理 MCP 专属 Skill
+
+> 💡 **提示**: MCP 服务启用后，AI 对话功能将自动支持工具调用（Agent 模式）。
 
 ---
 
@@ -553,13 +622,23 @@ mt-kang/
 ├── src/main/
 │   ├── java/com/kggzs/cn/mt/
 │   │   ├── EncodeDecodeMenu.java              # 编码/解码浮动菜单
+│   │   ├── AIChatMenu.java                    # AI 对话浮动菜单（新增）
 │   │   ├── AICodeAnalysisToolMenu.java        # AI 代码分析工具菜单
 │   │   ├── AICodeAnalysisFloatingMenu.java    # AI 快速分析浮动菜单
 │   │   ├── AICodeAnalysisHelper.java          # AI 分析辅助类
+│   │   ├── MCPServiceMenu.java                # MCP 服务配置菜单（新增）
 │   │   ├── QuickInsertFunction.java           # 快速插入时间功能
 │   │   ├── MyPreference.java                  # 插件偏好设置
+│   │   ├── PreferenceApiDialog.java           # API 配置对话框
+│   │   ├── PreferenceSkillDialog.java         # AI 能力配置对话框
+│   │   ├── PreferenceTimeFormatDialog.java    # 时间格式配置对话框
 │   │   └── util/
 │   │       ├── AIHelper.java                  # AI 工具类（核心网络逻辑）
+│   │       ├── AIChatHelper.java              # AI 对话辅助类（新增）
+│   │       ├── MCPClient.java                 # MCP 客户端（新增）
+│   │       ├── SkillManager.java              # Skill 管理工具类
+│   │       ├── StreamParser.java              # 流式解析工具类
+│   │       ├── ThreadPoolManager.java         # 线程池管理
 │   │       ├── TimeFormatHelper.java          # 时间格式配置工具
 │   │       └── LunarCalendar.java             # 农历计算工具
 │   ├── assets/
@@ -711,7 +790,17 @@ mtPlugin {
 
 ## 📝 更新日志
 
-### v2.0.3 (当前版本)
+### v2.1.0 (当前版本)
+
+- 🤖 **新增 AI 对话功能** - 支持与 AI 直接聊天，多轮对话，流式响应
+- 🔌 **新增 MCP 服务配置** - 支持 MCP (Model Context Protocol) 协议
+- 🔧 **MCP Agent 模式** - AI 对话支持自动调用 MCP 工具（最多 10 轮）
+- 🔧 **MCP 工具管理** - 支持查看 MCP 服务器工具列表
+- 🔧 **MCP Skill 管理** - 支持管理 MCP 专属 Skill 技能
+- 🔧 **连接测试** - 支持测试 MCP 服务器连接状态
+- 🔧 **新增接口** - AIChatMenu、MCPServiceMenu
+
+### v2.0.3
 
 - ✨ 时间插入新增三种显示模式（不带时间/带时间/自定义）
 - ✨ 时间插入新增自定义格式功能，支持18种格式标记

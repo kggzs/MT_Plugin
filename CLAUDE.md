@@ -13,7 +13,7 @@
 | 项目属性 | 值 |
 |---------|-----|
 | 插件ID | `com.kggzs.cn.mt` |
-| 版本号 | v2.0.2 (versionCode: 4) |
+| 版本号 | v2.1.0 (versionCode: 5) |
 | 最低SDK | API 21 (Android 5.0) |
 | 目标SDK | API 28 |
 | 编译SDK | API 36 |
@@ -22,11 +22,13 @@
 
 ### 核心功能
 
-1. **AI 代码分析** - 基于 AI 模型的智能代码分析
-2. **编码/解码工具** - Base64、Hex、Unicode、URL、ROT13、二进制
-3. **哈希计算** - MD5、SHA-256、SHA-512
-4. **时间戳转换** - 时间戳与日期时间双向转换
-5. **快速插入时间** - 支持公历、农历、干支等多种格式
+1. **AI 对话** - 与 AI 直接聊天，支持多轮对话和 MCP 工具调用（Agent 模式）
+2. **MCP 服务配置** - 支持 MCP (Model Context Protocol) 协议，配置外部工具服务
+3. **AI 代码分析** - 基于 AI 模型的智能代码分析
+4. **编码/解码工具** - Base64、Hex、Unicode、URL、ROT13、二进制
+5. **哈希计算** - MD5、SHA-256、SHA-512
+6. **时间戳转换** - 时间戳与日期时间双向转换
+7. **快速插入时间** - 支持公历、农历、干支等多种格式
 
 ---
 
@@ -37,13 +39,20 @@ mt-kang/
 ├── src/main/
 │   ├── java/com/kggzs/cn/mt/
 │   │   ├── EncodeDecodeMenu.java              # 编码/解码浮动菜单
+│   │   ├── AIChatMenu.java                    # AI 对话浮动菜单（新增）
 │   │   ├── AICodeAnalysisToolMenu.java        # AI 代码分析工具菜单
 │   │   ├── AICodeAnalysisFloatingMenu.java    # AI 快速分析浮动菜单
 │   │   ├── AICodeAnalysisHelper.java          # AI 分析辅助类
+│   │   ├── MCPServiceMenu.java                # MCP 服务配置菜单（新增）
 │   │   ├── QuickInsertFunction.java           # 快速插入时间功能
 │   │   ├── MyPreference.java                  # 插件偏好设置
 │   │   └── util/
 │   │       ├── AIHelper.java                  # AI 工具类（核心网络逻辑）
+│   │       ├── AIChatHelper.java              # AI 对话辅助类（新增）
+│   │       ├── MCPClient.java                 # MCP 客户端（新增）
+│   │       ├── SkillManager.java              # Skill 管理工具类
+│   │       ├── StreamParser.java              # 流式解析工具类
+│   │       ├── ThreadPoolManager.java         # 线程池管理
 │   │       ├── TimeFormatHelper.java          # 时间格式配置工具
 │   │       └── LunarCalendar.java             # 农历计算工具
 │   ├── assets/
@@ -229,6 +238,7 @@ key: value
 interfaces = [
     "com.kggzs.cn.mt.EncodeDecodeMenu",           // 编码/解码浮动菜单
     "com.kggzs.cn.mt.QuickInsertFunction",        // 快速插入时间
+    "com.kggzs.cn.mt.AIChatMenu",                 // AI 对话浮动菜单（新增）
     "com.kggzs.cn.mt.AICodeAnalysisToolMenu",     // AI 代码分析工具菜单
     "com.kggzs.cn.mt.AICodeAnalysisFloatingMenu"  // AI 快速分析浮动菜单
 ]
@@ -238,6 +248,7 @@ interfaces = [
 
 - **浮动菜单** - 选中文本后显示的菜单项
 - **工具菜单** - 编辑器顶部工具栏菜单项
+- **MCP 服务** - MCP 协议配置和管理（集成在设置界面）
 
 ---
 
@@ -327,7 +338,15 @@ interfaces = [
 
 ## 更新日志
 
-### v2.0.3 (当前开发版本)
+### v2.1.0 (当前版本)
+
+- 🤖 新增 AI 对话功能，支持多轮对话和 MCP 工具调用
+- 🔌 新增 MCP 服务配置，支持 MCP 协议
+- 🔧 MCP Agent 模式，AI 自动调用外部工具
+- 🔧 新增 AIChatMenu、MCPServiceMenu 接口
+- 🔧 新增 AIChatHelper、MCPClient 工具类
+
+### v2.0.3
 
 - ✨ 时间插入新增三种显示模式
 - ✨ 时间插入新增自定义格式功能
