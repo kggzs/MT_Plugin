@@ -7,6 +7,7 @@ support_author: Soutenir l'auteur
 support_author_summary: Parrainage pour soutenir le développement du plugin
 support_author_title: Soutenir l'auteur
 support_message: Ce plugin open-source et ses modèles d'IA gratuits font face à des coûts croissants de serveurs, de calcul et de maintenance qui sont devenus difficiles à supporter pour un individu à long terme. Pour éviter les interruptions de service et garantir les futures mises à jour et le fonctionnement stable, nous avons ouvert un canal de parrainage volontaire.\n\nTous les parrainages seront utilisés exclusivement pour le renouvellement du serveur, les coûts de calcul et la maintenance du projet. Merci pour votre soutien à long terme, et nous espérons continuer à fournir des services open-source et gratuits d'IA ensemble avec vous.
+switched_to_prefix: "Basculé vers : "
 alipay: Alipay
 wechat_pay: WeChat Pay
 load_image_failed: Échec du chargement de l'image
@@ -15,6 +16,7 @@ about: À propos
 features_group: Description des fonctionnalités
 features_title: Fonctionnalités principales
 features_summary: Ce plugin a pour fonction principale l'analyse de code IA, avec divers outils pratiques de développement assisté. Toutes les fonctionnalités peuvent être utilisées directement dans l'éditeur de texte pour améliorer globalement l'efficacité de programmation.
+format_help_section: [Aide au format]
 encode_decode_function: Encoder/Décoder
 encode_decode_usage: Fournit plusieurs formats d'encodage/décodage. Sélectionnez du texte et cliquez sur la fonction correspondante pour l'utiliser.
 base64_encode: Encoder Base64
@@ -73,6 +75,7 @@ common_text: Texte Commun
 current_date: Date Actuelle
 current_time: Heure Actuelle
 current_datetime: Date/Heure Actuelle
+current_format_prefix: Format actuel : 
 current_timestamp: Horodatage Actuel
 uuid: UUID
 email_template: Modèle d'Email
@@ -92,13 +95,16 @@ ai_capability_config: Configuration de Capacité IA
 manage_skills: Gérer les Skills Personnalisés
 save: Enregistrer
 saved: Enregistré
+saved_to_prefix: "Enregistré : "
 new_skill: + Nouveau Skill
 skill_management: Gestion des Skills Personnalisés
 load_skill_failed: Échec du chargement du Skill
+lunar_format_section: [Format lunaire]
 skill_name: Nom du Skill
 input_name: Entrez le nom
 prompt_content: Contenu du Prompt
 delete_this_skill: Supprimer Ce Skill
+display_mode_section: [Mode d'affichage]
 confirm_delete: Confirmer la Suppression
 sure_to_delete_skill: Êtes-vous sûr de vouloir supprimer le Skill ?
 delete: Supprimer
@@ -150,13 +156,18 @@ api_address: Adresse de l'API
 api_url_hint: Par défaut : https://api.kggzs.cn/v1
 model_name: Nom du Modèle
 model_name_hint: Par défaut : deepseek-v3.2
+mode_custom_label: Format personnalisé
+mode_date_only_label: Date seulement
+mode_date_time_label: Date et heure
 api_key: Clé API
 api_key_hint: Par défaut : sk-xxxxxxxxxxxxxxxxxxxxxxxx
 
 no_input_detected: Aucune entrée détectée
 reset_to_default: Réinitialisé aux valeurs par défaut
+reset_to_default_format: Réinitialisé au format par défaut
 reset_default: Réinitialiser par défaut
 global_analysis_prompt_label: Prompt d'Analyse Global
+gregorian_format_section: [Format grégorien]
 short_analysis_prompt_label: Prompt d'Analyse Court
 load_skill_data_failed: Échec du chargement des données de Skill
 conversion_tools: Outils de Conversion
@@ -258,4 +269,6 @@ ai_chat_error: Erreur
 ai_chat_settings_summary: Ouvrir la fenêtre de chat IA pour discuter directement avec l'IA
 ai_chat_stop: Arrêter
 ai_chat_use_system_prompt: Utiliser le prompt système (inclut les compétences MCP)
+ai_quick_analysis_prompt: Analysez brièvement le code suivant
+ai_code_analysis_prompt: Analysez le code suivant
 ai_mcp_active: Actif

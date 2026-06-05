@@ -7,6 +7,7 @@ support_author: Поддержать автора
 support_author_summary: Спонсорство для поддержки разработки плагина
 support_author_title: Поддержать автора
 support_message: Этот плагин с открытым исходным кодом и его бесплатные модели ИИ сталкиваются с растущими затратами на серверы, вычисления и обслуживание, которые стало сложно поддерживать одному человеку в долгосрочной перспективе. Чтобы избежать перебоев в работе сервиса и обеспечить будущие обновления и стабильную работу, мы открыли канал добровольного спонсорства.\n\nВсе спонсорские средства будут использоваться исключительно для продления сервера, вычислительных затрат и обслуживания проекта. Спасибо за вашу долгосрочную поддержку, и мы надеемся продолжать предоставлять услуги с открытым исходным кодом и бесплатные ИИ-услуги вместе с вами.
+switched_to_prefix: "Переключено на: "
 alipay: Alipay
 wechat_pay: WeChat Pay
 load_image_failed: Не удалось загрузить изображение
@@ -15,6 +16,7 @@ about: О плагине
 features_group: Описание функций
 features_title: Основные функции
 features_summary: Этот плагин имеет анализ кода ИИ в качестве основной функции, а также различные практические инструменты вспомогательной разработки. Все функции можно использовать непосредственно в текстовом редакторе для всестороннего повышения эффективности программирования.
+format_help_section: [Справка по формату]
 encode_decode_function: Кодирование/Декодирование
 encode_decode_usage: Предоставляет несколько форматов кодирования/декодирования. Выберите текст и нажмите соответствующую функцию для использования.
 base64_encode: Кодировать Base64
@@ -73,6 +75,7 @@ common_text: Общий текст
 current_date: Текущая дата
 current_time: Текущее время
 current_datetime: Текущая дата/время
+current_format_prefix: Текущий формат: 
 current_timestamp: Текущая метка времени
 uuid: UUID
 email_template: Шаблон электронной почты
@@ -92,13 +95,16 @@ ai_capability_config: Настройка возможностей ИИ
 manage_skills: Управление пользовательскими Skills
 save: Сохранить
 saved: Сохранено
+saved_to_prefix: "Сохранено: "
 new_skill: + Новый Skill
 skill_management: Управление пользовательскими Skills
 load_skill_failed: Ошибка загрузки Skill
+lunar_format_section: [Лунный формат]
 skill_name: Имя Skill
 input_name: Введите имя
 prompt_content: Содержание подсказки
 delete_this_skill: Удалить этот Skill
+display_mode_section: [Режим отображения]
 confirm_delete: Подтвердить удаление
 sure_to_delete_skill: Вы уверены, что хотите удалить Skill?
 delete: Удалить
@@ -150,13 +156,18 @@ api_address: Адрес API
 api_url_hint: По умолчанию: https://api.kggzs.cn/v1
 model_name: Имя модели
 model_name_hint: По умолчанию: deepseek-v3.2
+mode_custom_label: Пользовательский формат
+mode_date_only_label: Только дата
+mode_date_time_label: Дата и время
 api_key: Ключ API
 api_key_hint: По умолчанию: sk-xxxxxxxxxxxxxxxxxxxxxxxx
 
 no_input_detected: Ввод не обнаружен
 reset_to_default: Сброшено до значений по умолчанию
+reset_to_default_format: Сброшено на формат по умолчанию
 reset_default: Сбросить по умолчанию
 global_analysis_prompt_label: Глобальная подсказка анализа
+gregorian_format_section: [Григорианский формат]
 short_analysis_prompt_label: Краткая подсказка анализа
 load_skill_data_failed: Ошибка загрузки данных Skill
 conversion_tools: Инструменты преобразования
@@ -258,4 +269,6 @@ ai_chat_error: Ошибка
 ai_chat_settings_summary: Открыть окно чата AI для прямого общения
 ai_chat_stop: Стоп
 ai_chat_use_system_prompt: Использовать системный промпт (включая MCP навыки)
+ai_quick_analysis_prompt: Кратко проанализируйте следующий код
+ai_code_analysis_prompt: Проанализируйте следующий код
 ai_mcp_active: Активен

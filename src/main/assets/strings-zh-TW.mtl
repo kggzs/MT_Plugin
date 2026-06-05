@@ -7,6 +7,7 @@ support_author: 支持作者
 support_author_summary: 贊助支持插件持續開發與維護
 support_author_title: 支持作者
 support_message: 本開源插件及配套免費 AI 模型，因伺服器、算力、運維成本持續增加，個人已難以長期承擔。為避免服務中斷、保證後續更新與穩定運行，現開啟自願贊助通道。\n\n所有贊助將全部用於伺服器續費、算力開銷與項目維護。感謝各位用戶長期支持，也希望能和大家一起，讓開源與免費 AI 服務走得更久。
+switched_to_prefix: 已切換: 
 alipay: 支付寶
 wechat_pay: 微信支付
 load_image_failed: 載入圖片失敗
@@ -15,6 +16,7 @@ about: 關於
 features_group: 功能說明
 features_title: 核心功能
 features_summary: 此外掛以 AI 程式碼分析為核心，同時提供多種實用開發輔助工具。在文字編輯器中即可使用所有功能，全方位提升程式設計效率
+format_help_section: 【格式說明】
 encode_decode_function: 編碼/解碼
 encode_decode_usage: 提供多種編碼/解碼格式，選取文字後點選對應功能即可使用。
 base64_encode: Base64 編碼
@@ -73,6 +75,7 @@ common_text: 常用文字
 current_date: 當前日期
 current_time: 當前時間
 current_datetime: 當前日期時間
+current_format_prefix: 當前格式: 
 current_timestamp: 當前時間戳
 uuid: UUID
 email_template: 郵件模板
@@ -92,13 +95,16 @@ ai_capability_config: AI 能力配置
 manage_skills: 管理自訂 Skill
 save: 儲存
 saved: 已儲存
+saved_to_prefix: 已儲存: 
 new_skill: + 新建 Skill
 skill_management: 自訂 Skill 管理
 load_skill_failed: 載入 Skill 失敗
+lunar_format_section: 【農曆格式】
 skill_name: Skill 名稱
 input_name: 輸入名稱
 prompt_content: 提示詞內容
 delete_this_skill: 刪除此 Skill
+display_mode_section: 【顯示模式】
 confirm_delete: 確認刪除
 sure_to_delete_skill: 確定要刪除 Skill
 delete: 刪除
@@ -150,13 +156,18 @@ api_address: API 地址
 api_url_hint: 預設: https://api.kggzs.cn/v1
 model_name: 模型名稱
 model_name_hint: 預設: deepseek-v3.2
+mode_custom_label: 自定義格式
+mode_date_only_label: 不帶時間（只顯示日期）
+mode_date_time_label: 帶時間（顯示日期+時分秒）
 api_key: API 金鑰
 api_key_hint: 預設: sk-xxxxxxxxxxxxxxxxxxxxxxxx
 
 no_input_detected: 未偵測到輸入
 reset_to_default: 已重設為預設值
+reset_to_default_format: 已重設為預設格式
 reset_default: 恢復預設
 global_analysis_prompt_label: 全域分析提示詞
+gregorian_format_section: 【公曆格式】
 short_analysis_prompt_label: 簡短分析提示詞
 load_skill_data_failed: 載入 Skill 資料失敗
 conversion_tools: 轉換工具
@@ -258,4 +269,6 @@ ai_chat_error: 錯誤
 ai_chat_settings_summary: 打開 AI 對話視窗，與 AI 直接聊天
 ai_chat_stop: 停止
 ai_chat_use_system_prompt: 啟用系統提示詞（含 MCP 技能）
+ai_quick_analysis_prompt: 請簡要分析以下代碼
+ai_code_analysis_prompt: 請分析以下代碼
 ai_mcp_active: 已啟用

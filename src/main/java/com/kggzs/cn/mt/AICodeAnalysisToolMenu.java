@@ -14,7 +14,7 @@ import bin.mt.plugin.api.ui.PluginUI;
  */
 public class AICodeAnalysisToolMenu extends BaseTextEditorToolMenu {
 
-    private final AICodeAnalysisHelper helper = new AICodeAnalysisHelper("请分析以下代码", 5, 10);
+    private final AICodeAnalysisHelper helper = new AICodeAnalysisHelper("{ai_code_analysis_prompt}", 5, 10);
 
     @NonNull
     @Override

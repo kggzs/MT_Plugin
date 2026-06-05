@@ -7,6 +7,7 @@ support_author: 개발자 지원
 support_author_summary: 플러그인 개발 지원을 위한 후원
 support_author_title: 개발자 지원
 support_message: 이 오픈소스 플러그인과 무료 AI 모델은 서버, 컴퓨팅 및 유지보수 비용이 증가하여 개인이 장기적으로 감당하기 어려워지고 있습니다. 서비스 중단을 피하고 향후 업데이트와 안정적인 운영을 보장하기 위해 자발적인 후원 채널을 열었습니다.\n\n모든 후원금은 서버 갱신, 컴퓨팅 비용 및 프로젝트 유지보수에 전적으로 사용될 것입니다. 장기적인 지원에 감사드리며, 여러분과 함께 오픈소스 및 무료 AI 서비스를 계속 제공하기를 희망합니다.
+switched_to_prefix: 전환됨: 
 alipay: Alipay
 wechat_pay: WeChat Pay
 load_image_failed: 이미지 로드 실패
@@ -14,7 +15,8 @@ screenshot_tip: QR 코드를 저장하려면 스크린샷을 찍으세요
 about: 정보소개
 features_group: 기능 설명
 features_title: 핵심 기능
-features_summary: 이 플러그인은 AI 코드 분석을 핵심으로 하며, 다양한 실용적인 개발 보조 도구를 제공합니다. 텍스트 편집기에서 모든 기능을 사용하여 프로그래밍 효율성을 전면적으로 향상시킬 수 있습니다.
+features_summary: 이 플러그인은 AI 코드 분석을 핵심 기능으로 하며, 다양한 실용적인 개발 보조 도구를 제공합니다. 텍스트 편집기에서 모든 기능을 사용할 수 있어 프로그래밍 효율성을 전면적으로 향상시킵니다.
+format_help_section: 【형식 설명】
 encode_decode_function: 인코딩/디코딩
 encode_decode_usage: 다양한 인코딩/디코딩 형식을 제공합니다. 텍스트를 선택한 후 해당 기능을 클릭하여 사용합니다.
 base64_encode: Base64 인코딩
@@ -72,7 +74,8 @@ convert_error: 변환 실패
 common_text: 일반 텍스트
 current_date: 현재 날짜
 current_time: 현재 시간
-current_datetime: 현재 날짜 시간
+current_datetime: 현재 날짜시간
+current_format_prefix: 현재 형식: 
 current_timestamp: 현재 타임스탬프
 uuid: UUID
 email_template: 이메일 템플릿
@@ -92,13 +95,16 @@ ai_capability_config: AI 능력 설정
 manage_skills: 사용자 정의 Skill 관리
 save: 저장
 saved: 저장됨
+saved_to_prefix: 저장됨: 
 new_skill: + 새 Skill
 skill_management: 사용자 정의 Skill 관리
 load_skill_failed: Skill 로드 실패
+lunar_format_section: 【음력 형식】
 skill_name: Skill 이름
 input_name: 이름 입력
 prompt_content: 프롬프트 내용
-delete_this_skill: 이 Skill 삭제
+delete_this_skill: Skill 삭제
+display_mode_section: 【표시 모드】
 confirm_delete: 삭제 확인
 sure_to_delete_skill: Skill을 삭제하시겠습니까
 delete: 삭제
@@ -150,13 +156,18 @@ api_address: API 주소
 api_url_hint: 기본값: https://api.kggzs.cn/v1
 model_name: 모델 이름
 model_name_hint: 기본값: deepseek-v3.2
+mode_custom_label: 사용자 정의 형식
+mode_date_only_label: 날짜만
+mode_date_time_label: 날짜 및 시간
 api_key: API 키
 api_key_hint: 기본값: sk-xxxxxxxxxxxxxxxxxxxxxxxx
 
 no_input_detected: 입력이 감지되지 않았습니다
 reset_to_default: 기본값으로 재설정했습니다
+reset_to_default_format: 기본 형식으로 초기화됨
 reset_default: 기본값 복원
-global_analysis_prompt_label: 전역 분석 프롬프트
+global_analysis_prompt_label: 글로벌 분석 프롬프트
+gregorian_format_section: 【양력 형식】
 short_analysis_prompt_label: 짧은 분석 프롬프트
 load_skill_data_failed: Skill 데이터 로드 실패
 conversion_tools: 변환 도구
@@ -258,4 +269,6 @@ ai_chat_error: 오류
 ai_chat_settings_summary: AI 채팅 창을 열어 AI와 직접 대화
 ai_chat_stop: 중지
 ai_chat_use_system_prompt: 시스템 프롬프트 사용 (MCP 스킬 포함)
+ai_quick_analysis_prompt: 다음 코드를 간략히 분석하세요
+ai_code_analysis_prompt: 다음 코드를 분석하세요
 ai_mcp_active: 활성화됨

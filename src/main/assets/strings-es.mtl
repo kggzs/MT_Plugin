@@ -7,6 +7,7 @@ support_author: Apoyar al autor
 support_author_summary: Patrocinio para apoyar el desarrollo del complemento
 support_author_title: Apoyar al autor
 support_message: Este complemento de código abierto y sus modelos de IA gratuitos enfrentan costos crecientes de servidores, computación y mantenimiento que se han vuelto difíciles de sostener para un individuo a largo plazo. Para evitar interrupciones del servicio y garantizar futuras actualizaciones y operación estable, hemos abierto un canal de patrocinio voluntario.\n\nTodos los patrocinios se utilizarán exclusivamente para la renovación del servidor, costos de computación y mantenimiento del proyecto. Gracias por su apoyo a largo plazo, y esperamos continuar brindando servicios de código abierto y gratuitos de IA junto con usted.
+switched_to_prefix: "Cambiado a: "
 alipay: Alipay
 wechat_pay: WeChat Pay
 load_image_failed: Error al cargar la imagen
@@ -15,6 +16,7 @@ about: Acerca de
 features_group: Descripción de funciones
 features_title: Funciones principales
 features_summary: Este complemento tiene como función principal el análisis de código AI, junto con varias herramientas prácticas de desarrollo asistido. Todas las funciones se pueden usar directamente en el editor de texto para mejorar integralmente la eficiencia de programación.
+format_help_section: [Ayuda de formato]
 encode_decode_function: Codificar/Decodificar
 encode_decode_usage: Proporciona múltiples formatos de codificación/decodificación. Seleccione texto y haga clic en la función correspondiente para usarla.
 base64_encode: Codificar Base64
@@ -73,6 +75,7 @@ common_text: Texto Común
 current_date: Fecha Actual
 current_time: Hora Actual
 current_datetime: Fecha/Hora Actual
+current_format_prefix: Formato actual: 
 current_timestamp: Marca de Tiempo Actual
 uuid: UUID
 email_template: Plantilla de Correo
@@ -92,13 +95,16 @@ ai_capability_config: Configuración de Capacidad AI
 manage_skills: Gestionar Skills Personalizados
 save: Guardar
 saved: Guardado
+saved_to_prefix: "Guardado: "
 new_skill: + Nuevo Skill
 skill_management: Gestión de Skills Personalizados
 load_skill_failed: Error al cargar Skill
+lunar_format_section: [Formato lunar]
 skill_name: Nombre del Skill
 input_name: Ingrese nombre
 prompt_content: Contenido del Prompt
 delete_this_skill: Eliminar Este Skill
+display_mode_section: [Modo de visualización]
 confirm_delete: Confirmar Eliminación
 sure_to_delete_skill: ¿Está seguro de que desea eliminar el Skill?
 delete: Eliminar
@@ -150,13 +156,18 @@ api_address: Dirección de API
 api_url_hint: Predeterminado: https://api.kggzs.cn/v1
 model_name: Nombre del Modelo
 model_name_hint: Predeterminado: deepseek-v3.2
-api_key: Clave de API
+mode_custom_label: Formato personalizado
+mode_date_only_label: Solo fecha
+mode_date_time_label: Fecha y hora
+api_key: Clave API
 api_key_hint: Predeterminado: sk-xxxxxxxxxxxxxxxxxxxxxxxx
 
 no_input_detected: No se detectó entrada
 reset_to_default: Restablecido a valores predeterminados
+reset_to_default_format: Restablecido al formato predeterminado
 reset_default: Restablecer por defecto
 global_analysis_prompt_label: Prompt de Análisis Global
+gregorian_format_section: [Formato gregoriano]
 short_analysis_prompt_label: Prompt de Análisis Corto
 load_skill_data_failed: Error al cargar datos de Skill
 conversion_tools: Herramientas de Conversión
@@ -258,4 +269,6 @@ ai_chat_error: Error
 ai_chat_settings_summary: Abrir ventana de chat AI para hablar directamente con la IA
 ai_chat_stop: Detener
 ai_chat_use_system_prompt: Usar mensaje del sistema (incluye habilidades MCP)
+ai_quick_analysis_prompt: Analice brevemente el siguiente código
+ai_code_analysis_prompt: Analice el siguiente código
 ai_mcp_active: Activado

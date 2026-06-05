@@ -14,12 +14,12 @@ import bin.mt.plugin.api.ui.PluginUI;
  */
 public class AICodeAnalysisFloatingMenu extends BaseTextEditorFloatingMenu {
 
-    private final AICodeAnalysisHelper helper = new AICodeAnalysisHelper("请简要分析以下代码", 3, 8);
+    private final AICodeAnalysisHelper helper = new AICodeAnalysisHelper("{ai_quick_analysis_prompt}", 3, 8);
 
     @NonNull
     @Override
     public String name() {
-        return "AI快速分析";
+        return "{ai_quick_analysis}";
     }
 
     @NonNull
@@ -40,7 +40,7 @@ public class AICodeAnalysisFloatingMenu extends BaseTextEditorFloatingMenu {
         String selectedText = editor.subText(start, end);
 
         if (selectedText.trim().isEmpty()) {
-            pluginUI.showToast("请先选择要分析的代码");
+            pluginUI.showToast("{select_code_hint}");
             return;
         }
 

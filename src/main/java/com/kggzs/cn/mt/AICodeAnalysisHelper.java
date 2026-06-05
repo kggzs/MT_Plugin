@@ -3,6 +3,7 @@ package com.kggzs.cn.mt;
 import androidx.annotation.NonNull;
 
 import com.kggzs.cn.mt.util.AIHelper;
+import com.kggzs.cn.mt.util.ThreadPoolManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -42,6 +43,22 @@ public class AICodeAnalysisHelper {
     }
 
     /**
+     * 安全地加载 JSONArray，解析失败时返回空数组
+     *
+     * @param jsonStr JSON 字符串
+     * @param logTag  日志标签
+     * @return 解析后的 JSONArray，失败时返回空 JSONArray
+     */
+    private static JSONArray safeLoadJsonArray(String jsonStr, String logTag) {
+        try {
+            return new JSONArray(jsonStr);
+        } catch (Exception e) {
+            android.util.Log.w("AICodeAnalysisHelper", logTag + ": " + e.getMessage());
+            return new JSONArray();
+        }
+    }
+
+    /**
      * 显示提示词输入对话框
      *
      * @param pluginUI 插件UI上下文
@@ -49,30 +66,14 @@ public class AICodeAnalysisHelper {
      */
     public void showPromptInputDialog(@NonNull PluginUI pluginUI, @NonNull String code) {
         // 获取快速提示词列表
-        JSONArray quickPrompts;
-        int quickPromptCount;
-        try {
-            quickPrompts = new JSONArray(AIHelper.getQuickPrompts(pluginUI.getContext()));
-            quickPromptCount = Math.min(quickPrompts.length(), 8);
-        } catch (Exception e) {
-            android.util.Log.w("AICodeAnalysisHelper", "{load_quick_prompts_failed}: " + e.getMessage());
-            quickPrompts = new JSONArray();
-            quickPromptCount = 0;
-        }
+        JSONArray quickPrompts = safeLoadJsonArray(AIHelper.getQuickPrompts(pluginUI.getContext()), "{load_quick_prompts_failed}");
+        int quickPromptCount = Math.min(quickPrompts.length(), 8);
         final JSONArray finalQuickPrompts = quickPrompts;
         final int finalQuickPromptCount = quickPromptCount;
 
         // 获取 Skill 列表
-        JSONArray skills;
-        int skillCount;
-        try {
-            skills = new JSONArray(AIHelper.getSkills(pluginUI.getContext()));
-            skillCount = skills.length();
-        } catch (Exception e) {
-            android.util.Log.w("AICodeAnalysisHelper", "{load_skill_failed}: " + e.getMessage());
-            skills = new JSONArray();
-            skillCount = 0;
-        }
+        JSONArray skills = safeLoadJsonArray(AIHelper.getSkills(pluginUI.getContext()), "{load_skill_failed}");
+        int skillCount = skills.length();
         final JSONArray finalSkills = skills;
         final int finalSkillCount = skillCount;
 
@@ -292,16 +293,14 @@ public class AICodeAnalysisHelper {
                 .setNeutralButton("{background_run}", (d, which) -> {
                     d.dismiss();
                     pluginUI.showToast("{background_running_msg}");
-                    PluginEditText thinkingEdit2 = contentView.requireViewById("thinking_edit");
-                    PluginEditText resultEdit2 = contentView.requireViewById("result_edit");
-                    startBackgroundAnalysis(pluginUI, code, userPrompt, thinkingEdit2, resultEdit2);
+                    startBackgroundAnalysis(pluginUI, code, userPrompt);
                 })
                 .show();
 
         PluginEditText thinkingEdit = contentView.requireViewById("thinking_edit");
         PluginEditText resultEdit = contentView.requireViewById("result_edit");
 
-        new Thread(() -> {
+        ThreadPoolManager.execute(() -> {
             try {
                 String[] result = AIHelper.analyzeCodeWithUserPrompt(
                         pluginUI.getContext(),
@@ -337,23 +336,19 @@ public class AICodeAnalysisHelper {
                     }
                 });
             }
-        }).start();
+        });
     }
 
     /**
      * 后台AI分析（不阻塞当前界面）
      *
-     * @param pluginUI     插件UI上下文
-     * @param code         待分析的代码
-     * @param userPrompt   用户提示词
-     * @param thinkingEdit 思考过程编辑框（用于传递引用，实际不使用）
-     * @param resultEdit   结果编辑框（用于传递引用，实际不使用）
+     * @param pluginUI   插件UI上下文
+     * @param code       待分析的代码
+     * @param userPrompt 用户提示词
      */
     private void startBackgroundAnalysis(@NonNull PluginUI pluginUI, @NonNull String code, 
-                                         @NonNull String userPrompt, 
-                                         @NonNull PluginEditText thinkingEdit,
-                                         @NonNull PluginEditText resultEdit) {
-        new Thread(() -> {
+                                         @NonNull String userPrompt) {
+        ThreadPoolManager.execute(() -> {
             try {
                 // 在后台线程中执行分析，不传入UI组件
                 String[] result = AIHelper.analyzeCodeWithUserPromptNoUI(
@@ -386,7 +381,7 @@ public class AICodeAnalysisHelper {
                     }
                 });
             }
-        }).start();
+        });
     }
 
     /**

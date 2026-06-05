@@ -7,6 +7,7 @@ support_author: 作者を支援
 support_author_summary: プラグイン開発を支援するためのスポンサー
 support_author_title: 作者を支援
 support_message: このオープンソースプラグインとその無料AIモデルは、サーバー、コンピューティング、メンテナンスのコストが増加し、個人が長期的に維持するのが困難になっています。サービスの中断を避け、将来のアップデートと安定した運営を保証するために、自主的なスポンサーチャンネルを開設しました。\n\nすべてのスポンサー料は、サーバーの更新、コンピューティングコスト、プロジェクトのメンテナンスにのみ使用されます。長期的なサポートに感謝し、皆様と共にオープンソースおよび無料のAIサービスを継続して提供できることを願っています。
+switched_to_prefix: 切り替えました: 
 alipay: Alipay
 wechat_pay: WeChat Pay
 load_image_failed: 画像の読み込みに失敗しました
@@ -15,6 +16,7 @@ about: について
 features_group: 機能説明
 features_title: コア機能
 features_summary: このプラグインは AI コード分析をコア機能とし、多種の実用的な開発支援ツールを提供します。テキストエディタですべての機能を使用でき、プログラミングの効率を全面的に向上させます。
+format_help_section: 【フォーマット説明】
 encode_decode_function: エンコード/デコード
 encode_decode_usage: 多种のエンコード/デコード形式を提供します。テキストを選択して対応する機能をクリックして使用します。
 base64_encode: Base64 エンコード
@@ -73,6 +75,7 @@ common_text: よく使用されるテキスト
 current_date: 現在日付
 current_time: 現在時刻
 current_datetime: 現在日時
+current_format_prefix: 現在のフォーマット: 
 current_timestamp: 現在タイムスタンプ
 uuid: UUID
 email_template: メールテンプレート
@@ -92,13 +95,16 @@ ai_capability_config: AI 能力設定
 manage_skills: カスタム Skill の管理
 save: 保存
 saved: 保存済み
+saved_to_prefix: 保存しました: 
 new_skill: + 新建 Skill
 skill_management: カスタム Skill 管理
 load_skill_failed: Skill のロードに失敗しました
+lunar_format_section: 【旧暦】
 skill_name: Skill 名
 input_name: 名前を入力
 prompt_content: プロンプト内容
 delete_this_skill: この Skill を削除
+display_mode_section: 【表示モード】
 confirm_delete: 削除を確認
 sure_to_delete_skill: Skill を削除してもよろしいですか
 delete: 削除
@@ -150,13 +156,18 @@ api_address: API アドレス
 api_url_hint: デフォルト: https://api.kggzs.cn/v1
 model_name: モデル名
 model_name_hint: デフォルト: deepseek-v3.2
+mode_custom_label: カスタムフォーマット
+mode_date_only_label: 日付のみ
+mode_date_time_label: 日付と時刻
 api_key: API キー
 api_key_hint: デフォルト: sk-xxxxxxxxxxxxxxxxxxxxxxxx
 
 no_input_detected: 入力が検出されません
 reset_to_default: デフォルト値にリセットしました
+reset_to_default_format: デフォルトフォーマットにリセットしました
 reset_default: デフォルトに戻す
 global_analysis_prompt_label: グローバル分析プロンプト
+gregorian_format_section: 【グレゴリオ暦】
 short_analysis_prompt_label: 簡易分析プロンプト
 load_skill_data_failed: Skill データのロードに失敗しました
 conversion_tools: 変換ツール
@@ -258,4 +269,6 @@ ai_chat_error: エラー
 ai_chat_settings_summary: AI チャットウィンドウを開いて AI と直接会話
 ai_chat_stop: 停止
 ai_chat_use_system_prompt: システムプロンプトを使用（MCP スキルを含む）
+ai_quick_analysis_prompt: 以下のコードを簡単に分析してください
+ai_code_analysis_prompt: 以下のコードを分析してください
 ai_mcp_active: 有効

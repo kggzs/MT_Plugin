@@ -22,7 +22,6 @@ import java.util.UUID;
 public class MCPClient {
 
     private final String serverUrl;
-    private String clientId;
     private String protocolVersion;
     private String serverName;
     private String serverVersion;
@@ -37,7 +36,6 @@ public class MCPClient {
      */
     public MCPClient(@NonNull String serverUrl) {
         this.serverUrl = serverUrl;
-        this.clientId = "mt-kang-plugin-" + UUID.randomUUID().toString().substring(0, 8);
         this.protocolVersion = "2025-03-26";
         this.serverName = "";
         this.serverVersion = "";

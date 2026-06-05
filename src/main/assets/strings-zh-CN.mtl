@@ -7,6 +7,7 @@ support_author: 支持作者
 support_author_summary: 赞助支持插件持续开发与维护
 support_author_title: 支持作者
 support_message: 本开源插件及配套免费 AI 模型，因服务器、算力、运维成本持续增加，个人已难以长期承担。为避免服务中断、保证后续更新与稳定运行，现开启自愿赞助通道。\n\n所有赞助将全部用于服务器续费、算力开销与项目维护。感谢各位用户长期支持，也希望能和大家一起，让开源与免费 AI 服务走得更久。
+switched_to_prefix: 已切换: 
 alipay: 支付宝
 wechat_pay: 微信支付
 load_image_failed: 加载图片失败
@@ -73,6 +74,7 @@ common_text: 常用文本
 current_date: 当前日期
 current_time: 当前时间
 current_datetime: 当前日期时间
+current_format_prefix: 当前格式: 
 current_timestamp: 当前时间戳
 uuid: UUID
 email_template: 邮箱模板
@@ -92,6 +94,7 @@ ai_capability_config: AI 能力配置
 manage_skills: 管理自定义 Skill
 save: 保存
 saved: 已保存
+saved_to_prefix: 已保存: 
 new_skill: + 新建 Skill
 skill_management: 自定义 Skill 管理
 load_skill_failed: 加载 Skill 失败
@@ -99,6 +102,10 @@ skill_name: Skill 名称
 input_name: 输入名称
 prompt_content: 提示词内容
 delete_this_skill: 删除此 Skill
+display_mode_section: 【显示模式】
+mode_date_only_label: 仅日期
+mode_date_time_label: 日期+时间
+mode_custom_label: 自定义格式
 confirm_delete: 确认删除
 sure_to_delete_skill: 确定要删除 Skill
 delete: 删除
@@ -155,6 +162,7 @@ api_key_hint: 默认: sk-xxxxxxxxxxxxxxxxxxxxxxxx
 
 no_input_detected: 未检测到输入
 reset_to_default: 已重置为默认值
+reset_to_default_format: 已重置为默认格式
 reset_default: 恢复默认
 global_analysis_prompt_label: 全局分析提示词
 short_analysis_prompt_label: 简短分析提示词
@@ -259,3 +267,5 @@ ai_chat_settings_summary: 打开 AI 对话窗口，与 AI 直接聊天
 ai_chat_stop: 停止
 ai_chat_use_system_prompt: 启用系统提示词（含 MCP 技能）
 ai_mcp_active: 已启用
+ai_quick_analysis_prompt: 请简要分析以下代码
+ai_code_analysis_prompt: 请分析以下代码

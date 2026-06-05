@@ -6,15 +6,16 @@ import androidx.annotation.Nullable;
 
 import com.kggzs.cn.mt.util.AIChatHelper;
 import com.kggzs.cn.mt.util.AIHelper;
+import com.kggzs.cn.mt.util.ThreadPoolManager;
 
 import java.net.HttpURLConnection;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import bin.mt.plugin.api.PluginContext;
 import bin.mt.plugin.api.drawable.MaterialIcons;
 import bin.mt.plugin.api.editor.BaseTextEditorToolMenu;
 import bin.mt.plugin.api.editor.TextEditor;
 import bin.mt.plugin.api.ui.PluginButton;
-import bin.mt.plugin.api.ui.PluginCheckBox;
 import bin.mt.plugin.api.ui.PluginEditText;
 import bin.mt.plugin.api.ui.PluginUI;
 import bin.mt.plugin.api.ui.PluginView;
@@ -54,7 +55,7 @@ public class AIChatMenu extends BaseTextEditorToolMenu {
         AIChatHelper chatHelper = new AIChatHelper(context);
         chatHelper.rebuildSystemMessage();
 
-        // 构建 UI 布局
+        // 构建 UI 布局（输入框单独一行，按钮行在下方）
         PluginView view = ui.buildVerticalLayout()
             .addEditBox("chat_display")
                 .text(welcomeText)
@@ -66,14 +67,12 @@ public class AIChatMenu extends BaseTextEditorToolMenu {
                 .hint("{ai_chat_input_hint}")
                 .minLines(1).maxLines(3).textSize(13)
                 .softWrap(PluginEditText.SOFT_WRAP_KEEP_WORD)
+                .widthMatchParent()
                 .marginBottom(smallMargin)
             .addHorizontalLayout("button_row").children(row -> row
-                .addButton("btn_clear").text("{ai_chat_clear}")
-                .addButton("btn_send").text("{ai_chat_send}")
-                    .marginLeft(smallMargin)
-            ).widthMatchParent().marginBottom(smallMargin)
-            .addCheckBox("chk_system_prompt").text("{ai_chat_use_system_prompt}")
-                .checked(chatHelper.isUseSystemPrompt()).widthMatchParent()
+                .addButton("btn_clear").text("{ai_chat_clear}").height(ui.dp2px(36))
+                .addButton("btn_send").text("{ai_chat_send}").height(ui.dp2px(36)).marginLeft(ui.dp2px(8))
+            ).widthMatchParent()
             .paddingHorizontal(padding)
             .paddingVertical(padding)
             .build();
@@ -82,11 +81,10 @@ public class AIChatMenu extends BaseTextEditorToolMenu {
         PluginEditText chatInput = view.requireViewById("chat_input");
         PluginButton btnClear = view.requireViewById("btn_clear");
         PluginButton btnSend = view.requireViewById("btn_send");
-        PluginCheckBox chkSystemPrompt = view.requireViewById("chk_system_prompt");
 
-        final boolean[] isSending = {false};
+        final AtomicBoolean isSending = new AtomicBoolean(false);
 
-        // 创建对话框（只有关闭按钮在底部按钮区）
+        // 创建对话框（底部只有关闭按钮）
         PluginDialog dialog = ui.buildDialog()
             .setTitle("{ai_chat_title}")
             .setView(view)
@@ -96,12 +94,27 @@ public class AIChatMenu extends BaseTextEditorToolMenu {
             })
             .show();
 
+        // ---- 清空按钮 ----
+        btnClear.setOnClickListener(v -> {
+            if (isSending.get()) {
+                stopActiveRequest();
+                isSending.set(false);
+                btnSend.setText("{ai_chat_send}");
+                chatInput.setEnabled(true);
+            }
+            chatHelper.clearHistory();
+            chatHelper.rebuildSystemMessage();
+            chatDisplay.setText(welcomeText);
+            chatInput.setText("");
+            ui.showToast("{ai_chat_cleared}");
+        });
+
         // ---- 发送/停止按钮 ----
         btnSend.setOnClickListener(v -> {
-            if (isSending[0]) {
+            if (isSending.get()) {
                 // 正在发送中，点击为停止
                 stopActiveRequest();
-                isSending[0] = false;
+                isSending.set(false);
                 btnSend.setText("{ai_chat_send}");
                 chatInput.setEnabled(true);
                 return;
@@ -113,7 +126,7 @@ public class AIChatMenu extends BaseTextEditorToolMenu {
                 return;
             }
 
-            isSending[0] = true;
+            isSending.set(true);
             btnSend.setText("{ai_chat_stop}");
             chatInput.setEnabled(false);
             chatInput.setText("");
@@ -125,27 +138,27 @@ public class AIChatMenu extends BaseTextEditorToolMenu {
             chatDisplay.selectEnd();
 
             // 在后台线程发送消息
-            new Thread(() -> {
-                final StringBuilder accumulatedAiResponse = new StringBuilder();
+            ThreadPoolManager.execute(() -> {
                 chatHelper.sendMessage(userMessage,
                     // onStream - 流式接收 AI 回复
                     accumulated -> AIHelper.runOnMainThread(() -> {
-                        accumulatedAiResponse.setLength(0);
-                        accumulatedAiResponse.append(accumulated);
                         String displayText = newText + "\n" + labelAi + ": " + accumulated;
                         chatDisplay.setText(displayText);
                         chatDisplay.selectEnd();
                     }),
                     // onComplete - AI 回复完成
                     fullContent -> AIHelper.runOnMainThread(() -> {
-                        isSending[0] = false;
+                        isSending.set(false);
                         btnSend.setText("{ai_chat_send}");
                         chatInput.setEnabled(true);
+                        String displayText = newText + "\n" + labelAi + ": " + fullContent;
+                        chatDisplay.setText(displayText);
+                        chatDisplay.selectEnd();
                         chatInput.requestFocusAndShowIME();
                     }),
                     // onError - 出错
                     error -> AIHelper.runOnMainThread(() -> {
-                        isSending[0] = false;
+                        isSending.set(false);
                         btnSend.setText("{ai_chat_send}");
                         chatInput.setEnabled(true);
                         String errorText = chatDisplay.getText().toString()
@@ -154,28 +167,7 @@ public class AIChatMenu extends BaseTextEditorToolMenu {
                         chatDisplay.selectEnd();
                     })
                 );
-            }).start();
-        });
-
-        // ---- 清空按钮 ----
-        btnClear.setOnClickListener(v -> {
-            if (isSending[0]) {
-                stopActiveRequest();
-                isSending[0] = false;
-                btnSend.setText("{ai_chat_send}");
-                chatInput.setEnabled(true);
-            }
-            chatHelper.clearHistory();
-            chatHelper.rebuildSystemMessage();
-            chatDisplay.setText(welcomeText);
-            chatInput.setText("");
-            ui.showToast("{ai_chat_cleared}");
-        });
-
-        // ---- 系统提示词开关 ----
-        chkSystemPrompt.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            chatHelper.setUseSystemPrompt(isChecked);
-            chatHelper.rebuildSystemMessage();
+            });
         });
 
         chatInput.requestFocusAndShowIME();
@@ -187,10 +179,7 @@ public class AIChatMenu extends BaseTextEditorToolMenu {
     private static void stopActiveRequest() {
         HttpURLConnection conn = sActiveConnection;
         if (conn != null) {
-            try {
-                conn.disconnect();
-            } catch (Exception ignored) {
-            }
+            conn.disconnect();
             sActiveConnection = null;
         }
     }

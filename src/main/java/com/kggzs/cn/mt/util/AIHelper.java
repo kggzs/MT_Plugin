@@ -1307,6 +1307,162 @@ aput-object v0, v1, v2      # v1[v2] = v0 (数组写入)
         return analyzeCodeWithAINoUI(context, code, true, combinedSystemPrompt);
     }
 
+    // ============================================================
+    // 私有辅助方法：构建请求、发送请求、解析响应
+    // ============================================================
+
+    /**
+     * 构建 AI API 请求的 JSON 请求体
+     */
+    private static JSONObject buildRequest(
+            @NonNull PluginContext context,
+            @NonNull String apiUrl,
+            @NonNull String apiKey,
+            @NonNull String model,
+            @NonNull String prompt,
+            @NonNull String codeContent,
+            boolean enableThinking) throws org.json.JSONException {
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("model", model);
+        requestBody.put("stream", true);
+        if (enableThinking) {
+            requestBody.put("enable_thinking", true);
+        }
+
+        JSONArray messages = new JSONArray();
+        JSONObject systemMessage = new JSONObject();
+        systemMessage.put("role", "system");
+        systemMessage.put("content", prompt);
+        messages.put(systemMessage);
+
+        JSONObject userMessage = new JSONObject();
+        userMessage.put("role", "user");
+        userMessage.put("content", "请分析以下代码：\n\n" + codeContent);
+        messages.put(userMessage);
+
+        requestBody.put("messages", messages);
+        return requestBody;
+    }
+
+    /**
+     * 发送流式请求到 AI API，返回 HTTP 连接
+     */
+    private static HttpURLConnection sendStreamRequest(
+            @NonNull String apiUrl,
+            @NonNull String apiKey,
+            @NonNull JSONObject requestBody,
+            int connectTimeoutMs) throws Exception {
+        String completionsUrl = apiUrl.endsWith("/chat/completions") ? apiUrl :
+                               (apiUrl.endsWith("/") ? apiUrl + "chat/completions" : apiUrl + "/chat/completions");
+
+        URL url = new URL(completionsUrl);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty("Authorization", "Bearer " + apiKey);
+        connection.setConnectTimeout(connectTimeoutMs);
+        connection.setReadTimeout(connectTimeoutMs * 2);
+        connection.setDoOutput(true);
+
+        connection.getOutputStream().write(requestBody.toString().getBytes(StandardCharsets.UTF_8));
+
+        int responseCode = connection.getResponseCode();
+        if (responseCode != 200) {
+            BufferedReader errorReader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+            StringBuilder errorResponse = new StringBuilder();
+            String line;
+            while ((line = errorReader.readLine()) != null) {
+                errorResponse.append(line);
+            }
+            errorReader.close();
+            throw new Exception("AI API错误: " + responseCode + " - " + errorResponse.toString());
+        }
+
+        return connection;
+    }
+
+    /**
+     * 读取 SSE 流式响应，逐块解析并返回完整内容
+     * @param connection HTTP 连接（已发送流式请求）
+     * @return 完整的响应内容
+     */
+    @NonNull
+    public static String readStreamResponse(HttpURLConnection connection) throws Exception {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        StringBuilder contentBuilder = new StringBuilder();
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+            if (line.startsWith("data: ")) {
+                String data = line.substring(6);
+                if (data.equals("[DONE]")) {
+                    break;
+                }
+                try {
+                    JSONObject chunk = new JSONObject(data);
+                    JSONArray choices = chunk.optJSONArray("choices");
+                    if (choices != null && choices.length() > 0) {
+                        JSONObject firstChoice = choices.getJSONObject(0);
+                        if (firstChoice != null) {
+                            String content = StreamChunkParser.extractContent(firstChoice);
+                            if (content != null && !content.isEmpty() && !"null".equals(content)) {
+                                contentBuilder.append(content);
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    android.util.Log.w("AIHelper", "JSON解析错误: " + e.getMessage());
+                }
+            }
+        }
+        reader.close();
+        connection.disconnect();
+
+        return contentBuilder.toString();
+    }
+
+    /**
+     * 流式响应回调接口
+     */
+    private interface StreamCallback {
+        void onChunk(String content, String reasoning);
+    }
+
+    /**
+     * 解析 SSE 流式响应，每个 chunk 解析后调用回调
+     */
+    private static void parseStreamResponse(
+            @NonNull HttpURLConnection connection,
+            @NonNull StreamCallback callback) throws Exception {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+            if (line.startsWith("data: ")) {
+                String data = line.substring(6);
+                if (data.equals("[DONE]")) {
+                    break;
+                }
+
+                try {
+                    JSONObject chunk = new JSONObject(data);
+                    JSONArray choices = chunk.optJSONArray("choices");
+                    if (choices != null && choices.length() > 0) {
+                        JSONObject firstChoice = choices.getJSONObject(0);
+                        if (firstChoice != null) {
+                            StreamChunkResult result = StreamChunkParser.parse(firstChoice);
+                            callback.onChunk(result.content, result.reasoning);
+                        }
+                    }
+                } catch (Exception e) {
+                    android.util.Log.w("AIHelper", "JSON解析错误: " + e.getMessage());
+                }
+            }
+        }
+        reader.close();
+        connection.disconnect();
+    }
+
     /**
      * AI 分析代码
      * @param context 插件上下文
@@ -1333,188 +1489,70 @@ aput-object v0, v1, v2      # v1[v2] = v0 (数组写入)
         String apiKey = getApiKey(context);
         String prompt = (customPrompt != null && !customPrompt.isEmpty()) ? customPrompt : getPrompt(context);
 
-        // 构建 API URL（确保以 /chat/completions 结尾）
-        String completionsUrl = apiUrl.endsWith("/chat/completions") ? apiUrl : 
-                               (apiUrl.endsWith("/") ? apiUrl + "chat/completions" : apiUrl + "/chat/completions");
+        JSONObject requestBody = buildRequest(context, apiUrl, apiKey, aiModel, prompt, code, showThinking);
+        HttpURLConnection connection = sendStreamRequest(apiUrl, apiKey, requestBody, 30000);
 
-        JSONObject requestBody = new JSONObject();
-        requestBody.put("model", aiModel);
-        requestBody.put("stream", true);
+        final StringBuilder fullReasoning = new StringBuilder();
+        final StringBuilder fullContent = new StringBuilder();
+        final StringBuilder rawResponse = new StringBuilder();
+        final StringBuilder contentBuffer = new StringBuilder();
+        final boolean[] hasDetectedThinkingTag = {false};
+        final boolean[] hasFoundEndTag = {false};
 
-        JSONArray messages = new JSONArray();
-        JSONObject systemMessage = new JSONObject();
-        systemMessage.put("role", "system");
-        systemMessage.put("content", prompt);
-        messages.put(systemMessage);
-
-        JSONObject userMessage = new JSONObject();
-        userMessage.put("role", "user");
-        userMessage.put("content", "请分析以下代码：\n\n" + code);
-        messages.put(userMessage);
-
-        requestBody.put("messages", messages);
-        // 不设 temperature 等非必需参数，以确保最大兼容性
-
-        URL url = new URL(completionsUrl);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("POST");
-        connection.setRequestProperty("Content-Type", "application/json");
-        connection.setRequestProperty("Authorization", "Bearer " + apiKey);
-        connection.setConnectTimeout(30000);
-        connection.setReadTimeout(60000);
-        connection.setDoOutput(true);
-
-        connection.getOutputStream().write(requestBody.toString().getBytes(StandardCharsets.UTF_8));
-
-        int responseCode = connection.getResponseCode();
-        if (responseCode != 200) {
-            BufferedReader errorReader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
-            StringBuilder errorResponse = new StringBuilder();
-            String line;
-            while ((line = errorReader.readLine()) != null) {
-                errorResponse.append(line);
-            }
-            errorReader.close();
-            throw new Exception("AI API错误: " + responseCode + " - " + errorResponse.toString());
-        }
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        StringBuilder fullReasoning = new StringBuilder();
-        StringBuilder fullContent = new StringBuilder();
-        StringBuilder rawResponse = new StringBuilder();
-        StringBuilder contentBuffer = new StringBuilder();
-        boolean hasDetectedThinkingTag = false;
-        boolean hasFoundEndTag = false;
-        String line;
-
-        while ((line = reader.readLine()) != null) {
-            rawResponse.append(line).append("\n");
-            if (line.startsWith("data: ")) {
-                String data = line.substring(6);
-                if (data.equals("[DONE]")) {
-                    break;
+        parseStreamResponse(connection, (content, reasoning) -> {
+            // 处理标准 reasoning_content/thinking/thought 字段
+            if (showThinking && reasoning != null && !reasoning.isEmpty() && !"null".equals(reasoning)) {
+                fullReasoning.append(reasoning);
+                if (thinkingEdit != null) {
+                    final String currentReasoning = fullReasoning.toString();
+                    runOnMainThread(() -> {
+                        thinkingEdit.setText(currentReasoning);
+                        thinkingEdit.selectEnd();
+                    });
                 }
+            }
 
-                try {
-                    JSONObject chunk = new JSONObject(data);
-                    JSONArray choices = chunk.optJSONArray("choices");
-                    if (choices != null && choices.length() > 0) {
-                        JSONObject firstChoice = choices.getJSONObject(0);
-                        if (firstChoice != null) {
-                            String reasoningContent = null;
-                            String content = null;
+            // 处理主内容 - 需要检测并分离内嵌标签型思考内容
+            if (content != null && !content.isEmpty() && !"null".equals(content)) {
+                if (showThinking) {
+                    if (!hasDetectedThinkingTag[0] && contentBuffer.length() == 0 && fullContent.length() > 0) {
+                        fullContent.append(content);
+                        if (resultEdit != null) {
+                            final String currentContent = fullContent.toString();
+                            runOnMainThread(() -> {
+                                resultEdit.setText(currentContent);
+                                resultEdit.selectEnd();
+                            });
+                        }
+                    } else {
+                        contentBuffer.append(content);
+                        String allContent = contentBuffer.toString();
 
-                            // ========== 格式A: 独立字段型 ==========
-                            
-                            // A1: DeepSeek/通义千问格式 - delta.reasoning_content
-                            JSONObject delta = firstChoice.optJSONObject("delta");
-                            if (delta != null) {
-                                content = delta.optString("content", "");
-                                reasoningContent = delta.optString("reasoning_content", "");
-                                if (reasoningContent == null || reasoningContent.isEmpty()) {
-                                    reasoningContent = delta.optString("thinking", "");
+                        if (!hasDetectedThinkingTag[0]) {
+                            if (StreamParser.containsThinkingTag(allContent)) {
+                                hasDetectedThinkingTag[0] = true;
+                            } else if (allContent.length() > 100) {
+                                fullContent.append(allContent);
+                                contentBuffer.setLength(0);
+                                if (resultEdit != null) {
+                                    final String currentContent = fullContent.toString();
+                                    runOnMainThread(() -> {
+                                        resultEdit.setText(currentContent);
+                                        resultEdit.selectEnd();
+                                    });
                                 }
                             }
+                        }
 
-                            // A2: 百度文心一言格式 - choices[0].thinking + choices[0].result
-                            if ((content == null || content.isEmpty()) && (reasoningContent == null || reasoningContent.isEmpty())) {
-                                reasoningContent = firstChoice.optString("thinking", "");
-                                content = firstChoice.optString("result", "");
-                            }
+                        if (hasDetectedThinkingTag[0]) {
+                            String[] result = StreamParser.separateThinkingFromContent(allContent);
+                            String thinking = result[0];
+                            String finalContent = result[1];
+                            hasFoundEndTag[0] = result[2].equals("true");
 
-                            // A3: 讯飞星火格式 - choices[0].text[0].thought + choices[0].text[0].content
-                            if ((content == null || content.isEmpty()) && (reasoningContent == null || reasoningContent.isEmpty())) {
-                                JSONArray textArray = firstChoice.optJSONArray("text");
-                                if (textArray != null && textArray.length() > 0) {
-                                    JSONObject textObj = textArray.getJSONObject(0);
-                                    content = textObj.optString("content", "");
-                                    reasoningContent = textObj.optString("thought", "");
-                                }
-                            }
-
-                            // A4: message.content 变体（某些模型）
-                            if ((content == null || content.isEmpty()) && (reasoningContent == null || reasoningContent.isEmpty())) {
-                                JSONObject message = firstChoice.optJSONObject("message");
-                                if (message != null) {
-                                    content = message.optString("content", "");
-                                    reasoningContent = message.optString("reasoning_content", "");
-                                    if (reasoningContent == null || reasoningContent.isEmpty()) {
-                                        reasoningContent = message.optString("thinking", "");
-                                    }
-                                }
-                            }
-
-                            // ========== 格式B: 结构化块型 ==========
-                            
-                            // B1: Claude格式 - content[] 数组，type:thinking + type:text
-                            if ((content == null || content.isEmpty()) && (reasoningContent == null || reasoningContent.isEmpty())) {
-                                JSONArray contentArray = firstChoice.optJSONArray("content");
-                                if (contentArray != null && contentArray.length() > 0) {
-                                    StringBuilder contentBuilder = new StringBuilder();
-                                    StringBuilder reasoningBuilder = new StringBuilder();
-                                    for (int i = 0; i < contentArray.length(); i++) {
-                                        JSONObject block = contentArray.optJSONObject(i);
-                                        if (block != null) {
-                                            String type = block.optString("type", "");
-                                            if ("thinking".equals(type)) {
-                                                reasoningBuilder.append(block.optString("thinking", ""));
-                                            } else if ("text".equals(type)) {
-                                                contentBuilder.append(block.optString("text", ""));
-                                            }
-                                        }
-                                    }
-                                    if (reasoningBuilder.length() > 0) {
-                                        reasoningContent = reasoningBuilder.toString();
-                                    }
-                                    if (contentBuilder.length() > 0) {
-                                        content = contentBuilder.toString();
-                                    }
-                                }
-                            }
-
-                            // B2: Gemini格式 - parts[] 数组，thought + text
-                            if ((content == null || content.isEmpty()) && (reasoningContent == null || reasoningContent.isEmpty())) {
-                                JSONArray partsArray = firstChoice.optJSONArray("parts");
-                                if (partsArray != null && partsArray.length() > 0) {
-                                    StringBuilder contentBuilder = new StringBuilder();
-                                    StringBuilder reasoningBuilder = new StringBuilder();
-                                    for (int i = 0; i < partsArray.length(); i++) {
-                                        JSONObject part = partsArray.optJSONObject(i);
-                                        if (part != null) {
-                                            if (part.has("thought")) {
-                                                reasoningBuilder.append(part.optString("thought", ""));
-                                            }
-                                            if (part.has("text")) {
-                                                contentBuilder.append(part.optString("text", ""));
-                                            }
-                                        }
-                                    }
-                                    if (reasoningBuilder.length() > 0) {
-                                        reasoningContent = reasoningBuilder.toString();
-                                    }
-                                    if (contentBuilder.length() > 0) {
-                                        content = contentBuilder.toString();
-                                    }
-                                }
-                            }
-
-                            // ========== 格式C: 简单字段型 ==========
-                            
-                            // C1: text字段（某些简单接口）
-                            if ((content == null || content.isEmpty()) && (reasoningContent == null || reasoningContent.isEmpty())) {
-                                content = firstChoice.optString("text", "");
-                            }
-
-                            // C2: content直接字段
-                            if ((content == null || content.isEmpty()) && (reasoningContent == null || reasoningContent.isEmpty())) {
-                                content = firstChoice.optString("content", "");
-                            }
-
-                            // ========== 处理思考过程和正式内容 ==========
-                            
-                            // 处理标准 reasoning_content/thinking/thought 字段
-                            if (showThinking && reasoningContent != null && !reasoningContent.isEmpty() && !"null".equals(reasoningContent)) {
-                                fullReasoning.append(reasoningContent);
+                            if (!thinking.isEmpty()) {
+                                fullReasoning.setLength(0);
+                                fullReasoning.append(thinking);
                                 if (thinkingEdit != null) {
                                     final String currentReasoning = fullReasoning.toString();
                                     runOnMainThread(() -> {
@@ -1524,104 +1562,37 @@ aput-object v0, v1, v2      # v1[v2] = v0 (数组写入)
                                 }
                             }
 
-                            // 处理主内容 - 需要检测并分离内嵌标签型思考内容
-                            if (content != null && !content.isEmpty() && !"null".equals(content)) {
-                                if (showThinking) {
-                                    // 如果已经确定没有思考标签，直接追加
-                                    if (!hasDetectedThinkingTag && contentBuffer.length() == 0 && fullContent.length() > 0) {
-                                        fullContent.append(content);
-                                        if (resultEdit != null) {
-                                            final String currentContent = fullContent.toString();
-                                            runOnMainThread(() -> {
-                                                resultEdit.setText(currentContent);
-                                                resultEdit.selectEnd();
-                                            });
-                                        }
-                                    } else {
-                                        // 累积内容到缓冲区
-                                        contentBuffer.append(content);
-                                        String allContent = contentBuffer.toString();
-
-                                        // 检测是否包含思考标签
-                                        if (!hasDetectedThinkingTag) {
-                                            if (containsThinkingTag(allContent)) {
-                                                hasDetectedThinkingTag = true;
-                                            } else if (allContent.length() > 100) {
-                                                // 超过100字符无标签，认为无思考过程
-                                                fullContent.append(allContent);
-                                                contentBuffer.setLength(0); // 清空buffer，后续内容直接追加到fullContent
-                                                if (resultEdit != null) {
-                                                    final String currentContent = fullContent.toString();
-                                                    runOnMainThread(() -> {
-                                                        resultEdit.setText(currentContent);
-                                                        resultEdit.selectEnd();
-                                                    });
-                                                }
-                                            }
-                                        }
-
-                                        // 如果检测到思考标签，分离并显示
-                                        if (hasDetectedThinkingTag) {
-                                            String[] result = separateThinkingFromContent(allContent);
-                                            String thinking = result[0];
-                                            String finalContent = result[1];
-                                            hasFoundEndTag = result[2].equals("true");
-
-                                            // 更新思考过程显示
-                                            if (!thinking.isEmpty()) {
-                                                fullReasoning.setLength(0);
-                                                fullReasoning.append(thinking);
-                                                if (thinkingEdit != null) {
-                                                    final String currentReasoning = fullReasoning.toString();
-                                                    runOnMainThread(() -> {
-                                                        thinkingEdit.setText(currentReasoning);
-                                                        thinkingEdit.selectEnd();
-                                                    });
-                                                }
-                                            }
-
-                                            // 更新正式内容显示
-                                            if (!finalContent.isEmpty()) {
-                                                fullContent.setLength(0);
-                                                fullContent.append(finalContent);
-                                                if (resultEdit != null) {
-                                                    final String currentContent = fullContent.toString();
-                                                    runOnMainThread(() -> {
-                                                        resultEdit.setText(currentContent);
-                                                        resultEdit.selectEnd();
-                                                    });
-                                                }
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    // 不显示思考过程，直接追加
-                                    fullContent.append(content);
-                                    if (resultEdit != null) {
-                                        final String currentContent = fullContent.toString();
-                                        runOnMainThread(() -> {
-                                            resultEdit.setText(currentContent);
-                                            resultEdit.selectEnd();
-                                        });
-                                    }
+                            if (!finalContent.isEmpty()) {
+                                fullContent.setLength(0);
+                                fullContent.append(finalContent);
+                                if (resultEdit != null) {
+                                    final String currentContent = fullContent.toString();
+                                    runOnMainThread(() -> {
+                                        resultEdit.setText(currentContent);
+                                        resultEdit.selectEnd();
+                                    });
                                 }
                             }
                         }
                     }
-                } catch (Exception e) {
-                    android.util.Log.w("AIHelper", "JSON解析错误: " + e.getMessage() + ", data: " + data);
+                } else {
+                    fullContent.append(content);
+                    if (resultEdit != null) {
+                        final String currentContent = fullContent.toString();
+                        runOnMainThread(() -> {
+                            resultEdit.setText(currentContent);
+                            resultEdit.selectEnd();
+                        });
+                    }
                 }
             }
-        }
-        reader.close();
-        connection.disconnect();
+        });
 
         // 处理缓冲区中剩余的内容
         if (contentBuffer.length() > 0) {
             String remainingContent = contentBuffer.toString();
-            if (hasDetectedThinkingTag) {
-                // 如果检测到思考标签，需要分离
-                String[] result = separateThinkingFromContent(remainingContent);
+            if (hasDetectedThinkingTag[0]) {
+                String[] result = StreamParser.separateThinkingFromContent(remainingContent);
                 String thinking = result[0];
                 String finalContent = result[1];
 
@@ -1632,151 +1603,20 @@ aput-object v0, v1, v2      # v1[v2] = v0 (数组写入)
                     fullContent.append(finalContent);
                 }
             } else {
-                // 没有思考标签，直接追加
                 fullContent.append(remainingContent);
             }
         }
 
-        // 只使用 content 作为最终结果，不使用 reasoning_content
-        // reasoning_content 是思考过程，不应该作为最终结果
         if (fullContent.length() == 0) {
             String errorDetail = "AI API返回空结果（未返回正式回答）\n\n思考过程:\n" + fullReasoning.toString() + "\n\n原始响应:\n" + rawResponse.toString();
             android.util.Log.e("AIHelper", errorDetail);
             throw new Exception(errorDetail);
         }
 
-        // 清理 content 中可能混入的思考过程标记
         String finalContent = fullContent.toString();
-        String cleanedContent = cleanThinkingTags(finalContent);
+        String cleanedContent = StreamParser.cleanThinkingTags(finalContent);
 
-        // 返回结果：result[0]=正式内容（content），result[1]=思考过程（reasoning_content）
         return new String[]{cleanedContent, fullReasoning.toString()};
-    }
-
-    /**
-     * 检测内容是否包含思考标签
-     */
-    private static boolean containsThinkingTag(String content) {
-        if (content == null || content.isEmpty()) {
-            return false;
-        }
-        return content.contains("<think>") ||
-               content.contains("<thinking>") ||
-               content.contains("<reasoning>") ||
-               content.contains("[思考]") ||
-               content.contains("[Thinking]") ||
-               content.contains("**思考过程**");
-    }
-
-    /**
-     * 从内容中分离思考过程和正式内容
-     * 支持多种思考标签格式：<think>, <thinking>, <reasoning>, [思考], **思考过程** 等
-     *
-     * @param content 完整内容
-     * @return 数组：[0]=思考过程, [1]=正式内容, [2]=是否找到结束标签("true"/"false")
-     */
-    private static String[] separateThinkingFromContent(String content) {
-        if (content == null || content.isEmpty()) {
-            return new String[]{"", "", "false"};
-        }
-
-        String thinking = "";
-        String finalContent = "";
-        boolean foundEndTag = false;
-
-        // 定义思考标签的正则模式
-        String[][] thinkingPatterns = {
-            {"<think>", "</think>"},
-            {"<thinking>", "</thinking>"},
-            {"<reasoning>", "</reasoning>"},
-            {"\\[思考\\]", "\\[/思考\\]"},
-            {"\\[Thinking\\]", "\\[/Thinking\\]"},
-            {"\\*\\*思考过程\\*\\*", "\\*\\*分析结果\\*\\*"}
-        };
-
-        String remainingContent = content;
-
-        for (String[] pattern : thinkingPatterns) {
-            String startPattern = pattern[0];
-            String endPattern = pattern[1];
-
-            java.util.regex.Matcher startMatcher = java.util.regex.Pattern.compile(startPattern).matcher(remainingContent);
-            if (startMatcher.find()) {
-                int startIndex = startMatcher.start();
-                int startEnd = startMatcher.end();
-
-                // 检查是否有结束标签
-                java.util.regex.Matcher endMatcher = java.util.regex.Pattern.compile(endPattern).matcher(remainingContent);
-                if (endMatcher.find(startIndex)) {
-                    int endIndex = endMatcher.start();
-                    int endEnd = endMatcher.end();
-
-                    // 提取思考内容（不含标签）
-                    thinking = remainingContent.substring(startEnd, endIndex).trim();
-
-                    // 提取结束标签后的正式内容
-                    finalContent = remainingContent.substring(endEnd).trim();
-                    foundEndTag = true;
-                } else {
-                    // 结束标签还未出现，所有内容都是思考过程
-                    thinking = remainingContent;
-                    finalContent = "";
-                    foundEndTag = false;
-                }
-                break;
-            }
-        }
-
-        // 如果没有找到任何思考标签，所有内容都是正式内容
-        if (thinking.isEmpty() && finalContent.isEmpty()) {
-            finalContent = content;
-        }
-
-        return new String[]{thinking, finalContent, foundEndTag ? "true" : "false"};
-    }
-
-    /**
-     * 清理内容中的思考过程标记
-     * 某些模型会将思考过程混入 content 中，需要用此方法清理
-     *
-     * @param content AI 返回的内容
-     * @return 清理后的内容
-     */
-    public static String cleanThinkingTags(String content) {
-        if (content == null || content.isEmpty()) {
-            return content;
-        }
-
-        String result = content;
-
-        // 移除 <think>...</think> 标签及其内容
-        result = result.replaceAll("(?s)<think>.*?</think>", "");
-
-        // 移除 <think>...</think> 标签及其内容
-        result = result.replaceAll("(?s)<think>.*?</think>", "");
-
-        // 移除 <thinking>...</thinking> 标签及其内容
-        result = result.replaceAll("(?s)<thinking>.*?</thinking>", "");
-
-        // 移除 [思考]...[/思考] 标签及其内容
-        result = result.replaceAll("(?s)\\[思考\\].*?\\[/思考\\]", "");
-
-        // 移除 [Thinking]...[/Thinking] 标签及其内容
-        result = result.replaceAll("(?s)\\[Thinking\\].*?\\[/Thinking\\]", "");
-
-        // 移除 **思考过程** 开头到 **分析结果** 结尾之间的内容
-        result = result.replaceAll("(?s)\\*\\*思考过程\\*\\*.*?\\*\\*分析结果\\*\\*", "**分析结果**");
-
-        // 移除 "思考过程：" 开头到 "分析结果：" 之间的内容
-        result = result.replaceAll("(?s)思考过程[：:].*?分析结果[：:]", "分析结果：");
-
-        // 清理多余的空行
-        result = result.replaceAll("\n{3,}", "\n\n");
-
-        // 去除首尾空白
-        result = result.trim();
-
-        return result;
     }
 
     /**
@@ -1964,110 +1804,13 @@ aput-object v0, v1, v2      # v1[v2] = v0 (数组写入)
         String apiKey = getApiKey(context);
         String prompt = (customPrompt != null && !customPrompt.isEmpty()) ? customPrompt : getPrompt(context);
 
-        // 构建 API URL（确保以 /chat/completions 结尾）
-        String completionsUrl = apiUrl.endsWith("/chat/completions") ? apiUrl :
-                               (apiUrl.endsWith("/") ? apiUrl + "chat/completions" : apiUrl + "/chat/completions");
+        JSONObject requestBody = buildRequest(context, apiUrl, apiKey, aiModel, prompt, code, showThinking);
+        HttpURLConnection connection = sendStreamRequest(apiUrl, apiKey, requestBody, 30000);
 
-        JSONObject requestBody = new JSONObject();
-        requestBody.put("model", aiModel);
-        requestBody.put("enable_thinking", showThinking);
-        requestBody.put("stream", true);
-
-        JSONArray messages = new JSONArray();
-        JSONObject systemMessage = new JSONObject();
-        systemMessage.put("role", "system");
-        systemMessage.put("content", prompt);
-        messages.put(systemMessage);
-
-        JSONObject userMessage = new JSONObject();
-        userMessage.put("role", "user");
-        userMessage.put("content", "请分析以下代码：\n\n" + code);
-        messages.put(userMessage);
-
-        requestBody.put("messages", messages);
-        // 不设 temperature 等非必需参数，以确保最大兼容性
-
-        URL url = new URL(completionsUrl);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("POST");
-        connection.setRequestProperty("Content-Type", "application/json");
-        connection.setRequestProperty("Authorization", "Bearer " + apiKey);
-        connection.setConnectTimeout(30000);
-        connection.setReadTimeout(120000); // 后台分析给更多时间
-        connection.setDoOutput(true);
-
-        connection.getOutputStream().write(requestBody.toString().getBytes(StandardCharsets.UTF_8));
-
-        int responseCode = connection.getResponseCode();
-        if (responseCode != 200) {
-            BufferedReader errorReader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
-            StringBuilder errorResponse = new StringBuilder();
-            String line;
-            while ((line = errorReader.readLine()) != null) {
-                errorResponse.append(line);
-            }
-            errorReader.close();
-            throw new Exception("AI API错误: " + responseCode + " - " + errorResponse.toString());
-        }
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        StringBuilder fullContent = new StringBuilder();
-        StringBuilder contentBuffer = new StringBuilder();
-        String line;
-
-        while ((line = reader.readLine()) != null) {
-            if (line.startsWith("data: ")) {
-                String data = line.substring(6);
-                if (data.equals("[DONE]")) {
-                    break;
-                }
-
-                try {
-                    JSONObject chunk = new JSONObject(data);
-                    JSONArray choices = chunk.optJSONArray("choices");
-                    if (choices != null && choices.length() > 0) {
-                        JSONObject firstChoice = choices.getJSONObject(0);
-                        if (firstChoice != null) {
-                            String content = null;
-
-                            // 尝试多种格式获取内容
-                            JSONObject delta = firstChoice.optJSONObject("delta");
-                            if (delta != null) {
-                                content = delta.optString("content", "");
-                            }
-
-                            if (content == null || content.isEmpty()) {
-                                content = firstChoice.optString("text", "");
-                            }
-
-                            if (content == null || content.isEmpty()) {
-                                content = firstChoice.optString("content", "");
-                            }
-
-                            if (content != null && !content.isEmpty() && !"null".equals(content)) {
-                                contentBuffer.append(content);
-                            }
-                        }
-                    }
-                } catch (Exception e) {
-                    android.util.Log.w("AIHelper", "JSON解析错误: " + e.getMessage());
-                }
-            }
-        }
-        reader.close();
-        connection.disconnect();
-
-        // 处理缓冲区剩余内容
-        if (contentBuffer.length() > 0) {
-            fullContent.append(contentBuffer.toString());
-        }
-
-        if (fullContent.length() == 0) {
+        String result = readStreamResponse(connection);
+        if (result.isEmpty()) {
             throw new Exception("AI API返回空结果（未返回正式回答）");
         }
-
-        String result = fullContent.toString();
         return new String[]{result};
     }
 }
-

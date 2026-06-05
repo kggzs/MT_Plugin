@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 
 import com.kggzs.cn.mt.util.AIHelper;
 import com.kggzs.cn.mt.util.MCPClient;
+import com.kggzs.cn.mt.util.SkillManager;
+import com.kggzs.cn.mt.util.ThreadPoolManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -158,7 +160,7 @@ public class MCPServiceMenu {
         String serverUrl = AIHelper.getMcpServerUrl(context);
         context.showToast("{mcp_connecting}");
 
-        new Thread(() -> {
+        ThreadPoolManager.execute(() -> {
             MCPClient client = new MCPClient(serverUrl);
             String result = client.testConnection();
 
@@ -173,7 +175,7 @@ public class MCPServiceMenu {
                     })
                     .show();
             });
-        }).start();
+        });
     }
 
     /**
@@ -183,7 +185,7 @@ public class MCPServiceMenu {
         String serverUrl = AIHelper.getMcpServerUrl(context);
         context.showToast("{mcp_loading_tools}");
 
-        new Thread(() -> {
+        ThreadPoolManager.execute(() -> {
             try {
                 MCPClient client = new MCPClient(serverUrl);
                 JSONArray tools = client.listTools();
@@ -238,7 +240,7 @@ public class MCPServiceMenu {
                     context.showToast("{mcp_load_tools_failed}: " + e.getMessage());
                 });
             }
-        }).start();
+        });
     }
 
     /**
@@ -247,11 +249,7 @@ public class MCPServiceMenu {
     private static void showMcpSkillManagementDialog(PluginUI ui, PluginContext context) {
         try {
             JSONArray skillsArray = new JSONArray(AIHelper.getMcpSkills(context));
-            ArrayList<String> skillNames = new ArrayList<>();
-            for (int i = 0; i < skillsArray.length(); i++) {
-                JSONObject skill = skillsArray.getJSONObject(i);
-                skillNames.add(skill.getString("name"));
-            }
+            ArrayList<String> skillNames = SkillManager.extractNames(skillsArray);
             skillNames.add(context.getString("{mcp_new_skill}"));
 
             CharSequence[] items = skillNames.toArray(new CharSequence[0]);
@@ -286,9 +284,8 @@ public class MCPServiceMenu {
         if (skillIndex >= 0) {
             try {
                 JSONArray skillsArray = new JSONArray(AIHelper.getMcpSkills(context));
-                JSONObject skill = skillsArray.getJSONObject(skillIndex);
-                currentName = skill.getString("name");
-                currentPrompt = skill.optString("prompt", "");
+                currentName = SkillManager.getSkillName(skillsArray, skillIndex);
+                currentPrompt = SkillManager.getSkillPrompt(skillsArray, skillIndex);
             } catch (Exception e) {
                 context.showToast("{load_skill_data_failed}: " + e.getMessage());
                 return;
@@ -328,15 +325,7 @@ public class MCPServiceMenu {
                 }
                 try {
                     JSONArray skillsArray = new JSONArray(AIHelper.getMcpSkills(context));
-                    JSONObject skill = new JSONObject();
-                    skill.put("name", name);
-                    skill.put("prompt", prompt);
-
-                    if (skillIndex >= 0) {
-                        skillsArray.put(skillIndex, skill);
-                    } else {
-                        skillsArray.put(skill);
-                    }
+                    SkillManager.saveSkill(skillsArray, name, prompt, skillIndex);
                     AIHelper.setMcpSkills(context, skillsArray.toString());
                     context.showToast("{skill_saved}");
                 } catch (Exception e) {
@@ -355,7 +344,7 @@ public class MCPServiceMenu {
                     .setPositiveButton("{delete}", (d, w) -> {
                         try {
                             JSONArray skillsArray = new JSONArray(AIHelper.getMcpSkills(context));
-                            skillsArray.remove(finalSkillIndex);
+                            SkillManager.deleteSkill(skillsArray, finalSkillIndex);
                             AIHelper.setMcpSkills(context, skillsArray.toString());
                             context.showToast("{deleted}");
                             d.dismiss();

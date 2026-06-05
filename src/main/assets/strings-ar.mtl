@@ -7,6 +7,7 @@ support_author: دعم المؤلف
 support_author_summary: رعاية لدعم تطوير المكون الإضافي
 support_author_title: دعم المؤلف
 support_message: يواجه هذا المكون الإضافي مفتوح المصدر ونماذج AI المجانية تكاليف متزايدة للخوادم والحوسبة والصيانة أصبح من الصعب على فرد تحملها على المدى الطويل. لتجنب انقطاع الخدمة وضمان التحديثات المستقبلية والتشغيل المستقر، قمنا بفتح قناة رعاية طوعية.\n\nستستخدم جميع الرعايات حصريًا لتجديد الخادم وتكاليف الحوسبة وصيانة المشروع. شكرًا لدعمك على المدى الطويل، ونأمل في الاستمرار في تقديم خدمات مفتوحة المصدر ومجانية للذكاء الاصطناعي معًا.
+switched_to_prefix: "تم التبديل إلى: "
 alipay: Alipay
 wechat_pay: WeChat Pay
 load_image_failed: فشل تحميل الصورة
@@ -15,6 +16,7 @@ about: حول
 features_group: وصف الميزات
 features_title: الميزات الأساسية
 features_summary: يحتوي هذا الإضافة على تحليل الكود بالذكاء الاصطناعي كوظيفة أساسية، بالإضافة إلى أدوات مساعدة تطوير عملية متنوعة. يمكن استخدام جميع الوظائف مباشرة في محرر النصوص لتحسين كفاءة البرمجة بشكل شامل.
+format_help_section: [مساعدة التنسيق]
 encode_decode_function: ترميز/فك ترميز
 encode_decode_usage: يوفر تنسيقات ترميز/فك ترميز متعددة. حدد النص وانقر على الوظيفة соответ لاستخدامها.
 base64_encode: ترميز Base64
@@ -73,6 +75,7 @@ common_text: النص الشائع
 current_date: التاريخ الحالي
 current_time: الوقت الحالي
 current_datetime: التاريخ/الوقت الحالي
+current_format_prefix: التنسيق الحالي: 
 current_timestamp: الطابع الزمني الحالي
 uuid: UUID
 email_template: قالب البريد الإلكتروني
@@ -92,13 +95,16 @@ ai_capability_config: تكوين قدرات الذكاء الاصطناعي
 manage_skills: إدارة Skills المخصصة
 save: حفظ
 saved: تم الحفظ
+saved_to_prefix: "تم الحفظ: "
 new_skill: + Skill جديد
 skill_management: إدارة Skills المخصصة
 load_skill_failed: فشل تحميل Skill
+lunar_format_section: [التنسيق القمري]
 skill_name: اسم Skill
 input_name: أدخل الاسم
 prompt_content: محتوى التلميح
 delete_this_skill: حذف هذا Skill
+display_mode_section: [وضع العرض]
 confirm_delete: تأكيد الحذف
 sure_to_delete_skill: هل أنت متأكد أنك تريد حذف Skill؟
 delete: حذف
@@ -150,13 +156,18 @@ api_address: عنوان API
 api_url_hint: الافتراضي: https://api.kggzs.cn/v1
 model_name: اسم النموذج
 model_name_hint: الافتراضي: deepseek-v3.2
+mode_custom_label: تنسيق مخصص
+mode_date_only_label: التاريخ فقط
+mode_date_time_label: التاريخ والوقت
 api_key: مفتاح API
 api_key_hint: الافتراضي: sk-xxxxxxxxxxxxxxxxxxxxxxxx
 
 no_input_detected: لم يتم اكتشاف إدخال
 reset_to_default: تم إعادة التعيين إلى القيم الافتراضية
+reset_to_default_format: تم إعادة التعيين إلى التنسيق الافتراضي
 reset_default: إعادة تعيين الافتراضي
 global_analysis_prompt_label: تلميح التحليل العام
+gregorian_format_section: [التنسيق الميلادي]
 short_analysis_prompt_label: تلميح التحليل القصير
 load_skill_data_failed: فشل تحميل بيانات Skill
 conversion_tools: أدوات التحويل
@@ -258,4 +269,6 @@ ai_chat_error: خطأ
 ai_chat_settings_summary: فتح نافذة محادثة AI للتحدث مباشرة مع AI
 ai_chat_stop: إيقاف
 ai_chat_use_system_prompt: استخدام موجه النظام (يشمل مهارات MCP)
+ai_quick_analysis_prompt: قم بتحليل الكود التالي بإيجاز
+ai_code_analysis_prompt: قم بتحليل الكود التالي
 ai_mcp_active: نشط

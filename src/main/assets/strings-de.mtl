@@ -7,6 +7,7 @@ support_author: Autor unterstützen
 support_author_summary: Sponsoring zur Unterstützung der Plugin-Entwicklung
 support_author_title: Autor unterstützen
 support_message: Dieses Open-Source-Plugin und seine kostenlosen KI-Modelle stehen vor steigenden Server-, Rechen- und Wartungskosten, die für eine Person langfristig schwer zu tragen sind. Um Serviceunterbrechungen zu vermeiden und zukünftige Updates und stabilen Betrieb zu gewährleisten, haben wir einen Kanal für freiwillige Sponsoring eröffnet.\n\nAlle Sponsoring-Beiträge werden ausschließlich für Server-Verlängerung, Rechenkosten und Projekt-Wartung verwendet. Vielen Dank für Ihre langfristige Unterstützung, und wir hoffen, gemeinsam mit Ihnen Open-Source- und kostenlose KI-Dienste weiterhin anzubieten.
+switched_to_prefix: "Gewechselt zu: "
 alipay: Alipay
 wechat_pay: WeChat Pay
 load_image_failed: Bild konnte nicht geladen werden
@@ -15,6 +16,7 @@ about: Über
 features_group: Funktionsbeschreibung
 features_title: Kernfunktionen
 features_summary: Dieses Plugin hat die KI-Codeanalyse als Kernfunktion, zusammen mit verschiedenen praktischen Entwicklungsunterstützungstools. Alle Funktionen können direkt im Texteditor verwendet werden, um die Programmierungseffizienz umfassend zu verbessern.
+format_help_section: [Format-Hilfe]
 encode_decode_function: Kodieren/Dekodieren
 encode_decode_usage: Bietet mehrere Kodierungs-/Dekodierungsformate. Wählen Sie Text aus und klicken Sie auf die entsprechende Funktion, um sie zu verwenden.
 base64_encode: Base64 Kodieren
@@ -72,7 +74,8 @@ convert_error: Konvertierung fehlgeschlagen
 common_text: Allgemeiner Text
 current_date: Aktuelles Datum
 current_time: Aktuelle Zeit
-current_datetime: Aktuelles Datum/Zeit
+current_datetime: Aktuelles Datum/Uhrzeit
+current_format_prefix: Aktuelles Format: 
 current_timestamp: Aktueller Zeitstempel
 uuid: UUID
 email_template: E-Mail-Vorlage
@@ -92,13 +95,16 @@ ai_capability_config: KI-Fähigkeitskonfiguration
 manage_skills: Benutzerdefinierte Skills Verwalten
 save: Speichern
 saved: Gespeichert
+saved_to_prefix: "Gespeichert: "
 new_skill: + Neuer Skill
 skill_management: Verwaltung Benutzerdefinierter Skills
 load_skill_failed: Skill konnte nicht geladen werden
+lunar_format_section: [Mondkalender]
 skill_name: Skill-Name
 input_name: Name eingeben
 prompt_content: Prompt-Inhalt
 delete_this_skill: Diesen Skill Löschen
+display_mode_section: [Anzeigemodus]
 confirm_delete: Löschung Bestätigen
 sure_to_delete_skill: Sind Sie sicher, dass Sie den Skill löschen möchten?
 delete: Löschen
@@ -150,13 +156,18 @@ api_address: API-Adresse
 api_url_hint: Standard: https://api.kggzs.cn/v1
 model_name: Modellname
 model_name_hint: Standard: deepseek-v3.2
+mode_custom_label: Benutzerdefiniert
+mode_date_only_label: Nur Datum
+mode_date_time_label: Datum & Uhrzeit
 api_key: API-Schlüssel
 api_key_hint: Standard: sk-xxxxxxxxxxxxxxxxxxxxxxxx
 
 no_input_detected: Keine Eingabe erkannt
 reset_to_default: Auf Standardwerte zurückgesetzt
+reset_to_default_format: Auf Standardformat zurückgesetzt
 reset_default: Standard wiederherstellen
 global_analysis_prompt_label: Globaler Analyse-Prompt
+gregorian_format_section: [Gregorianisches Format]
 short_analysis_prompt_label: Kurzer Analyse-Prompt
 load_skill_data_failed: Skill-Daten konnten nicht geladen werden
 conversion_tools: Konvertierungstools
@@ -258,4 +269,6 @@ ai_chat_error: Fehler
 ai_chat_settings_summary: AI-Chat-Fenster öffnen, um direkt mit der AI zu sprechen
 ai_chat_stop: Stopp
 ai_chat_use_system_prompt: System-Prompt verwenden (inkl. MCP-Fähigkeiten)
+ai_quick_analysis_prompt: Analysieren Sie den folgenden Code kurz
+ai_code_analysis_prompt: Analysieren Sie den folgenden Code
 ai_mcp_active: Aktiv

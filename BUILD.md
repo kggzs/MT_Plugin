@@ -60,14 +60,15 @@ android {
 
 mtPlugin {
     pluginID = "com.kggzs.cn.mt"
-    versionCode = 4
-    versionName = "v2.0.2"
+    versionCode = 5
+    versionName = "v2.1.0"
     name = "{plugin_name}"
     description = "{plugin_description}"
     mainPreference = "com.kggzs.cn.mt.MyPreference"
     interfaces = [
         "com.kggzs.cn.mt.EncodeDecodeMenu",
         "com.kggzs.cn.mt.QuickInsertFunction",
+        "com.kggzs.cn.mt.AIChatMenu",
         "com.kggzs.cn.mt.AICodeAnalysisToolMenu",
         "com.kggzs.cn.mt.AICodeAnalysisFloatingMenu"
     ]
@@ -142,29 +143,54 @@ Get-ChildItem -Path E:\www\mt-kang -Recurse -Filter *.mtp -ErrorAction SilentlyC
 mt-kang/
 ├── src/main/
 │   ├── java/com/kggzs/cn/mt/          # Java 源代码
-│   │   ├── EncodeDecodeMenu.java      # 编码/解码菜单
-│   │   ├── AICodeAnalysisToolMenu.java # AI 分析工具菜单
-│   │   ├── AICodeAnalysisFloatingMenu.java # AI 分析浮动菜单
+│   │   ├── AIChatMenu.java           # AI 对话浮动菜单
+│   │   ├── AICodeAnalysisFloatingMenu.java # AI 快速分析浮动菜单
 │   │   ├── AICodeAnalysisHelper.java  # AI 分析辅助类
-│   │   ├── QuickInsertFunction.java   # 快速插入时间
+│   │   ├── AICodeAnalysisToolMenu.java # AI 代码分析工具菜单
+│   │   ├── EncodeDecodeMenu.java      # 编码/解码菜单
+│   │   ├── MCPServiceMenu.java        # MCP 服务配置
 │   │   ├── MyPreference.java          # 设置界面
+│   │   ├── PreferenceApiDialog.java   # API 配置对话框
+│   │   ├── PreferenceSkillDialog.java # AI 能力配置对话框
+│   │   ├── PreferenceTimeFormatDialog.java # 时间格式配置对话框
+│   │   ├── QuickInsertFunction.java   # 快速插入时间
 │   │   └── util/
-│   │       ├── AIHelper.java          # AI 工具类
-│   │       ├── TimeFormatHelper.java  # 时间格式工具
-│   │       └── LunarCalendar.java     # 农历计算
+│   │       ├── AIHelper.java          # AI 核心工具类
+│   │       ├── AIChatHelper.java      # AI 对话辅助
+│   │       ├── LunarCalendar.java     # 农历计算
+│   │       ├── MCPClient.java         # MCP 客户端
+│   │       ├── SkillManager.java      # Skill 管理工具类
+│   │       ├── StreamParser.java      # 流式解析工具类
+│   │       ├── ThreadPoolManager.java # 线程池管理
+│   │       └── TimeFormatHelper.java  # 时间格式工具
 │   ├── assets/                       # 语言包和资源
-│   │   ├── strings.mtl               # 默认语言
+│   │   ├── strings.mtl               # 默认语言（英文）
 │   │   ├── strings-zh-CN.mtl         # 简体中文
-│   │   └── ...                       # 其他语言
+│   │   ├── strings-zh-TW.mtl         # 繁体中文
+│   │   ├── strings-ja.mtl            # 日语
+│   │   ├── strings-ko.mtl            # 韩语
+│   │   ├── strings-ar.mtl            # 阿拉伯语
+│   │   ├── strings-de.mtl            # 德语
+│   │   ├── strings-es.mtl            # 西班牙语
+│   │   ├── strings-fr.mtl            # 法语
+│   │   ├── strings-ru.mtl            # 俄语
+│   │   ├── wx.jpg                    # 微信收款码
+│   │   └── zfb.jpg                   # 支付宝收款码
 │   ├── resources/                    # 图标资源
+│   │   └── icon.png                  # 插件图标
 │   └── AndroidManifest.xml           # 清单文件
 ├── docs/                             # 文档目录
+│   └── code-audit-report.md          # 代码审计报告
 ├── gradle/
 │   └── libs.versions.toml            # 版本目录
+├── .trae/                            # AI 配置目录
+│   ├── rules/
+│   └── specs/
 ├── build.gradle                      # 构建配置
 ├── settings.gradle                   # Gradle 设置
 ├── gradle.properties                 # Gradle 属性
 ├── proguard-rules.pro                # 混淆规则
+├── CLAUDE.md                         # AI 助手指南
 ├── BUILD.md                          # 本文件
 └── README.md                         # 项目说明
 ```

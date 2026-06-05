@@ -28,7 +28,6 @@ public class AIChatHelper {
 
     private final JSONArray messages;
     private final PluginContext context;
-    private boolean useSystemPrompt = true;
 
     private static final String SYSTEM_PROMPT = "你是一个有用的AI助手，请根据用户的问题提供详细、准确的回答。";
     private static final int MAX_TOOL_ROUNDS = 10;
@@ -38,27 +37,22 @@ public class AIChatHelper {
         this.messages = new JSONArray();
     }
 
-    public void setUseSystemPrompt(boolean use) {
-        this.useSystemPrompt = use;
-    }
-
-    public boolean isUseSystemPrompt() {
-        return this.useSystemPrompt;
-    }
-
     /**
-     * 重建系统消息（在切换 useSystemPrompt 后调用）
+     * 初始化系统消息（始终使用系统提示词）
      */
     public void rebuildSystemMessage() {
-        while (messages.length() > 0) {
-            messages.remove(0);
+        // 先移除旧的系统消息（如果有）
+        if (messages.length() > 0) {
+            try {
+                JSONObject firstMsg = messages.getJSONObject(0);
+                if ("system".equals(firstMsg.optString("role", ""))) {
+                    messages.remove(0);
+                }
+            } catch (Exception e) {
+                android.util.Log.e("AIChatHelper", "检查系统消息失败", e);
+            }
         }
-        if (useSystemPrompt) {
-            initSystemMessage();
-        }
-    }
-
-    private void initSystemMessage() {
+        // 添加系统消息到开头
         try {
             String systemPrompt = AIHelper.getPrompt(context);
             if (systemPrompt == null || systemPrompt.isEmpty()) {
@@ -66,7 +60,6 @@ public class AIChatHelper {
             }
 
             if (AIHelper.isMcpEnabled(context)) {
-                String mcpUrl = AIHelper.getMcpServerUrl(context);
                 systemPrompt += "\n\n你可以通过MCP (Model Context Protocol) 服务反复调用外部工具来辅助回答。当需要调用工具时，请在回答中输出以下格式的JSON（不要用代码块包裹）:\n{\"tool\": \"工具名\", \"arguments\": { \"参数名\": \"参数值\" }}\n\n系统会自动执行工具并将结果返回给你。你可以根据结果决定是继续调用其他工具还是给出最终回答。如果需要多次调用工具，只需在每次回答时输出新的工具调用JSON即可。";
 
                 String skillsJson = AIHelper.getSkills(context);
@@ -110,7 +103,19 @@ public class AIChatHelper {
             JSONObject systemMessage = new JSONObject();
             systemMessage.put("role", "system");
             systemMessage.put("content", systemPrompt);
-            messages.put(systemMessage);
+            // 将系统消息插入到开头
+            JSONArray newMessages = new JSONArray();
+            newMessages.put(systemMessage);
+            for (int i = 0; i < messages.length(); i++) {
+                newMessages.put(messages.getJSONObject(i));
+            }
+            // 清空原数组并复制新数组
+            while (messages.length() > 0) {
+                messages.remove(0);
+            }
+            for (int i = 0; i < newMessages.length(); i++) {
+                messages.put(newMessages.getJSONObject(i));
+            }
         } catch (Exception e) {
             android.util.Log.e("AIChatHelper", "初始化系统消息失败", e);
         }
@@ -131,7 +136,10 @@ public class AIChatHelper {
             messages.put(userMsg);
 
             String firstResponse = callAiAndStream(onStream, onError);
-            if (firstResponse == null) return;
+            if (firstResponse == null) {
+                if (onError != null) onError.onError("AI 返回空响应");
+                return;
+            }
 
             if (!AIHelper.isMcpEnabled(context)) {
                 JSONObject assistantMsgFinal = new JSONObject();
@@ -242,7 +250,9 @@ public class AIChatHelper {
 
         BufferedReader reader = new BufferedReader(
             new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
-        StringBuilder fullContent = new StringBuilder();
+        // 分别累积 reasoning_content（思考过程）和 content（正式内容）
+        StringBuilder reasoningBuffer = new StringBuilder();
+        StringBuilder contentBuffer = new StringBuilder();
         String line;
 
         while ((line = reader.readLine()) != null) {
@@ -256,13 +266,25 @@ public class AIChatHelper {
                     JSONArray choices = chunk.optJSONArray("choices");
                     if (choices != null && choices.length() > 0) {
                         JSONObject firstChoice = choices.getJSONObject(0);
-                        String content = AIHelper.StreamChunkParser.extractContent(firstChoice);
+                        AIHelper.StreamChunkResult parsed = AIHelper.StreamChunkParser.parse(firstChoice);
 
-                        if (!content.isEmpty()) {
-                            fullContent.append(content);
-                            if (onStream != null) {
-                                onStream.onStream(AIHelper.cleanThinkingTags(fullContent.toString()));
-                            }
+                        boolean hasContent = parsed.hasContent();
+                        boolean hasReasoning = parsed.hasReasoning();
+
+                        if (hasReasoning) {
+                            reasoningBuffer.append(parsed.reasoning);
+                        }
+                        if (hasContent) {
+                            contentBuffer.append(parsed.content);
+                        }
+
+                        if (onStream != null && hasContent) {
+                            // 已有正式内容时，只显示清理后的正式内容
+                            // 思考过程（reasoning）不显示在对话界面，以免干扰用户阅读
+                            String displayContent = contentBuffer.toString();
+                            String[] separated = StreamParser.separateThinkingFromContent(displayContent);
+                            String cleanContent = "true".equals(separated[2]) ? separated[1] : displayContent;
+                            onStream.onStream(cleanContent);
                         }
                     }
                 } catch (Exception e) {
@@ -274,7 +296,10 @@ public class AIChatHelper {
         connection.disconnect();
         AIChatMenu.setActiveConnection(null);
 
-        String result = AIHelper.cleanThinkingTags(fullContent.toString());
+        // 最终以正式内容为准，兜底清理内嵌思考标签
+        String finalContent = contentBuffer.length() > 0
+                ? contentBuffer.toString() : reasoningBuffer.toString();
+        String result = StreamParser.cleanThinkingTags(finalContent);
         if (result.isEmpty()) {
             throw new Exception("AI返回空结果");
         }
@@ -344,7 +369,10 @@ public class AIChatHelper {
             if (toolName.isEmpty()) {
                 toolName = callObj.optString("name", "");
             }
-            if (toolName.isEmpty()) return null;
+            if (toolName.isEmpty()) {
+                android.util.Log.w("AIChatHelper", "MCP tool name is empty, skipping tool call");
+                return null;
+            }
 
             JSONObject arguments = callObj.optJSONObject("arguments");
             if (arguments == null) {

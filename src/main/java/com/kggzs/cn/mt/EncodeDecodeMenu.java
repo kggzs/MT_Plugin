@@ -25,6 +25,8 @@ public class EncodeDecodeMenu extends BaseTextEditorFloatingMenu {
     private TextEditor currentEditor;
     private String originalText;
 
+    private static final SimpleDateFormat TIMESTAMP_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+
     @NonNull
     @Override
     public String name() {
@@ -84,8 +86,8 @@ public class EncodeDecodeMenu extends BaseTextEditorFloatingMenu {
                 .addButton("url_decode_btn").text("{url_decode_btn}").height(buttonHeight).onClick(v -> handleUrlDecode(pluginUI))
             ).marginBottom(smallMargin)
             .addHorizontalLayout("row6").children(row -> row
-                .addButton("rot13_encode_btn").text("{rot13_encode_btn}").height(buttonHeight).marginRight(smallMargin).onClick(v -> handleRot13Encode(pluginUI))
-                .addButton("rot13_decode_btn").text("{rot13_decode_btn}").height(buttonHeight).onClick(v -> handleRot13Decode(pluginUI))
+                .addButton("rot13_encode_btn").text("{rot13_encode_btn}").height(buttonHeight).marginRight(smallMargin).onClick(v -> handleRot13(pluginUI))
+                .addButton("rot13_decode_btn").text("{rot13_decode_btn}").height(buttonHeight).onClick(v -> handleRot13(pluginUI))
             ).marginBottom(smallMargin)
             .addHorizontalLayout("row7").children(row -> row
                 .addButton("binary_encode_btn").text("{binary_encode_btn}").height(buttonHeight).marginRight(smallMargin).onClick(v -> handleBinaryEncode(pluginUI))
@@ -222,13 +224,9 @@ public class EncodeDecodeMenu extends BaseTextEditorFloatingMenu {
             .setPositiveButton("{copy}", (dialog, which) -> {
                 String hash = calculateHash(selected, hashTypes[selection[0]]);
                 pluginUI.getContext().setClipboardText(hash);
-                pluginUI.showToast(hashTypes[selection[0]] + ": " + copy_success(pluginUI, hash));
+                pluginUI.showToast(hashTypes[selection[0]] + ": " + pluginUI.getContext().getString("{copy_success}"));
             })
             .show();
-    }
-
-    private String copy_success(PluginUI pluginUI, String hash) {
-        return pluginUI.getContext().getString("{copy_success}");
     }
 
     private void handleBase64Encode(PluginUI pluginUI) {
@@ -381,7 +379,7 @@ public class EncodeDecodeMenu extends BaseTextEditorFloatingMenu {
         }
     }
 
-    private void handleRot13Encode(PluginUI pluginUI) {
+    private void handleRot13(PluginUI pluginUI) {
         String selected = getInputText();
         if (selected.isEmpty()) {
             pluginUI.showToast("{select_text_hint}");
@@ -399,31 +397,7 @@ public class EncodeDecodeMenu extends BaseTextEditorFloatingMenu {
                 result.append(c);
             }
             replaceSelectedText(result.toString());
-            pluginUI.showToast("{encode_success}");
-        } catch (Exception e) {
-            pluginUI.showToast("{encode_decode_error}: " + e.getMessage());
-        }
-    }
-
-    private void handleRot13Decode(PluginUI pluginUI) {
-        String selected = getInputText();
-        if (selected.isEmpty()) {
-            pluginUI.showToast("{select_text_hint}");
-            return;
-        }
-
-        try {
-            StringBuilder result = new StringBuilder();
-            for (char c : selected.toCharArray()) {
-                if (c >= 'a' && c <= 'z') {
-                    c = (char) ('a' + (c - 'a' + 13) % 26);
-                } else if (c >= 'A' && c <= 'Z') {
-                    c = (char) ('A' + (c - 'A' + 13) % 26);
-                }
-                result.append(c);
-            }
-            replaceSelectedText(result.toString());
-            pluginUI.showToast("{decode_success}");
+            pluginUI.showToast("{rot13_success}");
         } catch (Exception e) {
             pluginUI.showToast("{encode_decode_error}: " + e.getMessage());
         }
@@ -491,7 +465,13 @@ public class EncodeDecodeMenu extends BaseTextEditorFloatingMenu {
     }
 
     private boolean isTimestamp(String text) {
-        return Pattern.matches("^\\d+$", text.trim());
+        String trimmed = text.trim();
+        if (!Pattern.matches("^\\d{10,13}$", trimmed)) return false;
+        long ts = Long.parseLong(trimmed);
+        // 10 位秒级时间戳: 2001-09-09 ~ 2286-11-20
+        // 13 位毫秒级时间戳: 2001-09-09 ~ 2286-11-20
+        return (trimmed.length() == 10 && ts >= 1000000000L && ts <= 9999999999L)
+            || (trimmed.length() == 13 && ts >= 1000000000000L && ts <= 9999999999999L);
     }
 
     private boolean isDateTime(String text) {
@@ -526,7 +506,7 @@ public class EncodeDecodeMenu extends BaseTextEditorFloatingMenu {
                 SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
                 return sdf.parse(text.trim()).getTime() / 1000;
             } catch (ParseException e) {
-                continue;
+                // continue 循环后续尝试下一个格式
             }
         }
         throw new ParseException("Unable to parse date", 0);
@@ -534,8 +514,7 @@ public class EncodeDecodeMenu extends BaseTextEditorFloatingMenu {
 
     private String formatTimestamp(long timestamp) {
         Date date = new Date(timestamp * 1000);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        return sdf.format(date);
+        return TIMESTAMP_FORMAT.format(date);
     }
 
     private String calculateHash(String text, String algorithm) {
